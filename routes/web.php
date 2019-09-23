@@ -16,6 +16,8 @@
 // });
 
 use App\Question;
+use App\Category;
+
 
 Route::view('/','start');
 
@@ -26,6 +28,11 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/all', function () {
     return Question::all();
 });
+
+Route::get('/categories', function () {
+    return Category::all();
+});
+
 
 Route::patch('/counterquestion/{id}', function ($id) {
     $question = Question::find( $id);

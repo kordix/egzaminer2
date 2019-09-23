@@ -1,7 +1,7 @@
 <template>
-  <!-- <div class="row">
+  <div class="row">
          <div class="col-md-4" style="display:flex">
-         <select class="form-control" name="" v-model="activeobszar2" style="width:150px;margin-right:10px">
+         <select class="form-control" name="" v-model="activeobszar2" style="width:150px;margin-right:10px" @input="setActiveObszar">
              <option value="egzaminer">Egzaminer</option>
              <option value="list">Lista</option>
              <option value="showcase">Showcase</option>
@@ -17,17 +17,15 @@
 
              </button>
          </div>
-     </div> -->
-     <div class="">
-       <p>sets</p>
      </div>
+
 </template>
 
 <script>
 export default {
   data(){
     return {
-      activeobszar2:''
+      activeobszar2:'egzaminer'
     }
   },
   methods:{
@@ -36,6 +34,11 @@ export default {
           localStorage.languageset = arg;
           this.$emit('reset');
           },
+    setActiveObszar(){
+      console.log(this.activeobszar2);
+      this.$store.state.activeobszar = this.activeobszar2;
+      console.log(this.$store.state.activeobszar);
+    }
   },
   computed:{
     activelanguage(){
@@ -43,7 +46,6 @@ export default {
     },
     activeobszar(){
       return (this.$store.state.activeobszar) ? this.$store.state.activeobszar : {};
-
     }
   }
 }
