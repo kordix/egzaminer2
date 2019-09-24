@@ -20,14 +20,48 @@
 
        <div class="form-group">
            <button id="nextbutton" type="button" class="btn btn-success" @click="next">Dalej</button>
-           <!-- <button id="nextbutton" class="btn btn-secondary" @click="prev">Prev</button> -->
+           <button id="nextbutton" type="button" class="btn btn-secondary" @click="prev">Prev</button>
            <button id="nextbutton"  type="button" class="btn btn-secondary" style="margin-left:20px" @click="editbool=!editbool">Edytuj</button>
-           <!-- <button id="nextbutton" class="btn btn-danger" style="margin-left:20px" @click="deleteQuestion">Usuń</button> -->
+           <button id="nextbutton" type="button" class="btn btn-danger" style="margin-left:20px" @click="deleteQuestion">Usuń</button>
 
 
        </div>
 
       </form>
+      <div class="" v-if="editbool">
+          <div class="form-group">
+              <label for="">Pytanie po polsku</label>
+              <input type="text" name="question"  :value="currentQuestion.question">
+          </div>
+          <div class="form-group">
+              <label for="">Odpowiedź <span v-if="activelanguage=='DE'">po niemiecku</span><span v-else>po hiszpańsku</span>  </label>
+              <input type="text" name="answer" :value="currentQuestion.answer">
+          </div>
+          <div class="form-group">
+              <button @click="update" type="button" class="btn btn-primary" name="button">Zatwierdź</button>
+              <button @click="reverse" type="button" name="button" class="btn btn-warning">Reverse</button>
+          </div>
+
+       </div>
+
+      <p>To do: </p>
+        <ul>
+            <li>konta</li>
+            <li>komponenty</li>
+            <li>dodaj</li>
+            <li>tagi</li>
+            <li>collins babla szukanie</li>
+            <li>powtarzanie prevent</li>
+            <li>odpowiednik w innym języku</li>
+            <li>podobne, alfabetycznie</li>
+            <li>bez kategorii</li>
+            <li>losowe</li>
+            <li>przełączanie kategorii auto</li>
+            <li>zdania</li>
+            <li>statystyki</li>
+            <li>konta</li>
+            <li>Counterset  > </li>
+        </ul>
 
   </div>
 
@@ -40,7 +74,8 @@ export default {
     return {
       errors:[],
       answer:'',
-      disabledInput:false
+      disabledInput:false,
+      editbool:false
     }
   },
   methods:{
@@ -84,7 +119,6 @@ export default {
           let self = this;
           this.disabledInput = false;
           this.answer = '';
-
           let elem = this.$store.state.words.filter((el)=>el.counter <= this.$store.state.counterset).filter((el)=>el.category_id == this.$store.state.currentcategory).find((el) => el.id > this.$store.state.currentQuestion.id);
 
           if (typeof(elem) == 'undefined') {
@@ -100,6 +134,16 @@ export default {
 
           // this.getCurrent();
       },
+      prev(){
+          let elem = this.$store.state.words.filter((el)=>el.counter <= this.$store.state.counterset).filter((el)=>el.category_id == this.$store.state.currentcategory).filter((el) => el.id < this.$store.state.currentQuestion.id).slice(-1)[0];
+          if(elem) {this.$store.state.currentQuestion = elem}else{console.log('brak prev')}
+      },
+      deleteQuestion(){
+          let self = this;
+          axios.delete(`/delete/${self.currentQuestion.id}`);
+          this.next();
+      },
+
       start:function(){
         console.log('od nowa');
       },
@@ -110,14 +154,30 @@ export default {
             console.log(e.message);
         }
       },
+      update(){
+        let self = this;
+        axios.patch(`updatequestion/${this.currentQuestion.id}`, {question:self.currentQuestion.question,answer:self.currentQuestion.answer})
+      },
       formprevent(e){
         e.preventdefault()
+      },
+      reverse(){
+        let answer = this.currentQuestion.answer;
+        let question = this.currentQuestion.question;
+
+        this.$store.state.currentQuestion.answer = question;
+        this.$store.state.currentQuestion.question = answer;
+
+
       }
   },
 
   computed:{
     currentQuestion(){
       return (this.$store.state.currentQuestion) ? this.$store.state.currentQuestion : {};
+    },
+    activelanguage(){
+      return (this.$store.state.activelanguage) ? (this.$store.state.activelanguage) : '';
     }
   }
 }

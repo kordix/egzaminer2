@@ -25,6 +25,8 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('tester', require('./components/tester.vue').default);
 Vue.component('sets', require('./components/sets.vue').default);
 Vue.component('categoriser', require('./components/Categoriser.vue').default);
+Vue.component('lista', require('./components/Lista.vue').default);
+
 
 
 

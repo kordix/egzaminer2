@@ -38,3 +38,6 @@ Route::patch('/counterquestion/{id}', function ($id) {
     $question = Question::find( $id);
     $question->update(['counter'=>$question->counter + 1]);
 });
+
+
+Route::patch('/updatequestion/{id}', 'egzaminerController@update');

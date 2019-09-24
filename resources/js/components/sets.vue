@@ -1,22 +1,17 @@
 <template>
   <div class="row">
          <div class="col-md-4" style="display:flex">
-         <select class="form-control" name="" v-model="activeobszar2" style="width:150px;margin-right:10px" @input="setActiveObszar">
+         <select class="form-control" name="" v-model="activeobszar2" style="width:150px;margin-right:10px" @change="setActiveObszar">
              <option value="egzaminer">Egzaminer</option>
              <option value="list">Lista</option>
              <option value="showcase">Showcase</option>
              <option value="tags">tagi</option>
          </select>
          </div>
-         <div class="col-md-4">
-             <button class="ikona ikonagerman" :class="{active:activelanguage=='DE'}" @click="setLanguage('DE')">
-
-             </button>
-
-             <button class="ikona ikonaspain" :class="{active:activelanguage=='SP'}"  @click="setLanguage('SP')">
-
-             </button>
-         </div>
+         <!-- <div class="col-md-4">
+             <button class="ikona ikonagerman" :class="{active:activelanguage=='DE'}" @click="setLanguage('DE')"> </button>
+             <button class="ikona ikonaspain" :class="{active:activelanguage=='SP'}"  @click="setLanguage('SP')"> </button>
+         </div> -->
      </div>
 
 </template>
@@ -34,10 +29,9 @@ export default {
           localStorage.languageset = arg;
           this.$emit('reset');
           },
-    setActiveObszar(){
-      console.log(this.activeobszar2);
+    setActiveObszar(val){
       this.$store.state.activeobszar = this.activeobszar2;
-      console.log(this.$store.state.activeobszar);
+      // console.log(this.$store.state.activeobszar);
     }
   },
   computed:{

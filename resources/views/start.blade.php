@@ -5,10 +5,11 @@
 
 
 <sets></sets>
-<div class="row">
+<div class="row" v-if="$store.state.activeobszar=='egzaminer'">
 <tester></tester>
 <categoriser></categoriser>
 </div>
+<lista v-if="$store.state.activeobszar=='list'"></lista>
 
 
 </div>
