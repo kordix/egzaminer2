@@ -41,14 +41,15 @@ export default {
     setCategory(id){
       this.$store.state.currentcategory=id;
       localStorage.currentcategory=id;
+      window.next();
     }
   },
   mounted(){
     if(localStorage.currentcategory){
       this.setCategory(localStorage.currentcategory);
-      window.bus.$emit('DoSomethingInComponentB');
+
+
     }
-    window.flash();
   },
   computed:{
     wordsFilter(){

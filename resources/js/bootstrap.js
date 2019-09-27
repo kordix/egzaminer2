@@ -1,5 +1,6 @@
 window._ = require('lodash');
 
+window.Vue = require('vue');
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
  * for JavaScript based Bootstrap features such as modals and tabs. This
@@ -37,12 +38,12 @@ if (token) {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
 
-// window.events = new Vue();
+window.events = new Vue();
 //
-// window.flash = function () {
-//     window.events.$emit('next');
-//     console.log('zemitowano event');
-// };
+window.next = function () {
+    window.events.$emit('next');
+    console.log('zemitowano event');
+};
 
 
 /**

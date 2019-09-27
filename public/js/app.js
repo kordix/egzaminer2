@@ -1879,15 +1879,13 @@ __webpack_require__.r(__webpack_exports__);
     setCategory: function setCategory(id) {
       this.$store.state.currentcategory = id;
       localStorage.currentcategory = id;
+      window.next();
     }
   },
   mounted: function mounted() {
     if (localStorage.currentcategory) {
       this.setCategory(localStorage.currentcategory);
-      window.bus.$emit('DoSomethingInComponentB');
     }
-
-    window.flash();
   },
   computed: {
     wordsFilter: function wordsFilter() {
@@ -2132,13 +2130,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       errors: [],
       answer: '',
       disabledInput: false,
-      editbool: false
+      editbool: false,
+      wordcategory: ''
     };
   },
   methods: {
@@ -2255,7 +2265,8 @@ __webpack_require__.r(__webpack_exports__);
       var self = this;
       axios.patch("updatequestion/".concat(this.currentQuestion.id), {
         question: self.currentQuestion.question,
-        answer: self.currentQuestion.answer
+        answer: self.currentQuestion.answer,
+        rodzajnik: self.currentQuestion.rodzajnik
       });
     },
     formprevent: function formprevent(e) {
@@ -2268,12 +2279,21 @@ __webpack_require__.r(__webpack_exports__);
       this.$store.state.currentQuestion.question = answer;
     }
   },
+  created: function created() {
+    var self = this;
+    window.events.$on('next', function () {
+      self.next();
+    });
+  },
   computed: {
     currentQuestion: function currentQuestion() {
       return this.$store.state.currentQuestion ? this.$store.state.currentQuestion : {};
     },
     activelanguage: function activelanguage() {
       return this.$store.state.activelanguage ? this.$store.state.activelanguage : '';
+    },
+    categories: function categories() {
+      return this.$store.state.categories ? this.$store.state.categories : [];
     }
   }
 });
@@ -38837,6 +38857,50 @@ var render = function() {
       _vm.editbool
         ? _c("div", {}, [
             _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "" } }, [_vm._v("Kategoria")]),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.currentQuestion.category_id,
+                      expression: "currentQuestion.category_id"
+                    }
+                  ],
+                  attrs: { name: "" },
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.currentQuestion,
+                        "category_id",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    }
+                  }
+                },
+                _vm._l(_vm.categories, function(category) {
+                  return _c("option", { domProps: { value: category.id } }, [
+                    _vm._v(_vm._s(category.name))
+                  ])
+                }),
+                0
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
               _c("label", { attrs: { for: "" } }, [
                 _vm._v("Pytanie po polsku")
               ]),
@@ -38846,6 +38910,17 @@ var render = function() {
                 domProps: { value: _vm.currentQuestion.question }
               })
             ]),
+            _vm._v(" "),
+            _vm.currentQuestion.category_id == "2"
+              ? _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "" } }, [_vm._v("Rodzajnik")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    attrs: { type: "text", name: "rodzajnik" },
+                    domProps: { value: _vm.currentQuestion.rodzajnik }
+                  })
+                ])
+              : _vm._e(),
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
               _c("label", { attrs: { for: "" } }, [
@@ -52120,7 +52195,6 @@ __webpack_require__.r(__webpack_exports__);
  */
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
-window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 
 Vue.use(vuex__WEBPACK_IMPORTED_MODULE_0__["default"]);
 /**
@@ -52216,6 +52290,7 @@ var app = new Vue({
 /***/ (function(module, exports, __webpack_require__) {
 
 window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
  * for JavaScript based Bootstrap features such as modals and tabs. This
@@ -52249,13 +52324,14 @@ if (token) {
   window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
 } else {
   console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
-} // window.events = new Vue();
-//
-// window.flash = function () {
-//     window.events.$emit('next');
-//     console.log('zemitowano event');
-// };
+}
 
+window.events = new Vue(); //
+
+window.next = function () {
+  window.events.$emit('next');
+  console.log('zemitowano event');
+};
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting

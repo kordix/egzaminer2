@@ -30,8 +30,19 @@
       </form>
       <div class="" v-if="editbool">
           <div class="form-group">
+            <label for="">Kategoria</label>
+            <select class="" name="" v-model="currentQuestion.category_id">
+              <option v-for="category in categories" :value="category.id" >{{category.name}}</option>
+            </select>
+          </div>
+
+          <div class="form-group" >
               <label for="">Pytanie po polsku</label>
               <input type="text" name="question"  :value="currentQuestion.question">
+          </div>
+          <div class="form-group" v-if="currentQuestion.category_id=='2'">
+            <label for="" >Rodzajnik</label>
+            <input type="text" name="rodzajnik" :value="currentQuestion.rodzajnik">
           </div>
           <div class="form-group">
               <label for="">Odpowiedź <span v-if="activelanguage=='DE'">po niemiecku</span><span v-else>po hiszpańsku</span>  </label>
@@ -75,7 +86,8 @@ export default {
       errors:[],
       answer:'',
       disabledInput:false,
-      editbool:false
+      editbool:false,
+      wordcategory:''
     }
   },
   methods:{
@@ -156,7 +168,7 @@ export default {
       },
       update(){
         let self = this;
-        axios.patch(`updatequestion/${this.currentQuestion.id}`, {question:self.currentQuestion.question,answer:self.currentQuestion.answer})
+        axios.patch(`updatequestion/${this.currentQuestion.id}`, {question:self.currentQuestion.question,answer:self.currentQuestion.answer,rodzajnik:self.currentQuestion.rodzajnik })
       },
       formprevent(e){
         e.preventdefault()
@@ -171,14 +183,24 @@ export default {
 
       }
   },
-
+  created(){
+    let self = this;
+    window.events.$on(
+                'next', function(){
+                  self.next();
+                }
+            );
+  },
   computed:{
     currentQuestion(){
       return (this.$store.state.currentQuestion) ? this.$store.state.currentQuestion : {};
     },
     activelanguage(){
       return (this.$store.state.activelanguage) ? (this.$store.state.activelanguage) : '';
-    }
+    },
+    categories(){
+      return this.$store.state.categories ? this.$store.state.categories : [];
+    },
   }
 }
 
