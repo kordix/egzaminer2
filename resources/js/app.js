@@ -77,12 +77,10 @@ Vue.component('lista', require('./components/Lista.vue').default);
      },
      getCategories(state,data){
         state.categories = data;
-      }
+     }
    }
 
  })
-
-
 
  const app = new Vue({
    el: '#app',

@@ -2,7 +2,7 @@
   <div class="col-md-4">
     <label for="">Counterset:</label> <input type="number" v-model.number="counterset2" name="" value="" @input="setcounterset">
     <!-- <button type="button" name="button" @click="setCounter">Ustaw</button> -->
-    <div class="" v-for="category in categories" @click="$store.state.currentcategory=category.id">
+    <div class="" v-for="category in categories" @click="setCategory(category.id)">
         <span :class="{bold:category.id == currentcategory}"> {{category.name}}</span>
         <span>{{$store.state.words.filter((el)=>el.counter <= counterset2).filter((el)=>el.category_id == category.id).length}}</span>
         <span> / </span>
@@ -37,7 +37,18 @@ export default {
     setcounterset(event){
       console.log(event);
       // this.$store.state.counterset = parseInt(val.data);
+    },
+    setCategory(id){
+      this.$store.state.currentcategory=id;
+      localStorage.currentcategory=id;
     }
+  },
+  mounted(){
+    if(localStorage.currentcategory){
+      this.setCategory(localStorage.currentcategory);
+      window.bus.$emit('DoSomethingInComponentB');
+    }
+    window.flash();
   },
   computed:{
     wordsFilter(){

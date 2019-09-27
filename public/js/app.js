@@ -1875,7 +1875,19 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     setcounterset: function setcounterset(event) {
       console.log(event); // this.$store.state.counterset = parseInt(val.data);
+    },
+    setCategory: function setCategory(id) {
+      this.$store.state.currentcategory = id;
+      localStorage.currentcategory = id;
     }
+  },
+  mounted: function mounted() {
+    if (localStorage.currentcategory) {
+      this.setCategory(localStorage.currentcategory);
+      window.bus.$emit('DoSomethingInComponentB');
+    }
+
+    window.flash();
   },
   computed: {
     wordsFilter: function wordsFilter() {
@@ -1959,6 +1971,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
 //
 //
 //
@@ -2134,18 +2149,20 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.answer.escapeDiacritics().toLowerCase() == this.$store.state.currentQuestion.answer.escapeDiacritics().toLowerCase() && this.answer != '') {
         this.disabledInput = true;
-        this.errors.push("<b>Dobrze!</b> Mo\u017Cna przej\u015B\u0107 do nast\u0119pnego pytania (Odpowied\u017A: ".concat(this.$store.statecurrentQuestion.answer, ")"));
+        this.errors.push("<b>Dobrze!</b> Mo\u017Cna przej\u015B\u0107 do nast\u0119pnego pytania (Odpowied\u017A: ".concat(this.$store.state.currentQuestion.answer, ")"));
         this.$store.state.words.find(function (el) {
           return el.id == _this.$store.state.currentQuestion.id;
         }).counter++;
         axios.patch("/counterquestion/".concat(this.currentQuestion.id));
-        setTimeout(function () {// document.getElementById('nextbutton').focus();
+        setTimeout(function () {
+          document.getElementById('nextbutton').focus();
         }, 200);
       } else {
         // axios.patch(`/counterquestion/${this.currentQuestion.id}`);
         this.disabledInput = true;
         this.errors.push("Nie uda\u0142o si\u0119. Prawid\u0142owa odpowied\u017A: <b> <span v-if=\"currentQuestion.category_id=='2'\">".concat(this.currentQuestion.rodzajnik, "</span> ").concat(this.currentQuestion.answer, " </b>"));
-        setTimeout(function () {// document.getElementById('nextbutton').focus();
+        setTimeout(function () {
+          document.getElementById('nextbutton').focus();
         }, 200);
       }
     },
@@ -38340,7 +38357,7 @@ var render = function() {
           {
             on: {
               click: function($event) {
-                _vm.$store.state.currentcategory = category.id
+                return _vm.setCategory(category.id)
               }
             }
           },
@@ -38539,27 +38556,33 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    {},
+    { staticClass: "form-group" },
     [
       _c(
-        "button",
-        {
-          staticClass: "btn btn-primary",
-          attrs: { type: "button", name: "button" },
-          on: {
-            click: function($event) {
-              _vm.showanswers = !_vm.showanswers
-            }
-          }
-        },
-        [_vm._v("Pokaż odpowiedzi")]
+        "div",
+        { staticClass: "row my-2", staticStyle: { "margin-left": "0px" } },
+        [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary",
+              attrs: { type: "button", name: "button" },
+              on: {
+                click: function($event) {
+                  _vm.showanswers = !_vm.showanswers
+                }
+              }
+            },
+            [_vm._v("Pokaż odpowiedzi")]
+          )
+        ]
       ),
       _vm._v(" "),
       _vm._l(_vm.words, function(question) {
         return _c("p", [
           _vm._v(_vm._s(question.question) + " "),
           _vm.showanswers == true
-            ? _c("span", [_vm._v(_vm._s(question.answer) + " ")])
+            ? _c("span", [_vm._v("- " + _vm._s(question.answer) + " ")])
             : _vm._e()
         ])
       })
@@ -38777,7 +38800,7 @@ var render = function() {
             "button",
             {
               staticClass: "btn btn-secondary",
-              attrs: { id: "nextbutton", type: "button" },
+              attrs: { id: "prevbutton", type: "button" },
               on: { click: _vm.prev }
             },
             [_vm._v("Prev")]
@@ -38788,7 +38811,7 @@ var render = function() {
             {
               staticClass: "btn btn-secondary",
               staticStyle: { "margin-left": "20px" },
-              attrs: { id: "nextbutton", type: "button" },
+              attrs: { id: "editbutton", type: "button" },
               on: {
                 click: function($event) {
                   _vm.editbool = !_vm.editbool
@@ -38803,7 +38826,7 @@ var render = function() {
             {
               staticClass: "btn btn-danger",
               staticStyle: { "margin-left": "20px" },
-              attrs: { id: "nextbutton", type: "button" },
+              attrs: { id: "deletebutton", type: "button" },
               on: { click: _vm.deleteQuestion }
             },
             [_vm._v("Usuń")]
@@ -52226,7 +52249,13 @@ if (token) {
   window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
 } else {
   console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
-}
+} // window.events = new Vue();
+//
+// window.flash = function () {
+//     window.events.$emit('next');
+//     console.log('zemitowano event');
+// };
+
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting

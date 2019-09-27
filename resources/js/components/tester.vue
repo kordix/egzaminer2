@@ -20,9 +20,9 @@
 
        <div class="form-group">
            <button id="nextbutton" type="button" class="btn btn-success" @click="next">Dalej</button>
-           <button id="nextbutton" type="button" class="btn btn-secondary" @click="prev">Prev</button>
-           <button id="nextbutton"  type="button" class="btn btn-secondary" style="margin-left:20px" @click="editbool=!editbool">Edytuj</button>
-           <button id="nextbutton" type="button" class="btn btn-danger" style="margin-left:20px" @click="deleteQuestion">Usuń</button>
+           <button id="prevbutton" type="button" class="btn btn-secondary" @click="prev">Prev</button>
+           <button id="editbutton"  type="button" class="btn btn-secondary" style="margin-left:20px" @click="editbool=!editbool">Edytuj</button>
+           <button id="deletebutton" type="button" class="btn btn-danger" style="margin-left:20px" @click="deleteQuestion">Usuń</button>
 
 
        </div>
@@ -83,11 +83,11 @@ export default {
       e.preventDefault();
       if (this.answer.escapeDiacritics().toLowerCase() == this.$store.state.currentQuestion.answer.escapeDiacritics().toLowerCase() && this.answer !='' ) {
              this.disabledInput = true;
-             this.errors.push(`<b>Dobrze!</b> Można przejść do następnego pytania (Odpowiedź: ${this.$store.statecurrentQuestion.answer})` );
+             this.errors.push(`<b>Dobrze!</b> Można przejść do następnego pytania (Odpowiedź: ${this.$store.state.currentQuestion.answer})` );
              this.$store.state.words.find((el)=>el.id==this.$store.state.currentQuestion.id).counter++;
              axios.patch(`/counterquestion/${this.currentQuestion.id}`);
              setTimeout(function() {
-                 // document.getElementById('nextbutton').focus();
+                 document.getElementById('nextbutton').focus();
              }, 200);
 
          } else {
@@ -95,7 +95,7 @@ export default {
              this.disabledInput = true;
              this.errors.push(`Nie udało się. Prawidłowa odpowiedź: <b> <span v-if="currentQuestion.category_id=='2'">${this.currentQuestion.rodzajnik}</span> ${this.currentQuestion.answer} </b>`);
              setTimeout(function() {
-                 // document.getElementById('nextbutton').focus();
+                 document.getElementById('nextbutton').focus();
              }, 200);
          }
     },
