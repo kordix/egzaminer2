@@ -6,6 +6,7 @@
              <option value="list">Lista</option>
              <option value="showcase">Showcase</option>
              <option value="tags">tagi</option>
+             <option value="add">dodaj</option>
          </select>
          </div>
          <!-- <div class="col-md-4">

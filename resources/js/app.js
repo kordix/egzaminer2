@@ -26,6 +26,8 @@ Vue.component('tester', require('./components/tester.vue').default);
 Vue.component('sets', require('./components/sets.vue').default);
 Vue.component('categoriser', require('./components/Categoriser.vue').default);
 Vue.component('lista', require('./components/Lista.vue').default);
+Vue.component('add', require('./components/Add.vue').default);
+
 
 
 
@@ -57,23 +59,25 @@ Vue.component('lista', require('./components/Lista.vue').default);
        console.log('loaddata');
        axios.get('/all').then((response) => {
          // console.log(response.data, this)
-         commit('updatePosts', response.data);
+         commit('getWords', response.data);
          commit('changeLoadingState', false);
          commit('getWord');
        });
-       axios.get('/categories').then((res) => commit('getCategories', res.data));
+       // axios.get('/categories').then((res) => commit('getCategories', res.data));
      }
    },
    mutations: {
-     updatePosts(state, data) {
-       state.words = data.filter((el)=>el.language == state.activelanguage).filter((el)=>el.zdanie == 0);
+     getWords(state, data) {
+         // state.words=['asdf','afds'];
+       state.words = data.filter((el)=>el.language == state.activelanguage);
      },
      changeLoadingState(state, loading) {
        state.loading = loading
      },
      getWord(state){
        // console.log(state.currentcategory);
-       state.currentQuestion = state.words.filter((el)=>el.category_id == state.currentcategory).find((el) => el.counter <= state.counterset);
+       state.currentQuestion = state.words[0];
+       // state.currentQuestion = state.words.find((el) => el.counter <= state.counterset);
      },
      getCategories(state,data){
         state.categories = data;
