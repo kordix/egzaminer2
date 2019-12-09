@@ -11,6 +11,8 @@
 </div>
 {{-- <lista v-if="$store.state.activeobszar=='list'"></lista> --}}
 <add v-if="$store.state.activeobszar=='add'"></add>
+<tags v-if="$store.state.activeobszar=='tags'"></tags>
+
 
 
 

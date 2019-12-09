@@ -29,13 +29,6 @@
 
       </form>
       <div class="" v-if="editbool">
-          <div class="form-group">
-            <label for="">Kategoria</label>
-            <select class="" name="" v-model="currentQuestion.category_id">
-              <option v-for="category in categories" :value="category.id" >{{category.name}}</option>
-            </select>
-          </div>
-
           <div class="form-group" >
               <label for="">Pytanie po polsku</label>
               <input type="text" name="question"  :value="currentQuestion.question">
@@ -54,6 +47,21 @@
           </div>
 
        </div>
+       <div class="" id="tagstoquestion">
+           <div class="" style="position:relative;width:90px" v-for="elem in tagstoquestion">
+               <button class="btn-sm btn-primary tag" >{{elem.name}}</button>
+               <div @click="deletetag(elem)" class="closer" style="position:absolute;width:10px;height:10px;background:red;top:-2px;right:0px;border-radius:2em;"><span></span></div>
+           </div>
+       </div>
+
+       <div class="" style="display:flex">
+           <p @click="addTagToQuestion" style="margin-right:10px">Dodaj tag:</p>
+           <select class="" name="" v-model="chosentag" style="margin-right:10px">
+               <option :value="tag.id" v-for="tag in tags">{{tag.name}}</option>
+           </select>
+           <button  @click="addTagToQuestion" type="button" class="btn-sm btn-default" name="button">Dodaj</button>
+       </div>
+
 
       <p>To do: </p>
         <ul>
@@ -87,10 +95,32 @@ export default {
       answer:'',
       disabledInput:false,
       editbool:false,
-      wordcategory:''
+      wordcategory:'',
+      tags:null,
+      tagstoquestion:null,
+      chosentag:{}
     }
   },
   methods:{
+      addTagToQuestion(elem){
+        let self = this;
+        axios.post('/addtagtoquestion/'+self.currentQuestion.id+'/'+self.chosentag).then((res)=>self.getTagsToQuestion())
+      },
+      deletetag(elem){
+          let self = this;
+        axios.delete('/deletetagtoquestion/'+elem.question_id+'/'+elem.tag_id).then((res)=>self.getTagsToQuestion())
+      },
+      getTags(){
+          let self = this;
+          axios.get('tags').then((res)=>self.tags=res.data)
+      },
+      getTagsToQuestion(){
+          console.log('gettagstoqueston');
+          let self = this;
+          console.log(self.$store.state.currentQuestion.id);
+          axios.get('tagstoquestion/'+self.$store.state.currentQuestion.id).then((res)=>self.tagstoquestion=res.data)
+
+      },
     answerm(e){
       e.preventDefault();
       if (this.answer.escapeDiacritics().toLowerCase() == this.$store.state.currentQuestion.answer.escapeDiacritics().toLowerCase() && this.answer !='' ) {
@@ -131,7 +161,7 @@ export default {
           let self = this;
           this.disabledInput = false;
           this.answer = '';
-          let elem = this.$store.state.words.filter((el)=>el.counter <= this.$store.state.counterset).filter((el)=>el.category_id == this.$store.state.currentcategory).find((el) => el.id > this.$store.state.currentQuestion.id);
+          let elem = this.$store.state.words.filter((el)=>el.counter <= this.$store.state.counterset).find((el) => el.id > this.$store.state.currentQuestion.id);
 
           if (typeof(elem) == 'undefined') {
               this.start();
@@ -167,8 +197,9 @@ export default {
         }
       },
       update(){
+          console.log('update');
         let self = this;
-        axios.patch(`updatequestion/${this.currentQuestion.id}`, {question:self.currentQuestion.question,answer:self.currentQuestion.answer,rodzajnik:self.currentQuestion.rodzajnik })
+        axios.patch(`updatequestion/${this.currentQuestion.id}`, {'question':self.currentQuestion.question,'answer':self.currentQuestion.answer,'rodzajnik':self.currentQuestion.rodzajnik })
       },
       formprevent(e){
         e.preventdefault()
@@ -185,11 +216,18 @@ export default {
   },
   created(){
     let self = this;
+    self.getTags();
     window.events.$on(
                 'next', function(){
                   self.next();
                 }
             );
+  },
+  mounted(){
+      let self = this;
+      setTimeout(function(){
+          self.getTagsToQuestion();
+      },1000)
   },
   computed:{
     currentQuestion(){
@@ -208,6 +246,10 @@ export default {
 </script>
 
 <style scoped>
+.closer:hover{
+    background:#994444 !important;
+}
+
 .bold{
     font-weight:bold;
 }

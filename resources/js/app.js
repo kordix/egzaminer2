@@ -27,6 +27,8 @@ Vue.component('sets', require('./components/sets.vue').default);
 Vue.component('categoriser', require('./components/Categoriser.vue').default);
 Vue.component('lista', require('./components/Lista.vue').default);
 Vue.component('add', require('./components/Add.vue').default);
+Vue.component('tags', require('./components/Tags.vue').default);
+
 
 
 
