@@ -33,7 +33,7 @@
               <label for="">Pytanie po polsku</label>
               <input type="text" name="question"  :value="currentQuestion.question">
           </div>
-          <div class="form-group" v-if="currentQuestion.category_id=='2'">
+          <div class="form-group" v-if="chosentag=='2'">
             <label for="" >Rodzajnik</label>
             <input type="text" name="rodzajnik" :value="currentQuestion.rodzajnik">
           </div>
@@ -47,7 +47,7 @@
           </div>
 
        </div>
-       <div class="" id="tagstoquestion">
+       <div class="" id="tagstoquestion" style="margin-bottom:5px">
            <div class="" style="position:relative;width:90px" v-for="elem in tagstoquestion">
                <button class="btn-sm btn-primary tag" >{{elem.name}}</button>
                <div @click="deletetag(elem)" class="closer" style="position:absolute;width:10px;height:10px;background:red;top:-2px;right:0px;border-radius:2em;"><span></span></div>
@@ -65,21 +65,16 @@
 
       <p>To do: </p>
         <ul>
-            <li>konta</li>
-            <li>komponenty</li>
-            <li>dodaj</li>
-            <li>tagi</li>
+            <li>nauka wg tagu</li>
+            <li>synonimy beunruhigen änstigen</li>
+            <li>Counterset  > </li>
+            <li>przełączanie tagów auto</li>
             <li>collins babla szukanie</li>
-            <li>powtarzanie prevent</li>
             <li>odpowiednik w innym języku</li>
             <li>podobne, alfabetycznie</li>
-            <li>bez kategorii</li>
             <li>losowe</li>
-            <li>przełączanie kategorii auto</li>
             <li>zdania</li>
             <li>statystyki</li>
-            <li>konta</li>
-            <li>Counterset  > </li>
         </ul>
 
   </div>
@@ -103,6 +98,7 @@ export default {
   },
   methods:{
       addTagToQuestion(elem){
+          console.log('ADDRAGTOQUETON');
         let self = this;
         axios.post('/addtagtoquestion/'+self.currentQuestion.id+'/'+self.chosentag).then((res)=>self.getTagsToQuestion())
       },
@@ -143,17 +139,17 @@ export default {
     },
     plusCounter(){
             this.$store.state.words.find((el)=>el.id==this.$store.state.currentQuestion.id).counter++;
-            axios.patch(`/counterquestion/${this.currentQuestion.id}`);
+            axios.patch(`/counterquestion/${this.currentQuestion.question_id}`);
             this.next();
         },
     plusCounter5(){
         this.$store.state.words.find((el)=>el.id==this.$store.state.currentQuestion.id).counter+=5;
-        axios.patch(`/counterquestion5/${this.currentQuestion.id}`);
+        axios.patch(`/updatequestion2/${this.currentQuestion.question_id}`,{counter:this.$store.state.currentQuestion.counter} );
         this.next();
     },
     plusCounter0(){
         this.$store.state.find((el)=>el.id==this.$store.state.currentQuestion.id).counter=0;
-        axios.patch(`/counterquestion0/${this.currentQuestion.id}`);
+        axios.patch(`/counterquestion0/${this.currentQuestion.question_id}`);
         this.next();
     },
     next:function() {
@@ -177,12 +173,12 @@ export default {
           // this.getCurrent();
       },
       prev(){
-          let elem = this.$store.state.words.filter((el)=>el.counter <= this.$store.state.counterset).filter((el)=>el.category_id == this.$store.state.currentcategory).filter((el) => el.id < this.$store.state.currentQuestion.id).slice(-1)[0];
+          let elem = this.$store.state.words.filter((el)=>el.counter <= this.$store.state.counterset).filter((el) => el.id < this.$store.state.currentQuestion.id).slice(-1)[0];
           if(elem) {this.$store.state.currentQuestion = elem}else{console.log('brak prev')}
       },
       deleteQuestion(){
           let self = this;
-          axios.delete(`/delete/${self.currentQuestion.id}`);
+          axios.delete(`/delete/${self.currentQuestion.question_id}`);
           this.next();
       },
 

@@ -1856,12 +1856,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       question: '',
       answer: '',
-      rodzajnik: ''
+      rodzajnik: '',
+      tags: [],
+      chosentag: null,
+      messages: []
     };
   },
   methods: {
@@ -1870,11 +1885,37 @@ __webpack_require__.r(__webpack_exports__);
       var self = this;
       axios.post('add', {
         'question': this.question,
-        'answer': this.answer
+        'answer': this.answer,
+        'rodzajnik': this.rodzajnik,
+        'tag_id': this.chosentag
       }).then(function (res) {
         return console.log(res);
       });
+      this.messages.push('dodano pytanie (' + this.question + ') ');
+      this.question = '';
+      this.answer = '';
+    },
+    addTagToQuestion: function addTagToQuestion(elem) {
+      var self = this;
+      axios.post('/addtagtoquestion/' + self.currentQuestion.id + '/' + self.chosentag).then(function (res) {
+        return self.getTagsToQuestion();
+      });
+    },
+    deletetag: function deletetag(elem) {
+      var self = this;
+      axios["delete"]('/deletetagtoquestion/' + elem.question_id + '/' + elem.tag_id).then(function (res) {
+        return self.getTagsToQuestion();
+      });
+    },
+    getTags: function getTags() {
+      var self = this;
+      axios.get('tags').then(function (res) {
+        return self.tags = res.data;
+      });
     }
+  },
+  mounted: function mounted() {
+    this.getTags();
   }
 });
 
@@ -2257,11 +2298,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2277,6 +2313,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     addTagToQuestion: function addTagToQuestion(elem) {
+      console.log('ADDRAGTOQUETON');
       var self = this;
       axios.post('/addtagtoquestion/' + self.currentQuestion.id + '/' + self.chosentag).then(function (res) {
         return self.getTagsToQuestion();
@@ -2332,7 +2369,7 @@ __webpack_require__.r(__webpack_exports__);
       this.$store.state.words.find(function (el) {
         return el.id == _this2.$store.state.currentQuestion.id;
       }).counter++;
-      axios.patch("/counterquestion/".concat(this.currentQuestion.id));
+      axios.patch("/counterquestion/".concat(this.currentQuestion.question_id));
       this.next();
     },
     plusCounter5: function plusCounter5() {
@@ -2341,7 +2378,9 @@ __webpack_require__.r(__webpack_exports__);
       this.$store.state.words.find(function (el) {
         return el.id == _this3.$store.state.currentQuestion.id;
       }).counter += 5;
-      axios.patch("/counterquestion5/".concat(this.currentQuestion.id));
+      axios.patch("/updatequestion2/".concat(this.currentQuestion.question_id), {
+        counter: this.$store.state.currentQuestion.counter
+      });
       this.next();
     },
     plusCounter0: function plusCounter0() {
@@ -2350,7 +2389,7 @@ __webpack_require__.r(__webpack_exports__);
       this.$store.state.find(function (el) {
         return el.id == _this4.$store.state.currentQuestion.id;
       }).counter = 0;
-      axios.patch("/counterquestion0/".concat(this.currentQuestion.id));
+      axios.patch("/counterquestion0/".concat(this.currentQuestion.question_id));
       this.next();
     },
     next: function next() {
@@ -2383,8 +2422,6 @@ __webpack_require__.r(__webpack_exports__);
       var elem = this.$store.state.words.filter(function (el) {
         return el.counter <= _this6.$store.state.counterset;
       }).filter(function (el) {
-        return el.category_id == _this6.$store.state.currentcategory;
-      }).filter(function (el) {
         return el.id < _this6.$store.state.currentQuestion.id;
       }).slice(-1)[0];
 
@@ -2396,7 +2433,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     deleteQuestion: function deleteQuestion() {
       var self = this;
-      axios["delete"]("/delete/".concat(self.currentQuestion.id));
+      axios["delete"]("/delete/".concat(self.currentQuestion.question_id));
       this.next();
     },
     start: function start() {
@@ -38493,104 +38530,158 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", {}, [
-    _c("p", [_vm._v("Dodaj słówko")]),
-    _vm._v(" "),
-    _c("label", { attrs: { for: "" } }, [_vm._v("Pytanie (po polsku)")]),
-    _vm._v(" "),
-    _c("input", {
-      directives: [
-        {
-          name: "model",
-          rawName: "v-model",
-          value: _vm.question,
-          expression: "question"
-        }
-      ],
-      attrs: { type: "text", name: "" },
-      domProps: { value: _vm.question },
-      on: {
-        input: function($event) {
-          if ($event.target.composing) {
-            return
-          }
-          _vm.question = $event.target.value
-        }
-      }
-    }),
-    _vm._v(" "),
-    _c("label", { attrs: { for: "" } }, [_vm._v("Odpowiedź (po obcemu)")]),
-    _vm._v(" "),
-    _c("input", {
-      directives: [
-        {
-          name: "model",
-          rawName: "v-model",
-          value: _vm.answer,
-          expression: "answer"
-        }
-      ],
-      attrs: { type: "text", name: "" },
-      domProps: { value: _vm.answer },
-      on: {
-        input: function($event) {
-          if ($event.target.composing) {
-            return
-          }
-          _vm.answer = $event.target.value
-        }
-      }
-    }),
-    _vm._v(" "),
-    _c("label", { attrs: { for: "" } }, [_vm._v("Rodzajnik")]),
-    _vm._v(" "),
-    _c(
-      "select",
-      {
+  return _c(
+    "div",
+    {},
+    [
+      _vm._l(_vm.messages, function(elem) {
+        return _c("p", [_vm._v(_vm._s(elem))])
+      }),
+      _vm._v(" "),
+      _c("p", [_vm._v("Dodaj słówko")]),
+      _vm._v(" "),
+      _vm.chosentag == "2"
+        ? _c("label", { attrs: { for: "" } }, [_vm._v("Rodzajnik")])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.chosentag == "2"
+        ? _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.rodzajnik,
+                  expression: "rodzajnik"
+                }
+              ],
+              attrs: { name: "" },
+              on: {
+                change: function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.rodzajnik = $event.target.multiple
+                    ? $$selectedVal
+                    : $$selectedVal[0]
+                }
+              }
+            },
+            [
+              _c("option", { attrs: { value: "der" } }, [_vm._v("der")]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "die" } }, [_vm._v("die")]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "das" } }, [_vm._v("das")])
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _c("label", { attrs: { for: "" } }, [_vm._v("Odpowiedź (po obcemu)")]),
+      _vm._v(" "),
+      _c("input", {
         directives: [
           {
             name: "model",
             rawName: "v-model",
-            value: _vm.rodzajnik,
-            expression: "rodzajnik"
+            value: _vm.answer,
+            expression: "answer"
           }
         ],
-        attrs: { name: "" },
+        attrs: { type: "text", name: "" },
+        domProps: { value: _vm.answer },
         on: {
-          change: function($event) {
-            var $$selectedVal = Array.prototype.filter
-              .call($event.target.options, function(o) {
-                return o.selected
-              })
-              .map(function(o) {
-                var val = "_value" in o ? o._value : o.value
-                return val
-              })
-            _vm.rodzajnik = $event.target.multiple
-              ? $$selectedVal
-              : $$selectedVal[0]
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.answer = $event.target.value
           }
         }
-      },
-      [
-        _c("option", { attrs: { value: "" } }, [_vm._v("der")]),
+      }),
+      _vm._v(" "),
+      _c("label", { attrs: { for: "" } }, [_vm._v("Pytanie (po polsku)")]),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.question,
+            expression: "question"
+          }
+        ],
+        attrs: { type: "text", name: "" },
+        domProps: { value: _vm.question },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.question = $event.target.value
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c("div", { staticStyle: { display: "flex", "margin-bottom": "5px" } }, [
+        _c("p", { staticStyle: { "margin-right": "10px" } }, [_vm._v("Tag:")]),
         _vm._v(" "),
-        _c("option", { attrs: { value: "" } }, [_vm._v("die")]),
-        _vm._v(" "),
-        _c("option", { attrs: { value: "" } }, [_vm._v("das")])
-      ]
-    ),
-    _vm._v(" "),
-    _c(
-      "button",
-      {
-        staticClass: "btn btn-primary",
-        attrs: { type: "button", name: "button" },
-        on: { click: _vm.add }
-      },
-      [_vm._v("Zatwierdź")]
-    )
-  ])
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.chosentag,
+                expression: "chosentag"
+              }
+            ],
+            staticStyle: { "margin-right": "10px" },
+            attrs: { name: "" },
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.chosentag = $event.target.multiple
+                  ? $$selectedVal
+                  : $$selectedVal[0]
+              }
+            }
+          },
+          _vm._l(_vm.tags, function(tag) {
+            return _c("option", { domProps: { value: tag.id } }, [
+              _vm._v(_vm._s(tag.name))
+            ])
+          }),
+          0
+        )
+      ]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary",
+          attrs: { type: "button", name: "button" },
+          on: { click: _vm.add }
+        },
+        [_vm._v("Zatwierdź")]
+      )
+    ],
+    2
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -39224,7 +39315,7 @@ var render = function() {
               })
             ]),
             _vm._v(" "),
-            _vm.currentQuestion.category_id == "2"
+            _vm.chosentag == "2"
               ? _c("div", { staticClass: "form-group" }, [
                   _c("label", { attrs: { for: "" } }, [_vm._v("Rodzajnik")]),
                   _vm._v(" "),
@@ -39275,7 +39366,10 @@ var render = function() {
       _vm._v(" "),
       _c(
         "div",
-        { attrs: { id: "tagstoquestion" } },
+        {
+          staticStyle: { "margin-bottom": "5px" },
+          attrs: { id: "tagstoquestion" }
+        },
         _vm._l(_vm.tagstoquestion, function(elem) {
           return _c(
             "div",
@@ -39383,35 +39477,25 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("ul", [
-      _c("li", [_vm._v("konta")]),
+      _c("li", [_vm._v("nauka wg tagu")]),
       _vm._v(" "),
-      _c("li", [_vm._v("komponenty")]),
+      _c("li", [_vm._v("synonimy beunruhigen änstigen")]),
       _vm._v(" "),
-      _c("li", [_vm._v("dodaj")]),
+      _c("li", [_vm._v("Counterset  > ")]),
       _vm._v(" "),
-      _c("li", [_vm._v("tagi")]),
+      _c("li", [_vm._v("przełączanie tagów auto")]),
       _vm._v(" "),
       _c("li", [_vm._v("collins babla szukanie")]),
-      _vm._v(" "),
-      _c("li", [_vm._v("powtarzanie prevent")]),
       _vm._v(" "),
       _c("li", [_vm._v("odpowiednik w innym języku")]),
       _vm._v(" "),
       _c("li", [_vm._v("podobne, alfabetycznie")]),
       _vm._v(" "),
-      _c("li", [_vm._v("bez kategorii")]),
-      _vm._v(" "),
       _c("li", [_vm._v("losowe")]),
-      _vm._v(" "),
-      _c("li", [_vm._v("przełączanie kategorii auto")]),
       _vm._v(" "),
       _c("li", [_vm._v("zdania")]),
       _vm._v(" "),
-      _c("li", [_vm._v("statystyki")]),
-      _vm._v(" "),
-      _c("li", [_vm._v("konta")]),
-      _vm._v(" "),
-      _c("li", [_vm._v("Counterset  > ")])
+      _c("li", [_vm._v("statystyki")])
     ])
   }
 ]
@@ -52658,6 +52742,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
   mutations: {
     getWords: function getWords(state, data) {
       // state.words=['asdf','afds'];
+      console.log(data);
       state.words = data.filter(function (el) {
         return el.language == state.activelanguage;
       });
@@ -52666,7 +52751,8 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
       state.loading = loading;
     },
     getWord: function getWord(state) {
-      // console.log(state.currentcategory);
+      console.log('idzie po słowo'); // console.log(state.currentcategory);
+
       state.currentQuestion = state.words[0]; // state.currentQuestion = state.words.find((el) => el.counter <= state.counterset);
     },
     getCategories: function getCategories(state, data) {

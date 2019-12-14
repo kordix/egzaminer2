@@ -43,6 +43,7 @@ Route::get('/tags', function () {
 
 Route::post('/add','egzaminerController@add');
 Route::post('/addtag','egzaminerController@addtag');
+Route::delete('/delete/{id}','egzaminerController@delete');
 Route::delete('/deletetag/{id}','egzaminerController@deletetag');
 Route::post('/addtagtoquestion/{qid}/{tid}','egzaminerController@addTagToQuestion');
 Route::delete('/deletetagtoquestion/{qid}/{tid}','egzaminerController@deleteTagToQuestion');
@@ -56,3 +57,4 @@ Route::get('/tagstoquestion/{id}','egzaminerController@tagsToQuestion');
 
 
 Route::patch('/updatequestion/{id}', 'egzaminerController@update');
+Route::patch('/updatequestion2/{id}', 'egzaminerController@update2');

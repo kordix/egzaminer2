@@ -28,6 +28,6 @@ class Tagpivot extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('tagpivot');
     }
 }

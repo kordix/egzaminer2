@@ -71,12 +71,14 @@ Vue.component('tags', require('./components/Tags.vue').default);
    mutations: {
      getWords(state, data) {
          // state.words=['asdf','afds'];
+         console.log(data);
        state.words = data.filter((el)=>el.language == state.activelanguage);
      },
      changeLoadingState(state, loading) {
        state.loading = loading
      },
      getWord(state){
+         console.log('idzie po słowo');
        // console.log(state.currentcategory);
        state.currentQuestion = state.words[0];
        // state.currentQuestion = state.words.find((el) => el.counter <= state.counterset);

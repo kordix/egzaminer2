@@ -1,17 +1,29 @@
 <template>
 <div class="">
+    <p v-for="elem in messages">{{elem}}</p>
+
     <p>Dodaj słówko</p>
-    <label for="">Pytanie (po polsku)</label>
-    <input type="text" name="" v-model="question">
+    <label for="" v-if="chosentag=='2'">Rodzajnik</label>
+    <select class="" name="" v-model="rodzajnik" v-if="chosentag=='2'">
+        <option value="der">der</option>
+        <option value="die">die</option>
+        <option value="das">das</option>
+    </select>
     <label for="">Odpowiedź (po obcemu)</label>
     <input type="text" name="" v-model="answer">
-    <label for="">Rodzajnik</label>
-    <select class="" name="" v-model="rodzajnik">
-        <option value="">der</option>
-        <option value="">die</option>
-        <option value="">das</option>
-    </select>
+    <label for="">Pytanie (po polsku)</label>
+    <input type="text" name="" v-model="question">
+    <div style="display:flex;margin-bottom:5px">
+        <p style="margin-right:10px">Tag:</p>
+        <select class="" name="" v-model="chosentag" style="margin-right:10px">
+            <option :value="tag.id" v-for="tag in tags">{{tag.name}}</option>
+        </select>
+    </div>
+
     <button type="button" name="button" class="btn btn-primary" @click="add">Zatwierdź</button>
+
+
+
 </div>
 
 </template>
@@ -22,15 +34,37 @@ export default {
         return {
             question:'',
             answer:'',
-            rodzajnik:''
+            rodzajnik:'',
+            tags:[],
+            chosentag:null,
+            messages:[]
         }
     },
     methods:{
         add(){
             console.log('add');
             let self = this;
-            axios.post('add',{'question':this.question,'answer':this.answer}).then((res)=>console.log(res));
-        }
+            axios.post('add',{'question':this.question,'answer':this.answer,'rodzajnik':this.rodzajnik, 'tag_id':this.chosentag }).then((res)=>console.log(res));
+            this.messages.push('dodano pytanie ('+this.question+') ');
+            this.question='';
+            this.answer='';
+
+        },
+        addTagToQuestion(elem){
+          let self = this;
+          axios.post('/addtagtoquestion/'+self.currentQuestion.id+'/'+self.chosentag).then((res)=>self.getTagsToQuestion())
+        },
+        deletetag(elem){
+            let self = this;
+          axios.delete('/deletetagtoquestion/'+elem.question_id+'/'+elem.tag_id).then((res)=>self.getTagsToQuestion())
+        },
+        getTags(){
+            let self = this;
+            axios.get('tags').then((res)=>self.tags=res.data)
+        },
+    },
+    mounted(){
+        this.getTags();
     }
 
 }
