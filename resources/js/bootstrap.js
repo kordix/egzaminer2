@@ -42,7 +42,6 @@ window.events = new Vue();
 //
 window.next = function () {
     window.events.$emit('next');
-    console.log('zemitowano event');
 };
 
 

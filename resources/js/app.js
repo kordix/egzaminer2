@@ -28,6 +28,10 @@ Vue.component('categoriser', require('./components/Categoriser.vue').default);
 Vue.component('lista', require('./components/Lista.vue').default);
 Vue.component('add', require('./components/Add.vue').default);
 Vue.component('tags', require('./components/Tags.vue').default);
+Vue.component('appinstance', require('./components/Appinstance.vue').default);
+Vue.component('app', require('./components/App.vue').default);
+
+
 
 
 
@@ -48,17 +52,19 @@ Vue.component('tags', require('./components/Tags.vue').default);
      words: [],
      currentQuestion:{},
      currentcategory:4,
-     counterset:5,
+     counterset:7,
+     countermode:'<',
      categories:[],
      activelanguage:'DE',
      activeobszar:'egzaminer',
-     loading: true
+     activeobszar2:'list',
+     loading: true,
+     randomset:false
    },
    actions: {
      loadData({
        commit
      }) {
-       console.log('loaddata');
        axios.get('/all').then((response) => {
          // console.log(response.data, this)
          commit('getWords', response.data);
@@ -66,36 +72,81 @@ Vue.component('tags', require('./components/Tags.vue').default);
          commit('getWord');
        });
        // axios.get('/categories').then((res) => commit('getCategories', res.data));
-     }
+   },
+   setWord(context,id){
+       context.commit('setWord',id)
+   },
+   setCounterMode(context,payload){
+       context.commit('setCounterMode',payload);
+   },
+   setCounterSet(context,payload){
+       context.commit('setCounterSet',payload);
+   }
    },
    mutations: {
      getWords(state, data) {
-         // state.words=['asdf','afds'];
-         console.log(data);
-       state.words = data.filter((el)=>el.language == state.activelanguage);
+         let wordslocal = data.filter((el)=>el.language == state.activelanguage).filter((el)=>el.counter < state.counterset);
+         if (wordslocal.length < 1) {console.log('skończyły się słówka'); return};
+         console.log(wordslocal);
+       state.words = data.filter((el)=>el.language == state.activelanguage).filter((el)=>el.counter < state.counterset);
      },
      changeLoadingState(state, loading) {
        state.loading = loading
      },
      getWord(state){
-         console.log('idzie po słowo');
-       // console.log(state.currentcategory);
-       state.currentQuestion = state.words[0];
+       if(state.randomset==true){
+           let count = state.words.length
+           let num = Math.floor(Math.random()*count);
+           state.currentQuestion = state.words[num];
+       }else {
+           state.currentQuestion = state.words[0];
+       }
+
        // state.currentQuestion = state.words.find((el) => el.counter <= state.counterset);
+     },
+     setWord(state,id){
+        axios.get('/getquestion/'+id).then((res)=>state.currentQuestion=res.data);
      },
      getCategories(state,data){
         state.categories = data;
-     }
+    },
+    setCounterMode(state,payload){
+        state.countermode = payload;
+    },
+    setCounterSet(state,payload){
+        state.counterset = payload;
+    },
+    initialiseStore(state) {
+			// Check if the ID exists
+			// if(localStorage.getItem('store')) {
+			// 	// Replace the state object with the stored item
+			// 	this.replaceState(
+			// 		Object.assign(state, JSON.parse(localStorage.getItem('store')))
+			// 	);
+			// }
+            // if(localStorage.getItem('counterset')){
+            // state.counterset = parseInt(localStorage.getItem('counterset'));
+            // }
+        }
    }
 
  })
+
+ store.subscribe((mutation, state) => {
+ 	// Store the state object as a JSON string
+ 	// localStorage.setItem('store', JSON.stringify(state));
+     localStorage.setItem('counterset',state.counterset);
+
+
+ });
 
  const app = new Vue({
    el: '#app',
    computed: Vuex.mapState(['words', 'loading']),
    store,
+
    created() {
-     //console.log(this.$store)
+       this.$store.state.counterset = parseInt(localStorage.getItem('counterset'));
      this.$store.dispatch('loadData') // dispatch loading
    }
  })

@@ -1,5 +1,5 @@
 <template>
-  <div class="col-md-6" id="egzaminer" >
+  <div  id="egzaminer" >
       <div id="error" v-for="error in errors" v-html="error"></div>
       <p><b> Przetłumacz:</b> {{currentQuestion.question}} </p>
       <p>Counter: {{currentQuestion.counter}}  <span style="font-size:8px">id: {{currentQuestion.id}}</span></p>
@@ -31,7 +31,7 @@
       <div class="" v-if="editbool">
           <div class="form-group" >
               <label for="">Pytanie po polsku</label>
-              <input type="text" name="question"  :value="currentQuestion.question">
+              <input type="text" id="editQquestion"  name="question"  :value="currentQuestion.question">
           </div>
           <div class="form-group" v-if="chosentag=='2'">
             <label for="" >Rodzajnik</label>
@@ -39,7 +39,7 @@
           </div>
           <div class="form-group">
               <label for="">Odpowiedź <span v-if="activelanguage=='DE'">po niemiecku</span><span v-else>po hiszpańsku</span>  </label>
-              <input type="text" name="answer" :value="currentQuestion.answer">
+              <input type="text" name="answer" id="editQanswer" :value="currentQuestion.answer">
           </div>
           <div class="form-group">
               <button @click="update" type="button" class="btn btn-primary" name="button">Zatwierdź</button>
@@ -47,8 +47,8 @@
           </div>
 
        </div>
-       <div class="" id="tagstoquestion" style="margin-bottom:5px">
-           <div class="" style="position:relative;width:90px" v-for="elem in tagstoquestion">
+       <div class="" id="tagstoquestion" style="margin-bottom:5px;display:flex">
+           <div class="" style="position:relative;margin-right:4px;" v-for="elem in tagstoquestion">
                <button class="btn-sm btn-primary tag" >{{elem.name}}</button>
                <div @click="deletetag(elem)" class="closer" style="position:absolute;width:10px;height:10px;background:red;top:-2px;right:0px;border-radius:2em;"><span></span></div>
            </div>
@@ -83,6 +83,9 @@
 </template>
 
 <script>
+import {mapState} from 'vuex';
+
+
 export default {
   data(){
     return {
@@ -111,31 +114,46 @@ export default {
           axios.get('tags').then((res)=>self.tags=res.data)
       },
       getTagsToQuestion(){
-          console.log('gettagstoqueston');
           let self = this;
-          console.log(self.$store.state.currentQuestion.id);
           axios.get('tagstoquestion/'+self.$store.state.currentQuestion.id).then((res)=>self.tagstoquestion=res.data)
-
       },
     answerm(e){
       e.preventDefault();
-      if (this.answer.escapeDiacritics().toLowerCase() == this.$store.state.currentQuestion.answer.escapeDiacritics().toLowerCase() && this.answer !='' ) {
-             this.disabledInput = true;
-             this.errors.push(`<b>Dobrze!</b> Można przejść do następnego pytania (Odpowiedź: ${this.$store.state.currentQuestion.answer})` );
-             this.$store.state.words.find((el)=>el.id==this.$store.state.currentQuestion.id).counter++;
-             axios.patch(`/counterquestion/${this.currentQuestion.id}`);
-             setTimeout(function() {
-                 document.getElementById('nextbutton').focus();
-             }, 200);
+      console.log('answerm');
 
-         } else {
-             // axios.patch(`/counterquestion/${this.currentQuestion.id}`);
-             this.disabledInput = true;
-             this.errors.push(`Nie udało się. Prawidłowa odpowiedź: <b> <span v-if="currentQuestion.category_id=='2'">${this.currentQuestion.rodzajnik}</span> ${this.currentQuestion.answer} </b>`);
-             setTimeout(function() {
-                 document.getElementById('nextbutton').focus();
-             }, 200);
-         }
+      if(this.currentQuestion.rodzajnik.length>1 ){
+          console.log('rodzajnik');
+          if (this.answer.escapeDiacritics().toLowerCase() == this.currentQuestion.rodzajnik+' '+this.currentQuestion.answer.escapeDiacritics().toLowerCase() && this.answer !='' ) {
+              this.answerPositive();
+          }else{
+              this.answerNegative();
+          }
+      }else {
+          console.log('else');
+          if (this.answer.escapeDiacritics().toLowerCase() == this.currentQuestion.answer.escapeDiacritics().toLowerCase()){
+              this.answerPositive();
+          }else {
+              this.answerNegative();
+
+          }
+
+      }
+    },
+    answerPositive(){
+        this.disabledInput = true;
+        this.errors.push(`<b>Dobrze!</b> Można przejść do następnego pytania (Odpowiedź:<b>${this.$store.state.currentQuestion.rodzajnik}</b> ${this.$store.state.currentQuestion.answer})` );
+        this.$store.state.words.find((el)=>el.id==this.$store.state.currentQuestion.id).counter++;
+        axios.patch(`/updatequestion2/${this.currentQuestion.id}`,{counter:this.currentQuestion.counter+1});
+        setTimeout(function() {
+            document.getElementById('nextbutton').focus();
+        }, 200);
+    },
+    answerNegative(){
+        this.disabledInput = true;
+        this.errors.push(`Nie udało się. Prawidłowa odpowiedź: <b> <span v-if="currentQuestion.category_id=='2'">${this.currentQuestion.rodzajnik}</span> ${this.currentQuestion.answer} </b>`);
+        setTimeout(function() {
+            document.getElementById('nextbutton').focus();
+        }, 200);
     },
     plusCounter(){
             this.$store.state.words.find((el)=>el.id==this.$store.state.currentQuestion.id).counter++;
@@ -144,7 +162,7 @@ export default {
         },
     plusCounter5(){
         this.$store.state.words.find((el)=>el.id==this.$store.state.currentQuestion.id).counter+=5;
-        axios.patch(`/updatequestion2/${this.currentQuestion.question_id}`,{counter:this.$store.state.currentQuestion.counter} );
+        axios.patch(`/updatequestion2/${this.currentQuestion.id}`,{counter:this.currentQuestion.counter});
         this.next();
     },
     plusCounter0(){
@@ -164,7 +182,10 @@ export default {
               return
           }
 
+
           this.$store.state.currentQuestion = elem;
+          this.getTagsToQuestion();
+
           setTimeout(function() {
               self.focusanswer();
           }, 200)
@@ -183,6 +204,7 @@ export default {
       },
 
       start:function(){
+         this.$store.dispatch('loadData');
         console.log('od nowa');
       },
       focusanswer() {
@@ -195,7 +217,10 @@ export default {
       update(){
           console.log('update');
         let self = this;
-        axios.patch(`updatequestion/${this.currentQuestion.id}`, {'question':self.currentQuestion.question,'answer':self.currentQuestion.answer,'rodzajnik':self.currentQuestion.rodzajnik })
+        let editQanswer = document.getElementById('editQanswer').value;
+        let editQquestion = document.getElementById('editQquestion').value;
+
+        axios.patch(`updatequestion3/${this.$store.state.currentQuestion.id}`, {'question':editQquestion,'answer':editQanswer,'rodzajnik':self.currentQuestion.rodzajnik })
       },
       formprevent(e){
         e.preventdefault()

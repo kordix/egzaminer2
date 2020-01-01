@@ -1,6 +1,5 @@
 <template>
   <div class="row">
-         <div class="col-md-4" style="display:flex">
          <select class="form-control" name="" v-model="activeobszar2" style="width:150px;margin-right:10px" @change="setActiveObszar">
              <option value="egzaminer">Egzaminer</option>
              <option value="list">Lista</option>
@@ -8,7 +7,16 @@
              <option value="tags">tagi</option>
              <option value="add">dodaj</option>
          </select>
-         </div>
+         <p style="margin-bottom:0px;line-height:2rem;">Counterset:</p>
+
+         <select class="" name="" class="mr-1" @change="setCounterMode">
+             <option value="<"><</option>
+             <option value=">">></option>
+         </select>
+         <select class="" name="" v-model="counterset" @change="setCounterSet">
+             <option  v-for="n in 10">{{n}}</option>
+         </select>
+        <button type="button" name="button" @click="reload">Ustaw</button>
          <!-- <div class="col-md-4">
              <button class="ikona ikonagerman" :class="{active:activelanguage=='DE'}" @click="setLanguage('DE')"> </button>
              <button class="ikona ikonaspain" :class="{active:activelanguage=='SP'}"  @click="setLanguage('SP')"> </button>
@@ -21,7 +29,10 @@
 export default {
   data(){
     return {
-      activeobszar2:'egzaminer'
+      activeobszar2:'egzaminer',
+      countermode:'<',
+      counterset:5
+
     }
   },
   methods:{
@@ -33,7 +44,19 @@ export default {
     setActiveObszar(val){
       this.$store.state.activeobszar = this.activeobszar2;
       // console.log(this.$store.state.activeobszar);
-    }
+  },
+  setCounterMode(){
+      let self = this;
+      this.$store.dispatch('setCounterMode',self.countermode);
+  },
+  setCounterSet(){
+      let self = this;
+      
+      this.$store.dispatch('setCounterSet',self.counterset);
+  },
+  reload(){
+      location.reload();
+  }
   },
   computed:{
     activelanguage(){
@@ -42,7 +65,10 @@ export default {
     activeobszar(){
       return (this.$store.state.activeobszar) ? this.$store.state.activeobszar : {};
     }
-  }
+},
+mounted(){
+    this.counterset = this.$store.state.counterset;
+}
 }
 
 </script>

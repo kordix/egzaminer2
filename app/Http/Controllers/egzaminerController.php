@@ -19,8 +19,9 @@ class egzaminerController extends Controller
         $rows = Question::with('tags')->whereHas('tags', function ($q) use ($tags2) {
             $q->whereIn('id', $tags2);
         })->where('language', '=', 'DE')->get();
-        dd($rows);
-        return view('layouts.list', compact('rows', 'currentlanguage', 'categories', 'tags'));
+        return $rows;
+        // dd($rows);
+        // return view('layouts.list', compact('rows', 'currentlanguage', 'categories', 'tags'));
     }
 
     public function tagsToQuestion($id){
@@ -39,10 +40,17 @@ class egzaminerController extends Controller
     }
 
     public function update2($id,Request $request){
+            $question = Result::find($id);
+        // dd($request->counter);
+        $question->update(['counter'=>$request->counter]);
+
+    }
+
+    public function update3($id, Request $request){
         $question = Question::find($id);
-
         $question->update($request->all());
-
+        dd($request->all());
+        
     }
 
     public function add(Request $request){
@@ -89,6 +97,10 @@ class egzaminerController extends Controller
 
     public function delete($id){
         Question::find($id)->delete();
+    }
+
+    public function getQuestion($id){
+        return Question::find($id);
     }
 
 
