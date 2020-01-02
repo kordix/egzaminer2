@@ -56,7 +56,7 @@ Vue.component('app', require('./components/App.vue').default);
      countermode:'<',
      categories:[],
      activelanguage:'DE',
-     activeobszar:'egzaminer',
+     activeobszar:'list',
      activeobszar2:'list',
      loading: true,
      randomset:false
@@ -105,7 +105,11 @@ Vue.component('app', require('./components/App.vue').default);
        // state.currentQuestion = state.words.find((el) => el.counter <= state.counterset);
      },
      setWord(state,id){
-        axios.get('/getquestion/'+id).then((res)=>state.currentQuestion=res.data);
+         console.log(id);
+         console.log(state.words.find((el)=>el.id==id));
+        state.currentQuestion = state.words.find((el)=>el.id==id);
+
+        // axios.get('/getquestion/'+id).then((res)=>state.currentQuestion=res.data);
      },
      getCategories(state,data){
         state.categories = data;

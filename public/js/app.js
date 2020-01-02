@@ -2155,6 +2155,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2162,12 +2170,42 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       showanswers: false,
       tags: null,
       words2: null,
-      activetag: null
+      activetag: null,
+      idmousedown: null,
+      search: null
     };
   },
   computed: {
     words: function words() {
       return this.$store.state.words;
+    },
+    test: function test() {
+      return 'dupa';
+    },
+    filteredHeroes: function filteredHeroes() {
+      var sortKey = '';
+      var filterkeydump = this.search;
+      var filterKey = filterkeydump && filterkeydump.toLowerCase();
+      var order = 1;
+      var heroes = this.words;
+
+      if (filterKey) {
+        heroes = heroes.filter(function (row) {
+          return Object.keys(row).some(function (key) {
+            return String(row[key]).toLowerCase().indexOf(filterKey) > -1;
+          });
+        });
+      }
+
+      if (sortKey) {
+        heroes = heroes.slice().sort(function (a, b) {
+          a = a[sortKey];
+          b = b[sortKey];
+          return (a === b ? 0 : a > b ? 1 : -1) * order;
+        });
+      }
+
+      return heroes;
     }
   },
   mounted: function mounted() {
@@ -2177,6 +2215,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])({
     setWord: 'setWord'
   }), {
+    handleMousedownStyling: function handleMousedownStyling() {
+      console.log('handleMousedownStyling');
+    },
     getTags: function getTags() {
       var self = this;
       axios.get('tags').then(function (res) {
@@ -2605,7 +2646,7 @@ __webpack_require__.r(__webpack_exports__);
       var self = this;
       var editQanswer = document.getElementById('editQanswer').value;
       var editQquestion = document.getElementById('editQquestion').value;
-      axios.patch("updatequestion3/".concat(this.$store.state.currentQuestion.id), {
+      axios.patch("updatequestion3/".concat(this.$store.state.currentQuestion.question_id), {
         'question': editQquestion,
         'answer': editQanswer,
         'rodzajnik': self.currentQuestion.rodzajnik
@@ -7125,7 +7166,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.row[data-v-ed233ab0]:hover{\r\n    color:red\n}\r\n\r\n", ""]);
+exports.push([module.i, "\n.myrow[data-v-ed233ab0]{\n    display:flex;\n    flex-wrap: wrap;\n}\n.row[data-v-ed233ab0]:hover {\r\n    color: red\n}\np[data-v-ed233ab0]:active {\r\n    background: green;\n}\n.active[data-v-ed233ab0] {\r\n    background: red;\n}\n", ""]);
 
 // exports
 
@@ -39230,7 +39271,7 @@ var render = function() {
     [
       _c(
         "div",
-        { staticClass: "row my-2", staticStyle: { "margin-left": "0px" } },
+        { staticClass: "myrow my-2", staticStyle: { "margin-left": "0px" } },
         [
           _c(
             "button",
@@ -39246,6 +39287,8 @@ var render = function() {
             },
             [_vm._v("Pokaż odpowiedzi")]
           ),
+          _vm._v(" "),
+          _c("p", [_vm._v("Wybierz tag:")]),
           _vm._v(" "),
           _c(
             "select",
@@ -39292,14 +39335,21 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
-      _vm._l(_vm.words2, function(question) {
+      _vm._l(_vm.filteredHeroes, function(question) {
         return _c(
           "div",
           {
             staticClass: "row",
+            class: { active: question.id == _vm.idmousedown },
             on: {
               click: function($event) {
                 return _vm.setWord(question.id)
+              },
+              mousedown: function($event) {
+                _vm.idmousedown = question.id
+              },
+              mouseup: function($event) {
+                _vm.idmousedown = null
               }
             }
           },
@@ -39323,7 +39373,38 @@ var render = function() {
             ])
           ]
         )
-      })
+      }),
+      _vm._v(" "),
+      _c("div", { staticClass: "myrow my-3" }, [
+        _c("p", [_vm._v("Szukaj:")]),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.search,
+              expression: "search"
+            }
+          ],
+          staticClass: "form-control",
+          staticStyle: {
+            height: "1.6em",
+            display: "inline-block",
+            width: "200px"
+          },
+          attrs: { type: "text", name: "" },
+          domProps: { value: _vm.search },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.search = $event.target.value
+            }
+          }
+        })
+      ])
     ],
     2
   )
@@ -53140,7 +53221,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
     countermode: '<',
     categories: [],
     activelanguage: 'DE',
-    activeobszar: 'egzaminer',
+    activeobszar: 'list',
     activeobszar2: 'list',
     loading: true,
     randomset: false
@@ -53200,9 +53281,13 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
 
     },
     setWord: function setWord(state, id) {
-      axios.get('/getquestion/' + id).then(function (res) {
-        return state.currentQuestion = res.data;
-      });
+      console.log(id);
+      console.log(state.words.find(function (el) {
+        return el.id == id;
+      }));
+      state.currentQuestion = state.words.find(function (el) {
+        return el.id == id;
+      }); // axios.get('/getquestion/'+id).then((res)=>state.currentQuestion=res.data);
     },
     getCategories: function getCategories(state, data) {
       state.categories = data;

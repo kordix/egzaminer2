@@ -220,7 +220,7 @@ export default {
         let editQanswer = document.getElementById('editQanswer').value;
         let editQquestion = document.getElementById('editQquestion').value;
 
-        axios.patch(`updatequestion3/${this.$store.state.currentQuestion.id}`, {'question':editQquestion,'answer':editQanswer,'rodzajnik':self.currentQuestion.rodzajnik })
+        axios.patch(`updatequestion3/${this.$store.state.currentQuestion.question_id}`, {'question':editQquestion,'answer':editQanswer,'rodzajnik':self.currentQuestion.rodzajnik })
       },
       formprevent(e){
         e.preventdefault()
