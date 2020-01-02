@@ -22,8 +22,8 @@ Vue.use(Vuex);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component('tester', require('./components/tester.vue').default);
-Vue.component('sets', require('./components/sets.vue').default);
+Vue.component('tester', require('./components/Tester.vue').default);
+Vue.component('sets', require('./components/Sets.vue').default);
 Vue.component('categoriser', require('./components/Categoriser.vue').default);
 Vue.component('lista', require('./components/Lista.vue').default);
 Vue.component('add', require('./components/Add.vue').default);
