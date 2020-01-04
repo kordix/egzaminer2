@@ -58,3 +58,5 @@ Route::patch('/updatequestion2/{id}', 'egzaminerController@update2');
 Route::patch('/updatequestion3/{id}', 'egzaminerController@update3');
 
 Route::get('/settings','SettingController@index');
+
+Route::patch('/updatesetting','SettingController@update');

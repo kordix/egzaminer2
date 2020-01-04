@@ -53254,6 +53254,9 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
     },
     setCounterSet: function setCounterSet(context, payload) {
       context.commit('setCounterSet', payload);
+    },
+    setLanguage: function setLanguage(context, payload) {
+      context.commit('setLanguage', payload);
     }
   },
   mutations: {
@@ -53261,7 +53264,9 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
       state.settings = data;
     },
     getWords: function getWords(state, data) {
+      console.log(data);
       console.log(state.settings.activelanguage);
+      console.log(state.counterset);
       var wordslocal = data.filter(function (el) {
         return el.language == state.settings.activelanguage;
       }).filter(function (el) {
@@ -53274,12 +53279,12 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
       }
 
       ;
-      console.log(wordslocal);
       state.words = data.filter(function (el) {
-        return el.language == state.activelanguage;
+        return el.language == state.settings.activelanguage;
       }).filter(function (el) {
         return el.counter < state.counterset;
       });
+      console.log(state.words);
     },
     changeLoadingState: function changeLoadingState(state, loading) {
       state.loading = loading;
@@ -53312,6 +53317,9 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
     setCounterSet: function setCounterSet(state, payload) {
       state.counterset = payload;
     },
+    setLanguage: function setLanguage(state, payload) {
+      state.settings.activelanguage = payload;
+    },
     initialiseStore: function initialiseStore(state) {// Check if the ID exists
       // if(localStorage.getItem('store')) {
       // 	// Replace the state object with the stored item
@@ -53343,6 +53351,16 @@ var app = new Vue({
       self.$store.dispatch('loadData');
     }, 0);
     ; // dispatch loading
+  },
+  methods: {
+    setLanguage: function setLanguage(lang) {
+      this.$store.dispatch('setLanguage', lang);
+      var self = this;
+      console.log(self.$store.state.settings.activelanguage);
+      axios.patch('/updatesetting', {
+        activelanguage: self.$store.state.settings.activelanguage
+      });
+    }
   }
 });
 

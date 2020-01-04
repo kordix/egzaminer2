@@ -57,7 +57,9 @@ class egzaminerController extends Controller
         $row = Question::create([
             'answer' => $request->answer,
             'question' => $request->question,
-            'rodzajnik' => $request->rodzajnik
+            'rodzajnik' => $request->rodzajnik,
+            'language' => 'SP'
+
         ]);
 
         Result::create([

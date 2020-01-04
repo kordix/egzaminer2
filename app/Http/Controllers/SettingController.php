@@ -70,9 +70,11 @@ class SettingController extends Controller
      * @param  \App\Setting  $setting
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Setting $setting)
+    public function update(Request $request)
     {
-        $setting->update($request->all());
+
+        Setting::find(1)->update($request->all());
+        dd($request);
     }
 
     /**

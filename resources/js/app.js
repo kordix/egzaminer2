@@ -45,135 +45,154 @@ Vue.component('app', require('./components/App.vue').default);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
- const store = new Vuex.Store({
-   state: {
-     count:0,
-     errors:[],
-     words: [],
-     currentQuestion:{},
-     currentcategory:4,
-     counterset:7,
-     countermode:'<',
-     categories:[],
-     activelanguage:'DE',
-     activeobszar:'egzaminer',
-     activeobszar2:'list',
-     loading: true,
-     randomset:false,
-     settings:{}
-   },
-   actions: {
-     loadData({
-       commit
-     }) {
-       axios.get('/all').then((response) => {
-         // console.log(response.data, this)
-         commit('getWords', response.data);
-         commit('changeLoadingState', false);
-         commit('getWord');
-       });
-       // axios.get('/categories').then((res) => commit('getCategories', res.data));
-   },
-   getSettings({
-     commit
-   }) {
-     axios.get('/settings').then((response) => {
-       // console.log(response.data, this)
-       commit('getSettings',response.data );
-       // state.settings=response.data;
-     });
-     // axios.get('/categories').then((res) => commit('getCategories', res.data));
- },
-
-   setWord(context,id){
-       context.commit('setWord',id)
-   },
-   setCounterMode(context,payload){
-       context.commit('setCounterMode',payload);
-   },
-   setCounterSet(context,payload){
-       context.commit('setCounterSet',payload);
-   }
-   },
-   mutations: {
-       getSettings(state,data){
-           state.settings=data;
-       },
-     getWords(state, data) {
-         console.log(state.settings.activelanguage);
-         let wordslocal = data.filter((el)=>el.language == state.settings.activelanguage).filter((el)=>el.counter < state.counterset);
-         if (wordslocal.length < 1) {console.log('skończyły się słówka'); return};
-         console.log(wordslocal);
-       state.words = data.filter((el)=>el.language == state.activelanguage).filter((el)=>el.counter < state.counterset);
-     },
-     changeLoadingState(state, loading) {
-       state.loading = loading
-     },
-     getWord(state){
-       if(state.randomset==true){
-           let count = state.words.length
-           let num = Math.floor(Math.random()*count);
-           state.currentQuestion = state.words[num];
-       }else {
-           state.currentQuestion = state.words[0];
-       }
-
-       // state.currentQuestion = state.words.find((el) => el.counter <= state.counterset);
-     },
-     setWord(state,id){
-         console.log(id);
-         console.log(state.words.find((el)=>el.id==id));
-        state.currentQuestion = state.words.find((el)=>el.id==id);
-
-        // axios.get('/getquestion/'+id).then((res)=>state.currentQuestion=res.data);
-     },
-     getCategories(state,data){
-        state.categories = data;
+const store = new Vuex.Store({
+  state: {
+    count: 0,
+    errors: [],
+    words: [],
+    currentQuestion: {},
+    currentcategory: 4,
+    counterset: 7,
+    countermode: '<',
+    categories: [],
+    activelanguage: 'DE',
+    activeobszar: 'egzaminer',
+    activeobszar2: 'list',
+    loading: true,
+    randomset: false,
+    settings: {}
+  },
+  actions: {
+    loadData({
+      commit
+    }) {
+      axios.get('/all').then((response) => {
+        // console.log(response.data, this)
+        commit('getWords', response.data);
+        commit('changeLoadingState', false);
+        commit('getWord');
+      });
+      // axios.get('/categories').then((res) => commit('getCategories', res.data));
     },
-    setCounterMode(state,payload){
-        state.countermode = payload;
+    getSettings({
+      commit
+    }) {
+      axios.get('/settings').then((response) => {
+        // console.log(response.data, this)
+        commit('getSettings', response.data);
+        // state.settings=response.data;
+      });
+      // axios.get('/categories').then((res) => commit('getCategories', res.data));
     },
-    setCounterSet(state,payload){
-        state.counterset = payload;
+
+    setWord(context, id) {
+      context.commit('setWord', id)
     },
+    setCounterMode(context, payload) {
+      context.commit('setCounterMode', payload);
+    },
+    setCounterSet(context, payload) {
+      context.commit('setCounterSet', payload);
+    },
+    setLanguage(context,payload){
+      context.commit('setLanguage',payload);
+    }
+    
+  },
+  mutations: {
+    getSettings(state, data) {
+      state.settings = data;
+    },
+    getWords(state, data) {
+      console.log(data);
+      console.log(state.settings.activelanguage);
+      console.log(state.counterset);
+      let wordslocal = data.filter((el) => el.language == state.settings.activelanguage).filter((el) => el.counter < state.counterset);
+      if (wordslocal.length < 1) { console.log('skończyły się słówka'); return };
+      state.words = data.filter((el) => el.language == state.settings.activelanguage).filter((el) => el.counter < state.counterset);
+      console.log(state.words);
+    },
+    changeLoadingState(state, loading) {
+      state.loading = loading
+    },
+    getWord(state) {
+      if (state.randomset == true) {
+        let count = state.words.length
+        let num = Math.floor(Math.random() * count);
+        state.currentQuestion = state.words[num];
+      } else {
+        state.currentQuestion = state.words[0];
+      }
+
+      // state.currentQuestion = state.words.find((el) => el.counter <= state.counterset);
+    },
+    setWord(state, id) {
+      console.log(id);
+      console.log(state.words.find((el) => el.id == id));
+      state.currentQuestion = state.words.find((el) => el.id == id);
+
+      // axios.get('/getquestion/'+id).then((res)=>state.currentQuestion=res.data);
+    },
+    getCategories(state, data) {
+      state.categories = data;
+    },
+    setCounterMode(state, payload) {
+      state.countermode = payload;
+    },
+    setCounterSet(state, payload) {
+      state.counterset = payload;
+    },
+    setLanguage(state, payload) {
+      state.settings.activelanguage = payload;
+    },
+
     initialiseStore(state) {
-			// Check if the ID exists
-			// if(localStorage.getItem('store')) {
-			// 	// Replace the state object with the stored item
-			// 	this.replaceState(
-			// 		Object.assign(state, JSON.parse(localStorage.getItem('store')))
-			// 	);
-			// }
-            // if(localStorage.getItem('counterset')){
-            // state.counterset = parseInt(localStorage.getItem('counterset'));
-            // }
-        }
-   }
+      // Check if the ID exists
+      // if(localStorage.getItem('store')) {
+      // 	// Replace the state object with the stored item
+      // 	this.replaceState(
+      // 		Object.assign(state, JSON.parse(localStorage.getItem('store')))
+      // 	);
+      // }
+      // if(localStorage.getItem('counterset')){
+      // state.counterset = parseInt(localStorage.getItem('counterset'));
+      // }
+    }
+  }
 
- })
+})
 
- store.subscribe((mutation, state) => {
- 	// Store the state object as a JSON string
- 	// localStorage.setItem('store', JSON.stringify(state));
-     localStorage.setItem('counterset',state.counterset);
+store.subscribe((mutation, state) => {
+  // Store the state object as a JSON string
+  // localStorage.setItem('store', JSON.stringify(state));
+  localStorage.setItem('counterset', state.counterset);
 
 
- });
+});
 
- const app = new Vue({
-   el: '#app',
-   computed: Vuex.mapState(['words', 'loading']),
-   store,
+const app = new Vue({
+  el: '#app',
+  computed: Vuex.mapState(['words', 'loading']),
+  store,
 
-   created() {
-       let self = this;
-       this.$store.state.counterset = parseInt(localStorage.getItem('counterset'));
-       this.$store.dispatch('getSettings'); // dispatch loading
-       setTimeout(function(){
-           self.$store.dispatch('loadData');
+  created() {
+    let self = this;
+    this.$store.state.counterset = parseInt(localStorage.getItem('counterset'));
+    this.$store.dispatch('getSettings'); // dispatch loading
+    setTimeout(function () {
+      self.$store.dispatch('loadData');
 
-       },0);;
+    }, 0);;
 
-      // dispatch loading
-   }
- })
+    // dispatch loading
+  },
+  methods: {
+    setLanguage(lang) {
+      this.$store.dispatch('setLanguage', lang);
+      let self = this;
+      console.log(self.$store.state.settings.activelanguage);
+
+      axios.patch('/updatesetting',{activelanguage:self.$store.state.settings.activelanguage});
+    }
+  }
+})

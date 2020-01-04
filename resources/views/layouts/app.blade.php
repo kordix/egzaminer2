@@ -95,10 +95,10 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <li>
-                            <img src="/images/SP.png" class="langicon img-fluid active" alt="" @click="setLanguage('SP')">
+                            <img src="/images/SP.png" class="langicon img-fluid" :class="{active:$store.state.settings.activelanguage=='SP'}" alt="" @click="setLanguage('SP')">
                         </li>
                         <li>
-                            <img src="/images/DE.png" class="langicon img-fluid" alt="" @click="setLanguage('DE')">
+                            <img src="/images/DE.png" class="langicon img-fluid" :class="{active:$store.state.settings.activelanguage=='DE'}" alt="" @click="setLanguage('DE')">
                         </li>
 
 
