@@ -11,6 +11,7 @@
     </select>
     <label for="">Odpowiedź (po obcemu)</label>
     <input type="text" name="" v-model="answer">
+    <br>
     <label for="">Pytanie (po polsku)</label>
     <input type="text" name="" v-model="question">
     <div style="display:flex;margin-bottom:5px">
@@ -42,7 +43,6 @@ export default {
     },
     methods:{
         add(){
-            console.log('add');
             let self = this;
             axios.post('add',{'question':this.question,'answer':this.answer,'rodzajnik':this.rodzajnik, 'tag_id':this.chosentag }).then((res)=>console.log(res));
             this.messages.push('dodano pytanie ('+this.question+') ');

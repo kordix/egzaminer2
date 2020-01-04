@@ -53,11 +53,8 @@ Route::get('/questionstotag/{id}','egzaminerController@questionsToTag');
 Route::get('/getquestion/{id}','egzaminerController@getQuestion');
 
 
-Route::get('/test',function(){
-    dd('asdf');
-});
-
-
 Route::patch('/updatequestion/{id}', 'egzaminerController@update');
 Route::patch('/updatequestion2/{id}', 'egzaminerController@update2');
 Route::patch('/updatequestion3/{id}', 'egzaminerController@update3');
+
+Route::get('/settings','SettingController@index');

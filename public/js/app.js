@@ -1868,6 +1868,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1881,7 +1882,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     add: function add() {
-      console.log('add');
       var self = this;
       axios.post('add', {
         'question': this.question,
@@ -38852,6 +38852,8 @@ var render = function() {
         }
       }),
       _vm._v(" "),
+      _c("br"),
+      _vm._v(" "),
       _c("label", { attrs: { for: "" } }, [_vm._v("Pytanie (po polsku)")]),
       _vm._v(" "),
       _c("input", {
@@ -53221,10 +53223,11 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
     countermode: '<',
     categories: [],
     activelanguage: 'DE',
-    activeobszar: 'list',
+    activeobszar: 'egzaminer',
     activeobszar2: 'list',
     loading: true,
-    randomset: false
+    randomset: false,
+    settings: {}
   },
   actions: {
     loadData: function loadData(_ref) {
@@ -53234,6 +53237,13 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
         commit('getWords', response.data);
         commit('changeLoadingState', false);
         commit('getWord');
+      }); // axios.get('/categories').then((res) => commit('getCategories', res.data));
+    },
+    getSettings: function getSettings(_ref2) {
+      var commit = _ref2.commit;
+      axios.get('/settings').then(function (response) {
+        // console.log(response.data, this)
+        commit('getSettings', response.data); // state.settings=response.data;
       }); // axios.get('/categories').then((res) => commit('getCategories', res.data));
     },
     setWord: function setWord(context, id) {
@@ -53247,9 +53257,13 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
     }
   },
   mutations: {
+    getSettings: function getSettings(state, data) {
+      state.settings = data;
+    },
     getWords: function getWords(state, data) {
+      console.log(state.settings.activelanguage);
       var wordslocal = data.filter(function (el) {
-        return el.language == state.activelanguage;
+        return el.language == state.settings.activelanguage;
       }).filter(function (el) {
         return el.counter < state.counterset;
       });
@@ -53321,8 +53335,14 @@ var app = new Vue({
   computed: vuex__WEBPACK_IMPORTED_MODULE_0__["default"].mapState(['words', 'loading']),
   store: store,
   created: function created() {
+    var self = this;
     this.$store.state.counterset = parseInt(localStorage.getItem('counterset'));
-    this.$store.dispatch('loadData'); // dispatch loading
+    this.$store.dispatch('getSettings'); // dispatch loading
+
+    setTimeout(function () {
+      self.$store.dispatch('loadData');
+    }, 0);
+    ; // dispatch loading
   }
 });
 

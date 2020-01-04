@@ -17,6 +17,42 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
+    <style media="screen">
+            .ikonaspain{
+               background:url("{{asset('images/SP.png')}}");
+               background-size:contain;
+               background-repeat:no-repeat;
+               width:40px;
+               height:30px;
+               margin:10px;
+           }
+           .ikonagerman{
+               background:url("{{asset('images/DE.png')}}");
+               background-size:contain;
+               background-repeat:no-repeat;
+
+               width:40px;
+               height:30px;
+               margin:10px;
+           }
+
+           .langicon{
+               width:40px;
+               height:40px;
+               margin:0px 10px 0px 10px;
+               transition:0.3s;
+           }
+
+           .langicon:hover{
+               opacity:0.6;
+           }
+
+           .active{
+               /* box-shadow:1px 1px 1px red; */
+               filter: drop-shadow(5px 5px 5px #992222);
+           }
+
+    </style>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"></link>
    <script type="text/javascript">
@@ -58,6 +94,14 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
+                        <li>
+                            <img src="/images/SP.png" class="langicon img-fluid active" alt="" @click="setLanguage('SP')">
+                        </li>
+                        <li>
+                            <img src="/images/DE.png" class="langicon img-fluid" alt="" @click="setLanguage('DE')">
+                        </li>
+
+
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">

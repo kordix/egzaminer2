@@ -56,10 +56,11 @@ Vue.component('app', require('./components/App.vue').default);
      countermode:'<',
      categories:[],
      activelanguage:'DE',
-     activeobszar:'list',
+     activeobszar:'egzaminer',
      activeobszar2:'list',
      loading: true,
-     randomset:false
+     randomset:false,
+     settings:{}
    },
    actions: {
      loadData({
@@ -73,6 +74,17 @@ Vue.component('app', require('./components/App.vue').default);
        });
        // axios.get('/categories').then((res) => commit('getCategories', res.data));
    },
+   getSettings({
+     commit
+   }) {
+     axios.get('/settings').then((response) => {
+       // console.log(response.data, this)
+       commit('getSettings',response.data );
+       // state.settings=response.data;
+     });
+     // axios.get('/categories').then((res) => commit('getCategories', res.data));
+ },
+
    setWord(context,id){
        context.commit('setWord',id)
    },
@@ -84,8 +96,12 @@ Vue.component('app', require('./components/App.vue').default);
    }
    },
    mutations: {
+       getSettings(state,data){
+           state.settings=data;
+       },
      getWords(state, data) {
-         let wordslocal = data.filter((el)=>el.language == state.activelanguage).filter((el)=>el.counter < state.counterset);
+         console.log(state.settings.activelanguage);
+         let wordslocal = data.filter((el)=>el.language == state.settings.activelanguage).filter((el)=>el.counter < state.counterset);
          if (wordslocal.length < 1) {console.log('skończyły się słówka'); return};
          console.log(wordslocal);
        state.words = data.filter((el)=>el.language == state.activelanguage).filter((el)=>el.counter < state.counterset);
@@ -150,7 +166,14 @@ Vue.component('app', require('./components/App.vue').default);
    store,
 
    created() {
+       let self = this;
        this.$store.state.counterset = parseInt(localStorage.getItem('counterset'));
-     this.$store.dispatch('loadData') // dispatch loading
+       this.$store.dispatch('getSettings'); // dispatch loading
+       setTimeout(function(){
+           self.$store.dispatch('loadData');
+
+       },0);;
+
+      // dispatch loading
    }
  })
