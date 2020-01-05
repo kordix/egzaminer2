@@ -9,10 +9,16 @@ use App\Setting;
 use App\Tag;
 use App\Tagpivot;
 use Illuminate\Support\Facades\DB;
+use Auth;
 
 
 class egzaminerController extends Controller
 {
+
+    public function __construct(){
+        $this->middleware('auth');
+    }
+
     public function questionsToTag($id)
     {
         $tags2 = [$id];
@@ -73,7 +79,7 @@ class egzaminerController extends Controller
         Result::create([
             'question_id' => $row->id,
             'counter' => 0,
-            'user_id' => 1
+            'user_id' => Auth::id()
         ]);
         Tagpivot::create([
             'question_id' => $row->id,

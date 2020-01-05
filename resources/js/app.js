@@ -166,6 +166,8 @@ store.subscribe((mutation, state) => {
   // Store the state object as a JSON string
   // localStorage.setItem('store', JSON.stringify(state));
   localStorage.setItem('counterset', state.counterset);
+  localStorage.setItem('activeobszar', state.activeobszar);
+
 
 
 });
@@ -182,7 +184,13 @@ const app = new Vue({
     setTimeout(function () {
       self.$store.dispatch('loadData');
 
-    }, 0);;
+    }, 0);
+
+    if(localStorage.getItem('activeobszar')){
+    this.$store.state.activeobszar = localStorage.getItem('activeobszar');
+    console.log('activeobszar '+this.$store.state.activeobszar);
+  }
+
 
     // dispatch loading
   },

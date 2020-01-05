@@ -1,32 +1,28 @@
 <template>
-<div class="">
-    <p v-for="elem in messages">{{elem}}</p>
+  <div class>
+    <p v-for="elem in messages" :key="elem">{{elem}}</p>
 
     <p>Dodaj słówko</p>
-    <label for="" v-if="chosentag=='2'">Rodzajnik</label>
-    <select class="" name="" v-model="rodzajnik" v-if="chosentag=='2'">
-        <option value="der">der</option>
-        <option value="die">die</option>
-        <option value="das">das</option>
+    <label for v-if="chosentag=='2'">Rodzajnik</label>
+    <select class name v-model="rodzajnik" v-if="chosenTagObj.name=='rzeczowniki'">
+      <option value="der">der</option>
+      <option value="die">die</option>
+      <option value="das">das</option>
     </select>
-    <label for="">Odpowiedź (po obcemu)</label>
-    <input type="text" name="" v-model="answer">
-    <br>
-    <label for="">Pytanie (po polsku)</label>
-    <input type="text" name="" v-model="question">
+    <label for>Odpowiedź (po obcemu)</label>
+    <input type="text" name v-model="answer" />
+    <br />
+    <label for>Pytanie (po polsku)</label>
+    <input type="text" name v-model="question" />
     <div style="display:flex;margin-bottom:5px">
-        <p style="margin-right:10px">Tag:</p>
-        <select class="" name="" v-model="chosentag" style="margin-right:10px">
-            <option :value="tag.id" v-for="tag in tags">{{tag.name}}</option>
-        </select>
+      <p style="margin-right:10px">Tag:</p>
+      <select class name v-model="chosentag" style="margin-right:10px">
+        <option :value="tag.id" :key="tag.id" v-for="tag in tags">{{tag.name}}</option>
+      </select>
     </div>
 
     <button type="button" name="button" class="btn btn-primary" @click="add">Zatwierdź</button>
-
-
-
-</div>
-
+  </div>
 </template>
 
 <script>
@@ -37,7 +33,7 @@ export default {
             answer:'',
             rodzajnik:'',
             tags:[],
-            chosentag:null,
+            chosentag:1,
             messages:[]
         }
     },
@@ -65,11 +61,20 @@ export default {
     },
     mounted(){
         this.getTags();
+    },
+    computed:{
+        chosenTagObj(){
+            if(this.tags.find((el)=>el.id==this.chosentag)){
+                return this.tags.find((el)=>el.id==this.chosentag)
+            }else{
+                return {}
+            }
+
+        }
     }
 
 }
 </script>
 
 <style>
-
 </style>

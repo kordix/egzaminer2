@@ -42,7 +42,8 @@ export default {
           this.$emit('reset');
           },
     setActiveObszar(val){
-      this.$store.state.activeobszar = this.activeobszar2;
+        this.$store.state.activeobszar = this.activeobszar2;
+        localStorage.activeobszar= this.activeobszar2;
       // console.log(this.$store.state.activeobszar);
   },
   setCounterMode(){
@@ -68,6 +69,9 @@ export default {
 },
 mounted(){
     this.counterset = this.$store.state.counterset;
+    if(localStorage.activeobszar){
+    this.activeobszar2 = localStorage.activeobszar
+    }
 }
 }
 

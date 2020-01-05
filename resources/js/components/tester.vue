@@ -1,6 +1,6 @@
 <template>
   <div  id="egzaminer" >
-      <div id="error" v-for="error in errors" v-html="error"></div>
+      <div id="error" v-for="error in errors" :key="error" v-html="error"></div>
       <p><b> Przetłumacz:</b> {{currentQuestion.question}} </p>
       <p>Counter: {{currentQuestion.counter}}  <span style="font-size:8px">id: {{currentQuestion.id}}</span></p>
       <label for="answer">Odpowiedź:</label>
@@ -48,7 +48,7 @@
 
        </div>
        <div class="" id="tagstoquestion" style="margin-bottom:5px;display:flex">
-           <div class="" style="position:relative;margin-right:4px;" v-for="elem in tagstoquestion">
+           <div class="" style="position:relative;margin-right:4px;" v-for="elem in tagstoquestion" :key="elem.id">
                <button class="btn-sm btn-primary tag" >{{elem.name}}</button>
                <div @click="deletetag(elem)" class="closer" style="position:absolute;width:10px;height:10px;background:red;top:-2px;right:0px;border-radius:2em;"><span></span></div>
            </div>
@@ -57,7 +57,7 @@
        <div class="" style="display:flex">
            <p @click="addTagToQuestion" style="margin-right:10px">Dodaj tag:</p>
            <select class="" name="" v-model="chosentag" style="margin-right:10px">
-               <option :value="tag.id" v-for="tag in tags">{{tag.name}}</option>
+               <option :value="tag.id" v-for="tag in tags" :key="tag.id">{{tag.name}}</option>
            </select>
            <button  @click="addTagToQuestion" type="button" class="btn-sm btn-default" name="button">Dodaj</button>
        </div>
@@ -115,6 +115,14 @@ export default {
       },
       getTagsToQuestion(){
           let self = this;
+          if (typeof(self.$store.state.currentQuestion)=='undefined'){
+              console.log('brak słów');
+              return
+          }
+
+          console.log(typeof(self.$store.state.currentQuestion.id));
+
+
           axios.get('tagstoquestion/'+self.$store.state.currentQuestion.id).then((res)=>self.tagstoquestion=res.data)
       },
     answerm(e){

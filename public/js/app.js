@@ -1865,10 +1865,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1876,7 +1872,7 @@ __webpack_require__.r(__webpack_exports__);
       answer: '',
       rodzajnik: '',
       tags: [],
-      chosentag: null,
+      chosentag: 1,
       messages: []
     };
   },
@@ -1916,6 +1912,21 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.getTags();
+  },
+  computed: {
+    chosenTagObj: function chosenTagObj() {
+      var _this = this;
+
+      if (this.tags.find(function (el) {
+        return el.id == _this.chosentag;
+      })) {
+        return this.tags.find(function (el) {
+          return el.id == _this.chosentag;
+        });
+      } else {
+        return {};
+      }
+    }
   }
 });
 
@@ -2288,7 +2299,8 @@ __webpack_require__.r(__webpack_exports__);
       this.$emit('reset');
     },
     setActiveObszar: function setActiveObszar(val) {
-      this.$store.state.activeobszar = this.activeobszar2; // console.log(this.$store.state.activeobszar);
+      this.$store.state.activeobszar = this.activeobszar2;
+      localStorage.activeobszar = this.activeobszar2; // console.log(this.$store.state.activeobszar);
     },
     setCounterMode: function setCounterMode() {
       var self = this;
@@ -2312,6 +2324,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.counterset = this.$store.state.counterset;
+
+    if (localStorage.activeobszar) {
+      this.activeobszar2 = localStorage.activeobszar;
+    }
   }
 });
 
@@ -2388,6 +2404,8 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 //
 //
 //
@@ -2508,6 +2526,13 @@ __webpack_require__.r(__webpack_exports__);
     },
     getTagsToQuestion: function getTagsToQuestion() {
       var self = this;
+
+      if (typeof self.$store.state.currentQuestion == 'undefined') {
+        console.log('brak słów');
+        return;
+      }
+
+      console.log(_typeof(self.$store.state.currentQuestion.id));
       axios.get('tagstoquestion/' + self.$store.state.currentQuestion.id).then(function (res) {
         return self.tagstoquestion = res.data;
       });
@@ -38781,7 +38806,7 @@ var render = function() {
     {},
     [
       _vm._l(_vm.messages, function(elem) {
-        return _c("p", [_vm._v(_vm._s(elem))])
+        return _c("p", { key: elem }, [_vm._v(_vm._s(elem))])
       }),
       _vm._v(" "),
       _c("p", [_vm._v("Dodaj słówko")]),
@@ -38790,7 +38815,7 @@ var render = function() {
         ? _c("label", { attrs: { for: "" } }, [_vm._v("Rodzajnik")])
         : _vm._e(),
       _vm._v(" "),
-      _vm.chosentag == "2"
+      _vm.chosenTagObj.name == "rzeczowniki"
         ? _c(
             "select",
             {
@@ -38910,7 +38935,7 @@ var render = function() {
             }
           },
           _vm._l(_vm.tags, function(tag) {
-            return _c("option", { domProps: { value: tag.id } }, [
+            return _c("option", { key: tag.id, domProps: { value: tag.id } }, [
               _vm._v(_vm._s(tag.name))
             ])
           }),
@@ -39654,6 +39679,7 @@ var render = function() {
     [
       _vm._l(_vm.errors, function(error) {
         return _c("div", {
+          key: error,
           attrs: { id: "error" },
           domProps: { innerHTML: _vm._s(error) }
         })
@@ -39869,7 +39895,10 @@ var render = function() {
         _vm._l(_vm.tagstoquestion, function(elem) {
           return _c(
             "div",
-            { staticStyle: { position: "relative", "margin-right": "4px" } },
+            {
+              key: elem.id,
+              staticStyle: { position: "relative", "margin-right": "4px" }
+            },
             [
               _c("button", { staticClass: "btn-sm btn-primary tag" }, [
                 _vm._v(_vm._s(elem.name))
@@ -39942,7 +39971,7 @@ var render = function() {
             }
           },
           _vm._l(_vm.tags, function(tag) {
-            return _c("option", { domProps: { value: tag.id } }, [
+            return _c("option", { key: tag.id, domProps: { value: tag.id } }, [
               _vm._v(_vm._s(tag.name))
             ])
           }),
@@ -53337,6 +53366,7 @@ store.subscribe(function (mutation, state) {
   // Store the state object as a JSON string
   // localStorage.setItem('store', JSON.stringify(state));
   localStorage.setItem('counterset', state.counterset);
+  localStorage.setItem('activeobszar', state.activeobszar);
 });
 var app = new Vue({
   el: '#app',
@@ -53350,7 +53380,12 @@ var app = new Vue({
     setTimeout(function () {
       self.$store.dispatch('loadData');
     }, 0);
-    ; // dispatch loading
+
+    if (localStorage.getItem('activeobszar')) {
+      this.$store.state.activeobszar = localStorage.getItem('activeobszar');
+      console.log('activeobszar ' + this.$store.state.activeobszar);
+    } // dispatch loading
+
   },
   methods: {
     setLanguage: function setLanguage(lang) {

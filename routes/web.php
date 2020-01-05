@@ -22,7 +22,7 @@ use App\Tag;
 use Illuminate\Support\Facades\DB;
 
 
-Route::view('/','start');
+Route::view('/','start')->middleware('auth');;
 
 Auth::routes();
 
