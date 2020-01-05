@@ -1865,12 +1865,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       question: '',
       answer: '',
-      rodzajnik: '',
+      rodzajnik: '-',
       tags: [],
       chosentag: 1,
       messages: []
@@ -38811,47 +38813,49 @@ var render = function() {
       _vm._v(" "),
       _c("p", [_vm._v("Dodaj słówko")]),
       _vm._v(" "),
-      _vm.chosentag == "2"
-        ? _c("label", { attrs: { for: "" } }, [_vm._v("Rodzajnik")])
-        : _vm._e(),
-      _vm._v(" "),
       _vm.chosenTagObj.name == "rzeczowniki"
-        ? _c(
-            "select",
-            {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.rodzajnik,
-                  expression: "rodzajnik"
+        ? _c("div", [
+            _vm.chosentag == "2"
+              ? _c("label", { attrs: { for: "" } }, [_vm._v("Rodzajnik")])
+              : _vm._e(),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.rodzajnik,
+                    expression: "rodzajnik"
+                  }
+                ],
+                attrs: { name: "" },
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.rodzajnik = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  }
                 }
-              ],
-              attrs: { name: "" },
-              on: {
-                change: function($event) {
-                  var $$selectedVal = Array.prototype.filter
-                    .call($event.target.options, function(o) {
-                      return o.selected
-                    })
-                    .map(function(o) {
-                      var val = "_value" in o ? o._value : o.value
-                      return val
-                    })
-                  _vm.rodzajnik = $event.target.multiple
-                    ? $$selectedVal
-                    : $$selectedVal[0]
-                }
-              }
-            },
-            [
-              _c("option", { attrs: { value: "der" } }, [_vm._v("der")]),
-              _vm._v(" "),
-              _c("option", { attrs: { value: "die" } }, [_vm._v("die")]),
-              _vm._v(" "),
-              _c("option", { attrs: { value: "das" } }, [_vm._v("das")])
-            ]
-          )
+              },
+              [
+                _c("option", { attrs: { value: "der" } }, [_vm._v("der")]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "die" } }, [_vm._v("die")]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "das" } }, [_vm._v("das")])
+              ]
+            )
+          ])
         : _vm._e(),
       _vm._v(" "),
       _c("label", { attrs: { for: "" } }, [_vm._v("Odpowiedź (po obcemu)")]),

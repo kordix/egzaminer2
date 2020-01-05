@@ -18,7 +18,7 @@ class Questions extends Migration
             $table->string('question')->default('');
             $table->string('answer')->default('');
             $table->string('language')->default('DE');
-            $table->string('rodzajnik')->default('');
+            $table->string('rodzajnik')->default('')->nullable();
             $table->timestamps();
 
         });

@@ -3,12 +3,14 @@
     <p v-for="elem in messages" :key="elem">{{elem}}</p>
 
     <p>Dodaj słówko</p>
+    <div v-if="chosenTagObj.name=='rzeczowniki'">
     <label for v-if="chosentag=='2'">Rodzajnik</label>
-    <select class name v-model="rodzajnik" v-if="chosenTagObj.name=='rzeczowniki'">
+    <select class name v-model="rodzajnik" >
       <option value="der">der</option>
       <option value="die">die</option>
       <option value="das">das</option>
     </select>
+    </div>
     <label for>Odpowiedź (po obcemu)</label>
     <input type="text" name v-model="answer" />
     <br />
@@ -31,7 +33,7 @@ export default {
         return {
             question:'',
             answer:'',
-            rodzajnik:'',
+            rodzajnik:'-',
             tags:[],
             chosentag:1,
             messages:[]

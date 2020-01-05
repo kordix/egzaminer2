@@ -86,7 +86,7 @@ class egzaminerController extends Controller
             'tag_id' => $request->tag_id
         ]);
 
-        dd($language);
+        dd($request->all());
     }
 
     public function addTag(Request $request)
