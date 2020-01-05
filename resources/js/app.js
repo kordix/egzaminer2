@@ -96,6 +96,7 @@ const store = new Vuex.Store({
     },
     setLanguage(context,payload){
       context.commit('setLanguage',payload);
+      context.dispatch('loadData');
     }
     
   },

@@ -53383,6 +53383,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
     },
     setLanguage: function setLanguage(context, payload) {
       context.commit('setLanguage', payload);
+      context.dispatch('loadData');
     }
   },
   mutations: {
