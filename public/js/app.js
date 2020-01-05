@@ -1867,6 +1867,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1875,7 +1891,8 @@ __webpack_require__.r(__webpack_exports__);
       rodzajnik: '',
       tags: [],
       chosentag: 1,
-      messages: []
+      messages: [],
+      reversed: true
     };
   },
   methods: {
@@ -2222,11 +2239,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   mounted: function mounted() {
+    this.loadData();
     this.getTags();
     this.getQuestionsToTag(2);
   },
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])({
-    setWord: 'setWord'
+    setWord: 'setWord',
+    loadData: 'loadData'
   }), {
     handleMousedownStyling: function handleMousedownStyling() {
       console.log('handleMousedownStyling');
@@ -7193,7 +7212,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.myrow[data-v-ed233ab0]{\n    display:flex;\n    flex-wrap: wrap;\n}\n.row[data-v-ed233ab0]:hover {\r\n    color: red\n}\np[data-v-ed233ab0]:active {\r\n    background: green;\n}\n.active[data-v-ed233ab0] {\r\n    background: red;\n}\n", ""]);
+exports.push([module.i, "\n.myrow[data-v-ed233ab0]{\n    display:flex;\n    flex-wrap: wrap;\n}\n.row[data-v-ed233ab0]:hover {\n    color: red\n}\np[data-v-ed233ab0]:active {\n    background: green;\n}\n.active[data-v-ed233ab0] {\n    background: red;\n}\n", ""]);
 
 // exports
 
@@ -38858,53 +38877,129 @@ var render = function() {
           ])
         : _vm._e(),
       _vm._v(" "),
-      _c("label", { attrs: { for: "" } }, [_vm._v("Odpowiedź (po obcemu)")]),
-      _vm._v(" "),
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.answer,
-            expression: "answer"
-          }
-        ],
-        attrs: { type: "text", name: "" },
-        domProps: { value: _vm.answer },
-        on: {
-          input: function($event) {
-            if ($event.target.composing) {
-              return
-            }
-            _vm.answer = $event.target.value
-          }
-        }
-      }),
-      _vm._v(" "),
-      _c("br"),
-      _vm._v(" "),
-      _c("label", { attrs: { for: "" } }, [_vm._v("Pytanie (po polsku)")]),
-      _vm._v(" "),
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.question,
-            expression: "question"
-          }
-        ],
-        attrs: { type: "text", name: "" },
-        domProps: { value: _vm.question },
-        on: {
-          input: function($event) {
-            if ($event.target.composing) {
-              return
-            }
-            _vm.question = $event.target.value
-          }
-        }
-      }),
+      _c("div", { staticClass: "row" }, [
+        _vm.reversed
+          ? _c("div", { staticClass: "col-md-9" }, [
+              _c("label", { attrs: { for: "" } }, [
+                _vm._v("Odpowiedź (po obcemu)")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.answer,
+                    expression: "answer"
+                  }
+                ],
+                attrs: { type: "text", name: "" },
+                domProps: { value: _vm.answer },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.answer = $event.target.value
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("br"),
+              _vm._v(" "),
+              _c("label", { attrs: { for: "" } }, [
+                _vm._v("Pytanie (po polsku)")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.question,
+                    expression: "question"
+                  }
+                ],
+                attrs: { type: "text", name: "" },
+                domProps: { value: _vm.question },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.question = $event.target.value
+                  }
+                }
+              })
+            ])
+          : _c("div", { staticClass: "col-md-9" }, [
+              _c("label", { attrs: { for: "" } }, [
+                _vm._v("Pytanie (po polsku)")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.question,
+                    expression: "question"
+                  }
+                ],
+                attrs: { type: "text", name: "" },
+                domProps: { value: _vm.question },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.question = $event.target.value
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("br"),
+              _vm._v(" "),
+              _c("label", { attrs: { for: "" } }, [
+                _vm._v("Odpowiedź (po obcemu)")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.answer,
+                    expression: "answer"
+                  }
+                ],
+                attrs: { type: "text", name: "" },
+                domProps: { value: _vm.answer },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.answer = $event.target.value
+                  }
+                }
+              })
+            ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-3" }, [
+          _c(
+            "button",
+            {
+              on: {
+                click: function($event) {
+                  _vm.reversed = !_vm.reversed
+                }
+              }
+            },
+            [_vm._v("reverse")]
+          )
+        ])
+      ]),
       _vm._v(" "),
       _c("div", { staticStyle: { display: "flex", "margin-bottom": "5px" } }, [
         _c("p", { staticStyle: { "margin-right": "10px" } }, [_vm._v("Tag:")]),
@@ -39386,7 +39481,7 @@ var render = function() {
           },
           [
             _c("div", { staticClass: "col-md-4" }, [
-              _vm._v("\r\n            " + _vm._s(question.question) + " "),
+              _vm._v("\n            " + _vm._s(question.question) + " "),
               _c("span", { staticStyle: { "font-size": "6px" } }, [
                 _vm._v("id: " + _vm._s(question.id))
               ])
@@ -39394,13 +39489,11 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col-md-4" }, [
               _c("b", [_vm._v(_vm._s(question.rodzajnik))]),
-              _vm._v(" " + _vm._s(question.answer) + "\r\n        ")
+              _vm._v(" " + _vm._s(question.answer) + "\n        ")
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "col-md-1" }, [
-              _vm._v(
-                "\r\n            " + _vm._s(question.counter) + "\r\n        "
-              )
+              _vm._v("\n            " + _vm._s(question.counter) + "\n        ")
             ])
           ]
         )

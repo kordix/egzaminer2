@@ -11,11 +11,27 @@
       <option value="das">das</option>
     </select>
     </div>
-    <label for>Odpowiedź (po obcemu)</label>
-    <input type="text" name v-model="answer" />
-    <br />
-    <label for>Pytanie (po polsku)</label>
-    <input type="text" name v-model="question" />
+    <div class="row">
+        <div class="col-md-9" v-if="reversed">
+            <label for>Odpowiedź (po obcemu)</label>
+            <input type="text" name v-model="answer" />
+            <br />
+            <label for>Pytanie (po polsku)</label>
+            <input type="text" name v-model="question" />
+        </div>
+        <div class="col-md-9" v-else>
+            <label for>Pytanie (po polsku)</label>
+            <input type="text" name v-model="question" />
+            <br />
+            <label for>Odpowiedź (po obcemu)</label>
+            <input type="text" name v-model="answer" />
+        </div>
+        <div class="col-md-3">
+            <button @click="reversed=!reversed">reverse</button>
+        </div>
+    </div>
+
+   
     <div style="display:flex;margin-bottom:5px">
       <p style="margin-right:10px">Tag:</p>
       <select class name v-model="chosentag" style="margin-right:10px">
@@ -36,7 +52,8 @@ export default {
             rodzajnik:'',
             tags:[],
             chosentag:1,
-            messages:[]
+            messages:[],
+            reversed:true
         }
     },
     methods:{

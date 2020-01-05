@@ -77,12 +77,14 @@ export default {
         }
     },
     mounted() {
+        this.loadData();
         this.getTags();
         this.getQuestionsToTag(2);
     },
     methods: {
         ...mapActions({
-            setWord: 'setWord'
+            setWord: 'setWord',
+            loadData:'loadData'
         }),
         handleMousedownStyling() {
             console.log('handleMousedownStyling');
