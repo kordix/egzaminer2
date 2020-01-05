@@ -65,13 +65,18 @@ class egzaminerController extends Controller
     public function add(Request $request)
     {
         $language = Setting::find(1)->activelanguage;
+        $rodzajnik = '';
 
-
+        if(is_null($request->rodzajnik)){
+            $rodzajnik = '';
+        }else{
+            $rodzajnik = $request->rodzajnik;
+        }
 
         $row = Question::create([
             'answer' => $request->answer,
             'question' => $request->question,
-            'rodzajnik' => $request->rodzajnik,
+            'rodzajnik' => $rodzajnik,
             'language' => $language
 
         ]);
