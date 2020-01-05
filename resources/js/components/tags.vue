@@ -1,5 +1,5 @@
 <template>
-<div class="">
+<div class="mt-2">
 <p v-for="tag in tags">{{tag.name}} <span style="font-size:8px"> id:{{tag.id}}</span> <span @click="deleteTag(tag.id)" style="color:red"> (usuń)</span></p>
 
 <input type="text" name="" v-model="taginput"> <button type="button" class="btn btn-primary" name="button" @click="addTag">Dodaj tag</button>

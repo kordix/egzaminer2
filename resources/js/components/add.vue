@@ -33,7 +33,7 @@ export default {
         return {
             question:'',
             answer:'',
-            rodzajnik:'-',
+            rodzajnik:'',
             tags:[],
             chosentag:1,
             messages:[]

@@ -1872,7 +1872,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       question: '',
       answer: '',
-      rodzajnik: '-',
+      rodzajnik: '',
       tags: [],
       chosentag: 1,
       messages: []
@@ -39597,7 +39597,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    {},
+    { staticClass: "mt-2" },
     [
       _vm._l(_vm.tags, function(tag) {
         return _c("p", [
