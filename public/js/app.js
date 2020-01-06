@@ -2511,6 +2511,32 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -7250,7 +7276,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.closer[data-v-0008ab6a]:hover{\r\n    background:#994444 !important;\n}\n.bold[data-v-0008ab6a]{\r\n    font-weight:bold;\n}\n.red[data-v-0008ab6a]{\r\n    color:red;\r\n    /* background:red; */\r\n    /* background-color:red; */\n}\n.unfocus[data-v-0008ab6a]:focus{\r\n    outline:none;\n}\r\n\r\n", ""]);
+exports.push([module.i, "\n.closer[data-v-0008ab6a]:hover{\r\n    background:#994444 !important;\n}\n.bold[data-v-0008ab6a]{\r\n    font-weight:bold;\n}\n.red[data-v-0008ab6a]{\r\n    color:red;\r\n    /* background:red; */\r\n    /* background-color:red; */\n}\n.unfocus[data-v-0008ab6a]:focus{\r\n    outline:none;\n}\n.divbackground[data-v-0008ab6a]{\r\n    background-size:contain;background-repeat:no-repeat;\n}\n.icon[data-v-0008ab6a]:hover{\r\n    filter:drop-shadow(red 2px 2px 2px);\n}\r\n\r\n", ""]);
 
 // exports
 
@@ -40086,14 +40112,120 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
+      _c("div", { staticStyle: { display: "flex", "align-items": "center" } }, [
+        _c(
+          "a",
+          {
+            attrs: {
+              href:
+                "https://www.collinsdictionary.com/dictionary/spanish-english/" +
+                _vm.currentQuestion.answer,
+              target: "_blank"
+            }
+          },
+          [_vm._m(0)]
+        ),
+        _vm._v(" "),
+        _c(
+          "a",
+          {
+            attrs: {
+              href:
+                "https://pl.wiktionary.org/wiki/" + _vm.currentQuestion.answer,
+              target: "_blank"
+            }
+          },
+          [_vm._m(1)]
+        ),
+        _vm._v(" "),
+        _vm._m(2)
+      ]),
+      _vm._v(" "),
       _c("p", [_vm._v("To do: ")]),
       _vm._v(" "),
-      _vm._m(0)
+      _vm._m(3)
     ],
     2
   )
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "icon",
+        staticStyle: {
+          "background-color": "#333",
+          width: "100px",
+          height: "40px",
+          margin: ".3em",
+          padding: "5px"
+        }
+      },
+      [
+        _c("img", {
+          staticClass: "img-fluid",
+          attrs: {
+            src: "",
+            src:
+              "https://www.collinsdictionary.com/external/images/logo.png?version=4.0.35",
+            alt: ""
+          }
+        })
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "icon",
+        staticStyle: { height: "60px", width: "60px", margin: ".3em" }
+      },
+      [
+        _c("img", {
+          staticClass: "img-fluid",
+          attrs: {
+            src:
+              "https://pl.wiktionary.org/static/images/project-logos/plwiktionary.png",
+            alt: ""
+          }
+        })
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "icon",
+        staticStyle: {
+          background: "#333399",
+          width: "100px",
+          height: "40px",
+          padding: "5px"
+        }
+      },
+      [
+        _c("img", {
+          staticClass: "img-fluid",
+          attrs: {
+            src: "https://static.bab.la/img/babla-logo-white.svg",
+            alt: ""
+          }
+        })
+      ]
+    )
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

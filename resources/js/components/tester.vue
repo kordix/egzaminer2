@@ -61,8 +61,34 @@
            </select>
            <button  @click="addTagToQuestion" type="button" class="btn-sm btn-default" name="button">Dodaj</button>
        </div>
+    <div style="display:flex;align-items:center">
+
+       
+    <a :href="'https://www.collinsdictionary.com/dictionary/spanish-english/'+currentQuestion.answer" target="_blank">   
+        <div style="background-color:#333;width:100px;height:40px;margin:.3em;padding:5px" class="icon">
+            <img src="" class="img-fluid" src="https://www.collinsdictionary.com/external/images/logo.png?version=4.0.35" alt="">
+            
+        </div>
+    </a>
+
+    <a :href="'https://pl.wiktionary.org/wiki/'+currentQuestion.answer" target="_blank">
+        <div style="height:60px;width:60px;margin:.3em" class="icon">
+            <img src="https://pl.wiktionary.org/static/images/project-logos/plwiktionary.png" class="img-fluid" alt="">
+        </div>
+    </a> 
+
+    <div style="background:#333399;width:100px;height:40px;padding:5px" class="icon">
+        <img src="https://static.bab.la/img/babla-logo-white.svg" class="img-fluid" alt="">
+    </div>
+
+    </div>
 
 
+
+
+
+
+      
       <p>To do: </p>
         <ul>
             <li>nauka wg tagu</li>
@@ -292,6 +318,14 @@ export default {
 
 .unfocus:focus{
     outline:none;
+}
+
+.divbackground{
+    background-size:contain;background-repeat:no-repeat;
+}
+
+.icon:hover{
+    filter:drop-shadow(red 2px 2px 2px);
 }
 
 </style>
