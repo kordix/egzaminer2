@@ -71,6 +71,7 @@
             .replace(/ö/g, 'o').replace(/é/g,'e')
             .replace(/ä/g, 'a').replace(/í/g,'i')
             .replace(/á/g,'a').replace(/ö/g,'o')
+            .replace(/ñ/g,'n')
             ;
     }
    </script>

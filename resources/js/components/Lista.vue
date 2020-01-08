@@ -10,14 +10,14 @@
     </div>
 
     <div class="row" v-for="question in filteredHeroes" @click="setWord(question.id)" @mousedown="idmousedown=question.id" @mouseup="idmousedown=null" :class="{active:question.id==idmousedown}">
-        <div class="col-md-4">
+        <div class="col-4">
             {{question.question}} <span style="font-size:6px">id: {{question.id}}</span>
 
         </div>
-        <div class="col-md-4">
+        <div class="col-4">
             <b>{{question.rodzajnik}}</b> {{question.answer}}
         </div>
-        <div class="col-md-1">
+        <div class="col-1">
             {{question.counter}}
         </div>
     </div>
