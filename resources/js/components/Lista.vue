@@ -3,13 +3,13 @@
     <div class="myrow my-2" style="margin-left:0px">
         <button type="button" class="btn btn-primary" style="margin-right:10px" name="button" @click="showanswers = !showanswers">Pokaż odpowiedzi</button>
         <p>Wybierz tag:</p>
-        <select class="" name="" class="form-control" style="width:200px" v-model="activetag" @change="getQuestionsToTag(activetag)">
-            <option v-for="tag in tags" :value="tag.id">{{tag.name}}</option>
+        <select name="" class="form-control" style="width:200px" v-model="activetag" @change="getQuestionsToTag(activetag)">
+            <option v-for="tag in tags" :key="tag.id" :value="tag.id">{{tag.name}}</option>
         </select>
 
     </div>
 
-    <div class="row" v-for="question in filteredHeroes" @click="setWord(question.id)" @mousedown="idmousedown=question.id" @mouseup="idmousedown=null" :class="{active:question.id==idmousedown}">
+    <div class="row" v-for="question in filteredHeroes" :key="question.id" @click="setWord(question.id)" @mousedown="idmousedown=question.id" @mouseup="idmousedown=null" :class="{active:question.id==idmousedown}">
         <div class="col-4">
             {{question.question}} <span style="font-size:6px">id: {{question.id}}</span>
 

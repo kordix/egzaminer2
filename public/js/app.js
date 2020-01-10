@@ -2304,7 +2304,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -39455,7 +39454,7 @@ var render = function() {
               ],
               staticClass: "form-control",
               staticStyle: { width: "200px" },
-              attrs: { name: "", class: "form-control" },
+              attrs: { name: "" },
               on: {
                 change: [
                   function($event) {
@@ -39478,9 +39477,11 @@ var render = function() {
               }
             },
             _vm._l(_vm.tags, function(tag) {
-              return _c("option", { domProps: { value: tag.id } }, [
-                _vm._v(_vm._s(tag.name))
-              ])
+              return _c(
+                "option",
+                { key: tag.id, domProps: { value: tag.id } },
+                [_vm._v(_vm._s(tag.name))]
+              )
             }),
             0
           )
@@ -39491,6 +39492,7 @@ var render = function() {
         return _c(
           "div",
           {
+            key: question.id,
             staticClass: "row",
             class: { active: question.id == _vm.idmousedown },
             on: {
@@ -39506,19 +39508,19 @@ var render = function() {
             }
           },
           [
-            _c("div", { staticClass: "col-md-4" }, [
+            _c("div", { staticClass: "col-4" }, [
               _vm._v("\n            " + _vm._s(question.question) + " "),
               _c("span", { staticStyle: { "font-size": "6px" } }, [
                 _vm._v("id: " + _vm._s(question.id))
               ])
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "col-md-4" }, [
+            _c("div", { staticClass: "col-4" }, [
               _c("b", [_vm._v(_vm._s(question.rodzajnik))]),
               _vm._v(" " + _vm._s(question.answer) + "\n        ")
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "col-md-1" }, [
+            _c("div", { staticClass: "col-1" }, [
               _vm._v("\n            " + _vm._s(question.counter) + "\n        ")
             ])
           ]
@@ -39620,8 +39622,6 @@ var render = function() {
         _vm._v(" "),
         _c("option", { attrs: { value: "list" } }, [_vm._v("Lista")]),
         _vm._v(" "),
-        _c("option", { attrs: { value: "showcase" } }, [_vm._v("Showcase")]),
-        _vm._v(" "),
         _c("option", { attrs: { value: "tags" } }, [_vm._v("tagi")]),
         _vm._v(" "),
         _c("option", { attrs: { value: "add" } }, [_vm._v("dodaj")])
@@ -39638,7 +39638,7 @@ var render = function() {
       "select",
       {
         staticClass: "mr-1",
-        attrs: { name: "", class: "mr-1" },
+        attrs: { name: "" },
         on: { change: _vm.setCounterMode }
       },
       [

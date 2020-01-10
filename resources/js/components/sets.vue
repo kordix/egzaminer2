@@ -3,13 +3,12 @@
          <select class="form-control" name="" v-model="activeobszar2" style="width:150px;margin-right:10px" @change="setActiveObszar">
              <option value="egzaminer">Egzaminer</option>
              <option value="list">Lista</option>
-             <option value="showcase">Showcase</option>
              <option value="tags">tagi</option>
              <option value="add">dodaj</option>
          </select>
          <p style="margin-bottom:0px;line-height:2rem;">Counterset:</p>
 
-         <select class="" name="" class="mr-1" @change="setCounterMode">
+         <select name="" class="mr-1" @change="setCounterMode">
              <option value="<"><</option>
              <option value=">">></option>
          </select>
