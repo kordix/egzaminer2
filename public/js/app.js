@@ -2193,6 +2193,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2202,7 +2216,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       words2: null,
       activetag: null,
       idmousedown: null,
-      search: null
+      search: null,
+      filterBy: 'name'
     };
   },
   computed: {
@@ -2241,7 +2256,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   mounted: function mounted() {
     this.loadData();
     this.getTags();
-    this.getQuestionsToTag(2);
   },
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])({
     setWord: 'setWord',
@@ -2259,7 +2273,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getQuestionsToTag: function getQuestionsToTag(id) {
       var _this = this;
 
+      if (id == 0) {
+        location.reload();
+        return;
+      }
+
       var self = this;
+      this.filterBy = 'tag';
       axios.get('questionstotag/' + id).then(function (res) {
         return _this.words2 = res.data;
       });
@@ -39476,55 +39496,106 @@ var render = function() {
                 ]
               }
             },
-            _vm._l(_vm.tags, function(tag) {
-              return _c(
-                "option",
-                { key: tag.id, domProps: { value: tag.id } },
-                [_vm._v(_vm._s(tag.name))]
-              )
-            }),
-            0
+            [
+              _c("option", { attrs: { value: "0" } }, [_vm._v("Wszystkie")]),
+              _vm._v(" "),
+              _vm._l(_vm.tags, function(tag) {
+                return _c(
+                  "option",
+                  { key: tag.id, domProps: { value: tag.id } },
+                  [_vm._v(_vm._s(tag.name))]
+                )
+              })
+            ],
+            2
           )
         ]
       ),
       _vm._v(" "),
       _vm._l(_vm.filteredHeroes, function(question) {
-        return _c(
-          "div",
-          {
-            key: question.id,
-            staticClass: "row",
-            class: { active: question.id == _vm.idmousedown },
-            on: {
-              click: function($event) {
-                return _vm.setWord(question.id)
+        return _vm.filterBy == "name"
+          ? _c(
+              "div",
+              {
+                key: question.id,
+                staticClass: "row",
+                class: { active: question.id == _vm.idmousedown },
+                on: {
+                  click: function($event) {
+                    return _vm.setWord(question.id)
+                  },
+                  mousedown: function($event) {
+                    _vm.idmousedown = question.id
+                  },
+                  mouseup: function($event) {
+                    _vm.idmousedown = null
+                  }
+                }
               },
-              mousedown: function($event) {
-                _vm.idmousedown = question.id
+              [
+                _c("div", { staticClass: "col-4" }, [
+                  _vm._v("\n            " + _vm._s(question.question) + " "),
+                  _c("span", { staticStyle: { "font-size": "6px" } }, [
+                    _vm._v("id: " + _vm._s(question.id))
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-4" }, [
+                  _c("b", [_vm._v(_vm._s(question.rodzajnik))]),
+                  _vm._v(" " + _vm._s(question.answer) + "\n        ")
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-1" }, [
+                  _vm._v(
+                    "\n            " + _vm._s(question.counter) + "\n        "
+                  )
+                ])
+              ]
+            )
+          : _vm._e()
+      }),
+      _vm._v(" "),
+      _vm._l(_vm.words2, function(question) {
+        return _vm.filterBy == "tag"
+          ? _c(
+              "div",
+              {
+                key: question.id,
+                staticClass: "row",
+                class: { active: question.id == _vm.idmousedown },
+                on: {
+                  click: function($event) {
+                    return _vm.setWord(question.id)
+                  },
+                  mousedown: function($event) {
+                    _vm.idmousedown = question.id
+                  },
+                  mouseup: function($event) {
+                    _vm.idmousedown = null
+                  }
+                }
               },
-              mouseup: function($event) {
-                _vm.idmousedown = null
-              }
-            }
-          },
-          [
-            _c("div", { staticClass: "col-4" }, [
-              _vm._v("\n            " + _vm._s(question.question) + " "),
-              _c("span", { staticStyle: { "font-size": "6px" } }, [
-                _vm._v("id: " + _vm._s(question.id))
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-4" }, [
-              _c("b", [_vm._v(_vm._s(question.rodzajnik))]),
-              _vm._v(" " + _vm._s(question.answer) + "\n        ")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-1" }, [
-              _vm._v("\n            " + _vm._s(question.counter) + "\n        ")
-            ])
-          ]
-        )
+              [
+                _c("div", { staticClass: "col-4" }, [
+                  _vm._v("\n            " + _vm._s(question.question) + "duo"),
+                  _c("span", { staticStyle: { "font-size": "6px" } }, [
+                    _vm._v("id: " + _vm._s(question.id))
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-4" }, [
+                  _c("b", [_vm._v(_vm._s(question.rodzajnik))]),
+                  _vm._v(" " + _vm._s(question.answer) + "\n        ")
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-1" }, [
+                  _vm._v(
+                    "\n            " + _vm._s(question.counter) + "\n        "
+                  )
+                ])
+              ]
+            )
+          : _vm._e()
       }),
       _vm._v(" "),
       _c("div", { staticClass: "myrow my-3" }, [
@@ -53624,6 +53695,8 @@ var app = new Vue({
       console.log(self.$store.state.settings.activelanguage);
       axios.patch('/updatesetting', {
         activelanguage: self.$store.state.settings.activelanguage
+      }).then(function (res) {
+        return location.reload();
       });
     }
   }

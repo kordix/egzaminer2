@@ -4,12 +4,13 @@
         <button type="button" class="btn btn-primary" style="margin-right:10px" name="button" @click="showanswers = !showanswers">Pokaż odpowiedzi</button>
         <p>Wybierz tag:</p>
         <select name="" class="form-control" style="width:200px" v-model="activetag" @change="getQuestionsToTag(activetag)">
+            <option value="0">Wszystkie</option>
             <option v-for="tag in tags" :key="tag.id" :value="tag.id">{{tag.name}}</option>
         </select>
 
     </div>
 
-    <div class="row" v-for="question in filteredHeroes" :key="question.id" @click="setWord(question.id)" @mousedown="idmousedown=question.id" @mouseup="idmousedown=null" :class="{active:question.id==idmousedown}">
+    <div v-if="filterBy=='name'" class="row" v-for="question in filteredHeroes" :key="question.id" @click="setWord(question.id)" @mousedown="idmousedown=question.id" @mouseup="idmousedown=null" :class="{active:question.id==idmousedown}">
         <div class="col-4">
             {{question.question}} <span style="font-size:6px">id: {{question.id}}</span>
 
@@ -21,6 +22,19 @@
             {{question.counter}}
         </div>
     </div>
+    <div v-if="filterBy=='tag'" class="row" v-for="question in words2" :key="question.id" @click="setWord(question.id)" @mousedown="idmousedown=question.id" @mouseup="idmousedown=null" :class="{active:question.id==idmousedown}">
+        <div class="col-4">
+            {{question.question}}duo<span style="font-size:6px">id: {{question.id}}</span>
+
+        </div>
+        <div class="col-4">
+            <b>{{question.rodzajnik}}</b> {{question.answer}}
+        </div>
+        <div class="col-1">
+            {{question.counter}}
+        </div>
+    </div>
+
     <div class="myrow my-3">
         <p>Szukaj:</p>
         <input type="text" name="" v-model="search" class="form-control" style="height:1.6em;display:inline-block;width:200px;">
@@ -43,7 +57,8 @@ export default {
             words2: null,
             activetag: null,
             idmousedown: null,
-            search:null
+            search:null,
+            filterBy:'name'
         }
     },
     computed: {
@@ -79,7 +94,6 @@ export default {
     mounted() {
         this.loadData();
         this.getTags();
-        this.getQuestionsToTag(2);
     },
     methods: {
         ...mapActions({
@@ -94,7 +108,12 @@ export default {
             axios.get('tags').then((res) => self.tags = res.data)
         },
         getQuestionsToTag(id) {
+            if(id==0){
+                location.reload();
+                return;
+            }
             let self = this;
+            this.filterBy='tag';
             axios.get('questionstotag/' + id).then((res) => this.words2 = res.data);
         }
     }

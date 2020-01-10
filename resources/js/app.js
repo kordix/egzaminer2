@@ -201,7 +201,7 @@ const app = new Vue({
       let self = this;
       console.log(self.$store.state.settings.activelanguage);
 
-      axios.patch('/updatesetting',{activelanguage:self.$store.state.settings.activelanguage});
+      axios.patch('/updatesetting',{activelanguage:self.$store.state.settings.activelanguage}).then((res)=>location.reload());
     }
   }
 })
