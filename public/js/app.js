@@ -39577,7 +39577,7 @@ var render = function() {
               },
               [
                 _c("div", { staticClass: "col-4" }, [
-                  _vm._v("\n            " + _vm._s(question.question) + "duo"),
+                  _vm._v("\n            " + _vm._s(question.question)),
                   _c("span", { staticStyle: { "font-size": "6px" } }, [
                     _vm._v("id: " + _vm._s(question.id))
                   ])

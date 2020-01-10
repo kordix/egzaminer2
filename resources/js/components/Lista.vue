@@ -24,7 +24,7 @@
     </div>
     <div v-if="filterBy=='tag'" class="row" v-for="question in words2" :key="question.id" @click="setWord(question.id)" @mousedown="idmousedown=question.id" @mouseup="idmousedown=null" :class="{active:question.id==idmousedown}">
         <div class="col-4">
-            {{question.question}}duo<span style="font-size:6px">id: {{question.id}}</span>
+            {{question.question}}<span style="font-size:6px">id: {{question.id}}</span>
 
         </div>
         <div class="col-4">
