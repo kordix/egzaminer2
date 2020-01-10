@@ -21,11 +21,13 @@ class egzaminerController extends Controller
 
     public function questionsToTag($id)
     {
+        $language = Setting::find(1)->activelanguage;
+
         $tags2 = [$id];
         // $rows = Tag::all();
         $rows = Question::with('tags')->whereHas('tags', function ($q) use ($tags2) {
             $q->whereIn('id', $tags2);
-        })->where('language', '=', 'DE')->join('results', 'questions.id', '=', 'results.question_id')->get();
+        })->where('language', '=', $language)->join('results', 'questions.id', '=', 'results.question_id')->get();
         return $rows;
         // dd($rows);
         // return view('layouts.list', compact('rows', 'currentlanguage', 'categories', 'tags'));
