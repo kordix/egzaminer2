@@ -24,7 +24,6 @@
         methods:{
             addTag(){
                 let self = this;
-                console.log(self.taginput);
                 axios.post('/addtag',{'name':self.taginput}).then((res)=>self.getTags());
             },
             getTags(){

@@ -67,22 +67,17 @@ const store = new Vuex.Store({
       commit
     }) {
       axios.get('/all').then((response) => {
-        // console.log(response.data, this)
         commit('getWords', response.data);
         commit('changeLoadingState', false);
         commit('getWord');
       });
-      // axios.get('/categories').then((res) => commit('getCategories', res.data));
     },
     getSettings({
       commit
     }) {
       axios.get('/settings').then((response) => {
-        // console.log(response.data, this)
         commit('getSettings', response.data);
-        // state.settings=response.data;
       });
-      // axios.get('/categories').then((res) => commit('getCategories', res.data));
     },
 
     setWord(context, id) {
@@ -112,31 +107,33 @@ const store = new Vuex.Store({
       state.settings = data;
     },
     getWords(state, data) {
-      console.log(data);
-      console.log(state.settings.activelanguage);
-      console.log(state.counterset);
       let wordslocal = data.filter((el) => el.language == state.settings.activelanguage).filter((el) => el.counter < state.counterset);
       if (wordslocal.length < 1) { console.log('skończyły się słówka'); return };
       state.words = data.filter((el) => el.language == state.settings.activelanguage).filter((el) => el.counter < state.counterset);
-      console.log(state.words);
     },
     changeLoadingState(state, loading) {
       state.loading = loading
     },
     getWord(state) {
-      if (state.randomset == true) {
+      console.log(state.randomset);
+      
+      if (state.randomset == 'true') {
+        console.log('działa');
+        
         let count = state.words.length
         let num = Math.floor(Math.random() * count);
+        console.log(num);
+        
         state.currentQuestion = state.words[num];
       } else {
+        console.log('nie działa');
+        
         state.currentQuestion = state.words[0];
       }
 
       // state.currentQuestion = state.words.find((el) => el.counter <= state.counterset);
     },
     setWord(state, id) {
-      console.log(id);
-      console.log(state.words.find((el) => el.id == id));
       state.currentQuestion = state.words.find((el) => el.id == id);
 
       // axios.get('/getquestion/'+id).then((res)=>state.currentQuestion=res.data);

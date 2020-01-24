@@ -2128,8 +2128,7 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    setcounterset: function setcounterset(event) {
-      console.log(event); // this.$store.state.counterset = parseInt(val.data);
+    setcounterset: function setcounterset(event) {// this.$store.state.counterset = parseInt(val.data);
     },
     setCategory: function setCategory(id) {
       this.$store.state.currentcategory = id;
@@ -2195,9 +2194,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mounted: function mounted() {
-    console.log('Component mounted.');
-  },
+  mounted: function mounted() {},
   methods: {
     test: function test() {
       this.$store.state.count++;
@@ -2331,9 +2328,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     setWord: 'setWord',
     loadData: 'loadData'
   }), {
-    handleMousedownStyling: function handleMousedownStyling() {
-      console.log('handleMousedownStyling');
-    },
+    handleMousedownStyling: function handleMousedownStyling() {},
     getTags: function getTags() {
       var self = this;
       axios.get('tags').then(function (res) {
@@ -2422,7 +2417,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     setActiveObszar: function setActiveObszar(val) {
       this.$store.state.activeobszar = this.activeobszar2;
-      localStorage.activeobszar = this.activeobszar2; // console.log(this.$store.state.activeobszar);
+      localStorage.activeobszar = this.activeobszar2;
     },
     setCounterMode: function setCounterMode() {
       var self = this;
@@ -2445,8 +2440,6 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    console.log('sets');
-    console.log(this.$store.state.randomset);
     this.randomsetlocal = this.$store.state.randomset;
     this.counterset = this.$store.state.counterset;
 
@@ -2492,7 +2485,6 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     addTag: function addTag() {
       var self = this;
-      console.log(self.taginput);
       axios.post('/addtag', {
         'name': self.taginput
       }).then(function (res) {
@@ -2529,8 +2521,6 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 //
 //
 //
@@ -2679,30 +2669,23 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       var self = this;
 
       if (typeof self.$store.state.currentQuestion == 'undefined') {
-        console.log('brak słów');
         return;
       }
 
-      console.log(_typeof(self.$store.state.currentQuestion.id));
       axios.get('tagstoquestion/' + self.$store.state.currentQuestion.id).then(function (res) {
         return self.tagstoquestion = res.data;
       });
     },
     answerm: function answerm(e) {
       e.preventDefault();
-      console.log('answerm');
 
       if (this.currentQuestion.rodzajnik.length > 1) {
-        console.log('rodzajnik');
-
         if (this.answer.escapeDiacritics().toLowerCase() == this.currentQuestion.rodzajnik + ' ' + this.currentQuestion.answer.escapeDiacritics().toLowerCase() && this.answer != '') {
           this.answerPositive();
         } else {
           this.answerNegative();
         }
       } else {
-        console.log('else');
-
         if (this.answer.escapeDiacritics().toLowerCase() == this.currentQuestion.answer.escapeDiacritics().toLowerCase()) {
           this.answerPositive();
         } else {
@@ -2808,17 +2791,13 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     },
     start: function start() {
       this.$store.dispatch('loadData');
-      console.log('od nowa');
     },
     focusanswer: function focusanswer() {
       try {
         document.getElementById('answerinput').focus();
-      } catch (e) {
-        console.log(e.message);
-      }
+      } catch (e) {}
     },
     update: function update() {
-      console.log('update');
       var self = this;
       var editQanswer = document.getElementById('editQanswer').value;
       var editQquestion = document.getElementById('editQquestion').value;
@@ -53668,18 +53647,16 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
     loadData: function loadData(_ref) {
       var commit = _ref.commit;
       axios.get('/all').then(function (response) {
-        // console.log(response.data, this)
         commit('getWords', response.data);
         commit('changeLoadingState', false);
         commit('getWord');
-      }); // axios.get('/categories').then((res) => commit('getCategories', res.data));
+      });
     },
     getSettings: function getSettings(_ref2) {
       var commit = _ref2.commit;
       axios.get('/settings').then(function (response) {
-        // console.log(response.data, this)
-        commit('getSettings', response.data); // state.settings=response.data;
-      }); // axios.get('/categories').then((res) => commit('getCategories', res.data));
+        commit('getSettings', response.data);
+      });
     },
     setWord: function setWord(context, id) {
       context.commit('setWord', id);
@@ -53706,9 +53683,6 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
       state.settings = data;
     },
     getWords: function getWords(state, data) {
-      console.log(data);
-      console.log(state.settings.activelanguage);
-      console.log(state.counterset);
       var wordslocal = data.filter(function (el) {
         return el.language == state.settings.activelanguage;
       }).filter(function (el) {
@@ -53726,26 +53700,26 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
       }).filter(function (el) {
         return el.counter < state.counterset;
       });
-      console.log(state.words);
     },
     changeLoadingState: function changeLoadingState(state, loading) {
       state.loading = loading;
     },
     getWord: function getWord(state) {
-      if (state.randomset == true) {
+      console.log(state.randomset);
+
+      if (state.randomset == 'true') {
+        console.log('działa');
         var count = state.words.length;
         var num = Math.floor(Math.random() * count);
+        console.log(num);
         state.currentQuestion = state.words[num];
       } else {
+        console.log('nie działa');
         state.currentQuestion = state.words[0];
       } // state.currentQuestion = state.words.find((el) => el.counter <= state.counterset);
 
     },
     setWord: function setWord(state, id) {
-      console.log(id);
-      console.log(state.words.find(function (el) {
-        return el.id == id;
-      }));
       state.currentQuestion = state.words.find(function (el) {
         return el.id == id;
       }); // axios.get('/getquestion/'+id).then((res)=>state.currentQuestion=res.data);

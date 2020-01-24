@@ -55,7 +55,6 @@ export default {
     setActiveObszar(val) {
       this.$store.state.activeobszar = this.activeobszar2;
       localStorage.activeobszar = this.activeobszar2;
-      // console.log(this.$store.state.activeobszar);
     },
     setCounterMode() {
       let self = this;
@@ -83,8 +82,6 @@ export default {
     }
   },
   mounted() {
-            console.log('sets');
-      console.log(this.$store.state.randomset);
       this.randomsetlocal = this.$store.state.randomset;
 
     this.counterset = this.$store.state.counterset;

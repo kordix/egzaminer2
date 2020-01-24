@@ -35,7 +35,6 @@ export default {
   },
   methods:{
     setcounterset(event){
-      console.log(event);
       // this.$store.state.counterset = parseInt(val.data);
     },
     setCategory(id){

@@ -101,7 +101,6 @@ export default {
             loadData:'loadData'
         }),
         handleMousedownStyling() {
-            console.log('handleMousedownStyling');
         },
         getTags() {
             let self = this;

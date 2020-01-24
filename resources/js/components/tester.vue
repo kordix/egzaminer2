@@ -142,28 +142,21 @@ export default {
       getTagsToQuestion(){
           let self = this;
           if (typeof(self.$store.state.currentQuestion)=='undefined'){
-              console.log('brak słów');
               return
           }
-
-          console.log(typeof(self.$store.state.currentQuestion.id));
-
 
           axios.get('tagstoquestion/'+self.$store.state.currentQuestion.id).then((res)=>self.tagstoquestion=res.data)
       },
     answerm(e){
       e.preventDefault();
-      console.log('answerm');
 
       if(this.currentQuestion.rodzajnik.length>1 ){
-          console.log('rodzajnik');
           if (this.answer.escapeDiacritics().toLowerCase() == this.currentQuestion.rodzajnik+' '+this.currentQuestion.answer.escapeDiacritics().toLowerCase() && this.answer !='' ) {
               this.answerPositive();
           }else{
               this.answerNegative();
           }
       }else {
-          console.log('else');
           if (this.answer.escapeDiacritics().toLowerCase() == this.currentQuestion.answer.escapeDiacritics().toLowerCase()){
               this.answerPositive();
           }else {
@@ -239,17 +232,14 @@ export default {
 
       start:function(){
          this.$store.dispatch('loadData');
-        console.log('od nowa');
       },
       focusanswer() {
             try{
             document.getElementById('answerinput').focus()
         }catch(e){
-            console.log(e.message);
         }
       },
       update(){
-          console.log('update');
         let self = this;
         let editQanswer = document.getElementById('editQanswer').value;
         let editQquestion = document.getElementById('editQquestion').value;
