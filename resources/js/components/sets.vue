@@ -22,8 +22,8 @@
       <option v-for="n in 10">{{n}}</option>
     </select>
     <button type="button" name="button" @click="reload">Ustaw</button>
-    <p>Random:</p>      
-    <input type="checkbox" v-model="randomsetlocal"  @change="test"/>
+    <!-- <p>Random:</p>       -->
+    <!-- <input type="checkbox" v-model="randomsetlocal"  @change="test"/> -->
 
     <!-- <div class="col-md-4">
              <button class="ikona ikonagerman" :class="{active:activelanguage=='DE'}" @click="setLanguage('DE')"> </button>

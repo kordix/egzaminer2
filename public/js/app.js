@@ -39208,13 +39208,49 @@ var render = function() {
     [
       _c("sets"),
       _vm._v(" "),
-      _vm.activeobszar == "egzaminer" ? _c("tester") : _vm._e(),
+      _c("tester", {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.activeobszar == "egzaminer",
+            expression: "activeobszar=='egzaminer'"
+          }
+        ]
+      }),
       _vm._v(" "),
-      _vm.activeobszar == "list" ? _c("lista") : _vm._e(),
+      _c("lista", {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.activeobszar == "list",
+            expression: "activeobszar=='list'"
+          }
+        ]
+      }),
       _vm._v(" "),
-      _vm.activeobszar == "add" ? _c("add") : _vm._e(),
+      _c("add", {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.activeobszar == "add",
+            expression: "activeobszar=='add'"
+          }
+        ]
+      }),
       _vm._v(" "),
-      _vm.activeobszar == "tags" ? _c("tags") : _vm._e()
+      _c("tags", {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.activeobszar == "tags",
+            expression: "activeobszar=='tags'"
+          }
+        ]
+      })
     ],
     1
   )
@@ -39802,50 +39838,7 @@ var render = function() {
       "button",
       { attrs: { type: "button", name: "button" }, on: { click: _vm.reload } },
       [_vm._v("Ustaw")]
-    ),
-    _vm._v(" "),
-    _c("p", [_vm._v("Random:")]),
-    _vm._v(" "),
-    _c("input", {
-      directives: [
-        {
-          name: "model",
-          rawName: "v-model",
-          value: _vm.randomsetlocal,
-          expression: "randomsetlocal"
-        }
-      ],
-      attrs: { type: "checkbox" },
-      domProps: {
-        checked: Array.isArray(_vm.randomsetlocal)
-          ? _vm._i(_vm.randomsetlocal, null) > -1
-          : _vm.randomsetlocal
-      },
-      on: {
-        change: [
-          function($event) {
-            var $$a = _vm.randomsetlocal,
-              $$el = $event.target,
-              $$c = $$el.checked ? true : false
-            if (Array.isArray($$a)) {
-              var $$v = null,
-                $$i = _vm._i($$a, $$v)
-              if ($$el.checked) {
-                $$i < 0 && (_vm.randomsetlocal = $$a.concat([$$v]))
-              } else {
-                $$i > -1 &&
-                  (_vm.randomsetlocal = $$a
-                    .slice(0, $$i)
-                    .concat($$a.slice($$i + 1)))
-              }
-            } else {
-              _vm.randomsetlocal = $$c
-            }
-          },
-          _vm.test
-        ]
-      }
-    })
+    )
   ])
 }
 var staticRenderFns = []
@@ -53640,7 +53633,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
     activeobszar: 'egzaminer',
     activeobszar2: 'list',
     loading: true,
-    randomset: false,
+    randomset: true,
     settings: {}
   },
   actions: {

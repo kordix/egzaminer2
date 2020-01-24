@@ -59,7 +59,7 @@ const store = new Vuex.Store({
     activeobszar: 'egzaminer',
     activeobszar2: 'list',
     loading: true,
-    randomset: false,
+    randomset: true,
     settings: {}
   },
   actions: {
