@@ -97,10 +97,17 @@ const store = new Vuex.Store({
     setLanguage(context,payload){
       context.commit('setLanguage',payload);
       context.dispatch('loadData');
+    },
+    setRandomset(context,payload){
+      context.commit('setRandomset',payload);
+    
     }
     
   },
   mutations: {
+    setRandomset(state,payload){
+      state.randomset = payload
+    },
     getSettings(state, data) {
       state.settings = data;
     },
@@ -168,6 +175,8 @@ store.subscribe((mutation, state) => {
   // localStorage.setItem('store', JSON.stringify(state));
   localStorage.setItem('counterset', state.counterset);
   localStorage.setItem('activeobszar', state.activeobszar);
+  localStorage.setItem('randomset', state.randomset);
+
 
 
 
@@ -189,7 +198,10 @@ const app = new Vue({
 
     if(localStorage.getItem('activeobszar')){
     this.$store.state.activeobszar = localStorage.getItem('activeobszar');
-    console.log('activeobszar '+this.$store.state.activeobszar);
+  }
+
+  if(localStorage.getItem('randomset')){
+    this.$store.dispatch('setRandomset',localStorage.getItem('randomset'));
   }
 
 
