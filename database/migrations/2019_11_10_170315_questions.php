@@ -15,10 +15,14 @@ class Questions extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('question')->default('');
-            $table->string('answer')->default('');
-            $table->string('language')->default('DE');
+            $table->string('question')->default('')->nullable();
+            $table->string('answer')->default('')->nullable();
+            $table->string('language')->default('DE')->nullable();
+            $table->string('partofspeech')->default('')->nullable();
+            $table->string('tags')->default('')->nullable();
             $table->string('rodzajnik')->default('')->nullable();
+            $table->string('fav')->default('')->nullable();
+            $table->string('level')->default('')->nullable();
             $table->timestamps();
 
         });

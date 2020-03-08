@@ -50,16 +50,17 @@ const store = new Vuex.Store({
     count: 0,
     errors: [],
     words: [],
+    wordsall:[],
     currentQuestion: {},
     currentcategory: 4,
-    counterset: 7,
+    counterset: 2,
     countermode: '<',
     categories: [],
     activelanguage: 'DE',
     activeobszar: 'egzaminer',
-    activeobszar2: 'list',
+    activeobszar2: 'categoriser',
     loading: true,
-    randomset: true,
+    randomset: false,
     settings: {}
   },
   actions: {
@@ -89,27 +90,35 @@ const store = new Vuex.Store({
     setCounterSet(context, payload) {
       context.commit('setCounterSet', payload);
     },
+    setCategory(context,payload){
+      context.commit('setCategory',payload);
+      location.reload();
+    },
     setLanguage(context,payload){
       context.commit('setLanguage',payload);
       context.dispatch('loadData');
     },
     setRandomset(context,payload){
-      context.commit('setRandomset',payload);
-    
+      // context.commit('setRandomset',payload);
     }
     
   },
   mutations: {
-    setRandomset(state,payload){
-      state.randomset = payload
-    },
+    // setRandomset(state,payload){
+    //   state.randomset = payload
+    // },
     getSettings(state, data) {
       state.settings = data;
     },
     getWords(state, data) {
       let wordslocal = data.filter((el) => el.language == state.settings.activelanguage).filter((el) => el.counter < state.counterset);
       if (wordslocal.length < 1) { console.log('skończyły się słówka'); return };
+
+      state.wordsall = data.filter((el) => el.language == state.settings.activelanguage);
       state.words = data.filter((el) => el.language == state.settings.activelanguage).filter((el) => el.counter < state.counterset);
+
+
+
     },
     changeLoadingState(state, loading) {
       state.loading = loading
@@ -150,7 +159,10 @@ const store = new Vuex.Store({
     setLanguage(state, payload) {
       state.settings.activelanguage = payload;
     },
-
+    setCategory(state,payload){
+      axios.patch('updatesetting',{currentcategory:payload});
+      // location.reload();
+    },
     initialiseStore(state) {
       // Check if the ID exists
       // if(localStorage.getItem('store')) {
@@ -172,11 +184,8 @@ store.subscribe((mutation, state) => {
   // localStorage.setItem('store', JSON.stringify(state));
   localStorage.setItem('counterset', state.counterset);
   localStorage.setItem('activeobszar', state.activeobszar);
-  localStorage.setItem('randomset', state.randomset);
-
-
-
-
+  localStorage.setItem('activeobszar2', state.activeobszar2);
+  // localStorage.setItem('randomset', state.randomset);
 });
 
 const app = new Vue({
@@ -188,17 +197,17 @@ const app = new Vue({
     let self = this;
     this.$store.state.counterset = parseInt(localStorage.getItem('counterset'));
     this.$store.dispatch('getSettings'); // dispatch loading
-    setTimeout(function () {
-      self.$store.dispatch('loadData');
+    // setTimeout(function () {
+    //   self.$store.dispatch('loadData');
 
-    }, 0);
+    // }, 1000);
 
     if(localStorage.getItem('activeobszar')){
     this.$store.state.activeobszar = localStorage.getItem('activeobszar');
   }
 
   if(localStorage.getItem('randomset')){
-    this.$store.dispatch('setRandomset',localStorage.getItem('randomset'));
+    // this.$store.dispatch('setRandomset',localStorage.getItem('randomset'));
   }
 
 

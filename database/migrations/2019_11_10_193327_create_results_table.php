@@ -17,7 +17,7 @@ class CreateResultsTable extends Migration
             $table->bigIncrements('id');
             $table->integer('question_id');
             $table->integer('user_id');
-            $table->integer('counter');
+            $table->integer('counter')->default(0);
             $table->timestamps();
         });
     }

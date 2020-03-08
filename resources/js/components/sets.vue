@@ -11,7 +11,10 @@
       <option value="list">Lista</option>
       <option value="tags">tagi</option>
       <option value="add">dodaj</option>
+      <option value="categoriser">categoriser</option>
     </select>
+
+    <div style="display:flex" v-if="$parent.instanceid == 1">
     <p style="margin-bottom:0px;line-height:2rem;">Counterset:</p>
 
     <select name class="mr-1" @change="setCounterMode">
@@ -22,6 +25,7 @@
       <option v-for="n in 10">{{n}}</option>
     </select>
     <button type="button" name="button" @click="reload">Ustaw</button>
+    </div>
     <!-- <p>Random:</p>       -->
     <!-- <input type="checkbox" v-model="randomsetlocal"  @change="test"/> -->
 
@@ -39,22 +43,26 @@ export default {
       activeobszar2: "egzaminer",
       countermode: "<",
       counterset: 5,
-      randomsetlocal:false
+      randomsetlocal: false
     };
   },
   methods: {
-      test(){
-          this.$store.dispatch('setRandomset',this.randomsetlocal);
-                        
-      },
+    test() {
+      this.$store.dispatch("setRandomset", this.randomsetlocal);
+    },
     setLanguage(arg) {
       this.$store.state.activelanguage = arg;
       localStorage.languageset = arg;
       this.$emit("reset");
     },
     setActiveObszar(val) {
-      this.$store.state.activeobszar = this.activeobszar2;
-      localStorage.activeobszar = this.activeobszar2;
+      if (this.$parent.instanceid == "2") {
+        this.$store.state.activeobszar2 = this.activeobszar2;
+        localStorage.activeobszar2 = this.activeobszar2;
+      } else {
+        this.$store.state.activeobszar = this.activeobszar2;
+        localStorage.activeobszar = this.activeobszar2;
+      }
     },
     setCounterMode() {
       let self = this;
@@ -82,10 +90,13 @@ export default {
     }
   },
   mounted() {
-      this.randomsetlocal = this.$store.state.randomset;
+    this.randomsetlocal = this.$store.state.randomset;
 
     this.counterset = this.$store.state.counterset;
-    if (localStorage.activeobszar) {
+
+    if (this.$parent.instanceid == "2" && localStorage.activeobszar2) {
+      this.activeobszar2 = localStorage.activeobszar2;
+    } else if (this.$parent.instanceid == "1" && localStorage.activeobszar) {
       this.activeobszar2 = localStorage.activeobszar;
     }
   }

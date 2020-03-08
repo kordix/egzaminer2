@@ -2042,11 +2042,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       key: 0,
-      render: true
+      key2: 1,
+      render: true,
+      render2: true
     };
   },
   methods: {
@@ -2078,8 +2082,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['activeobszar']
+  props: ['activeobszar', 'instanceid']
 });
 
 /***/ }),
@@ -2093,6 +2099,13 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -2117,49 +2130,51 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      counterset2: 5,
+      categories: ['rzeczownik', 'czasownik', 'przymiotnik', 'przyimek', 'zwroty'],
+      // counterset2:5,
       category: {},
       showcasebool: false // categories:[],
       // currentcategory:4
 
     };
   },
-  methods: {
-    setcounterset: function setcounterset(event) {// this.$store.state.counterset = parseInt(val.data);
-    },
-    setCategory: function setCategory(id) {
-      this.$store.state.currentcategory = id;
-      localStorage.currentcategory = id;
-      window.next();
-    }
-  },
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(['setCategory']), {
+    setcounterset: function setcounterset(event) {} // this.$store.state.counterset = parseInt(val.data);
+    // setCategory(id){
+    //   this.$store.state.currentcategory=id;
+    //   localStorage.currentcategory=id;
+    //   window.next();
+    // }
+
+  }),
   mounted: function mounted() {
-    if (localStorage.currentcategory) {
-      this.setCategory(localStorage.currentcategory);
-    }
+    console.log(this.$store.state.words);
   },
   computed: {
-    wordsFilter: function wordsFilter() {
-      var _this = this;
-
-      if (typeof this.$store.state.words == 'undefined' || typeof this.$store.state.currentcategory == 'undefined') {
-        return {};
-      } else {
-        return this.$store.state.words.filter(function (el) {
-          return el.counter <= _this.counterset2;
-        }).filter(function (el) {
-          return el.category_id == _this.currentcategory;
-        });
-      }
+    // wordsFilter(){
+    //       if(typeof(this.$store.state.words)=='undefined' || typeof(this.$store.state.currentcategory)=='undefined'){
+    //           return {}
+    //       }else{
+    //           return this.$store.state.words.filter((el)=>el.counter <= this.counterset2).filter((el)=>el.category_id == this.currentcategory)
+    //       }
+    //   },
+    words: function words() {
+      return this.$store.state.words;
     },
-    categories: function categories() {
-      return this.$store.state.categories ? this.$store.state.categories : [];
+    counter: function counter() {
+      return this.$store.state.counterset;
     },
+    // categories(){
+    //   return this.$store.state.categories ? this.$store.state.categories : [];
+    // },
     currentcategory: function currentcategory() {
-      return this.$store.state.currentcategory ? this.$store.state.currentcategory : '';
+      return this.$store.state.settings.currentcategory;
     }
   }
 });
@@ -2338,6 +2353,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getQuestionsToTag: function getQuestionsToTag(id) {
       var _this = this;
 
+      console.log('getquestionstotag');
+
       if (id == 0) {
         location.reload();
         return;
@@ -2397,6 +2414,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2408,7 +2429,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     test: function test() {
-      this.$store.dispatch('setRandomset', this.randomsetlocal);
+      this.$store.dispatch("setRandomset", this.randomsetlocal);
     },
     setLanguage: function setLanguage(arg) {
       this.$store.state.activelanguage = arg;
@@ -2416,8 +2437,13 @@ __webpack_require__.r(__webpack_exports__);
       this.$emit("reset");
     },
     setActiveObszar: function setActiveObszar(val) {
-      this.$store.state.activeobszar = this.activeobszar2;
-      localStorage.activeobszar = this.activeobszar2;
+      if (this.$parent.instanceid == "2") {
+        this.$store.state.activeobszar2 = this.activeobszar2;
+        localStorage.activeobszar2 = this.activeobszar2;
+      } else {
+        this.$store.state.activeobszar = this.activeobszar2;
+        localStorage.activeobszar = this.activeobszar2;
+      }
     },
     setCounterMode: function setCounterMode() {
       var self = this;
@@ -2443,7 +2469,9 @@ __webpack_require__.r(__webpack_exports__);
     this.randomsetlocal = this.$store.state.randomset;
     this.counterset = this.$store.state.counterset;
 
-    if (localStorage.activeobszar) {
+    if (this.$parent.instanceid == "2" && localStorage.activeobszar2) {
+      this.activeobszar2 = localStorage.activeobszar2;
+    } else if (this.$parent.instanceid == "1" && localStorage.activeobszar) {
       this.activeobszar2 = localStorage.activeobszar;
     }
   }
@@ -2631,15 +2659,55 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       errors: [],
-      answer: '',
+      answer: "",
       disabledInput: false,
       editbool: false,
-      wordcategory: '',
+      wordcategory: "",
       tags: null,
       tagstoquestion: null,
       chosentag: {}
@@ -2647,40 +2715,40 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     addTagToQuestion: function addTagToQuestion(elem) {
-      console.log('ADDRAGTOQUETON');
+      console.log("ADDRAGTOQUETON");
       var self = this;
-      axios.post('/addtagtoquestion/' + self.currentQuestion.id + '/' + self.chosentag).then(function (res) {
+      axios.post("/addtagtoquestion/" + self.currentQuestion.id + "/" + self.chosentag).then(function (res) {
         return self.getTagsToQuestion();
       });
     },
     deletetag: function deletetag(elem) {
       var self = this;
-      axios["delete"]('/deletetagtoquestion/' + elem.question_id + '/' + elem.tag_id).then(function (res) {
+      axios["delete"]("/deletetagtoquestion/" + elem.question_id + "/" + elem.tag_id).then(function (res) {
         return self.getTagsToQuestion();
       });
     },
     getTags: function getTags() {
       var self = this;
-      axios.get('tags').then(function (res) {
+      axios.get("tags").then(function (res) {
         return self.tags = res.data;
       });
     },
     getTagsToQuestion: function getTagsToQuestion() {
       var self = this;
 
-      if (typeof self.$store.state.currentQuestion == 'undefined') {
+      if (typeof self.$store.state.currentQuestion == "undefined") {
         return;
       }
 
-      axios.get('tagstoquestion/' + self.$store.state.currentQuestion.id).then(function (res) {
+      axios.get("tagstoquestion/" + self.$store.state.currentQuestion.id).then(function (res) {
         return self.tagstoquestion = res.data;
       });
     },
     answerm: function answerm(e) {
       e.preventDefault();
 
-      if (this.currentQuestion.rodzajnik.length > 1) {
-        if (this.answer.escapeDiacritics().toLowerCase() == this.currentQuestion.rodzajnik + ' ' + this.currentQuestion.answer.escapeDiacritics().toLowerCase() && this.answer != '') {
+      if (this.currentQuestion.rodzajnik) {
+        if (this.answer.escapeDiacritics().toLowerCase() == this.currentQuestion.rodzajnik + " " + this.currentQuestion.answer.escapeDiacritics().toLowerCase() && this.answer != "") {
           this.answerPositive();
         } else {
           this.answerNegative();
@@ -2705,14 +2773,14 @@ __webpack_require__.r(__webpack_exports__);
         counter: this.currentQuestion.counter + 1
       });
       setTimeout(function () {
-        document.getElementById('nextbutton').focus();
+        document.getElementById("nextbutton").focus();
       }, 200);
     },
     answerNegative: function answerNegative() {
       this.disabledInput = true;
       this.errors.push("Nie uda\u0142o si\u0119. Prawid\u0142owa odpowied\u017A: <b> <span v-if=\"currentQuestion.category_id=='2'\">".concat(this.currentQuestion.rodzajnik, "</span> ").concat(this.currentQuestion.answer, " </b>"));
       setTimeout(function () {
-        document.getElementById('nextbutton').focus();
+        document.getElementById("nextbutton").focus();
       }, 200);
     },
     plusCounter: function plusCounter() {
@@ -2750,14 +2818,23 @@ __webpack_require__.r(__webpack_exports__);
       this.errors = [];
       var self = this;
       this.disabledInput = false;
-      this.answer = '';
-      var elem = this.$store.state.words.filter(function (el) {
+      this.answer = "";
+      var filtered = this.$store.state.words.filter(function (el) {
         return el.counter <= _this5.$store.state.counterset;
-      }).find(function (el) {
+      });
+      console.log(this.$store.state.settings.currentcategory);
+
+      if (this.$store.state.settings.currentcategory) {
+        filtered = filtered.filter(function (el) {
+          return el.partofspeech == _this5.$store.state.settings.currentcategory;
+        });
+      }
+
+      var elem = filtered.find(function (el) {
         return el.id > _this5.$store.state.currentQuestion.id;
       });
 
-      if (typeof elem == 'undefined') {
+      if (typeof elem == "undefined") {
         this.start();
         return;
       }
@@ -2781,7 +2858,7 @@ __webpack_require__.r(__webpack_exports__);
       if (elem) {
         this.$store.state.currentQuestion = elem;
       } else {
-        console.log('brak prev');
+        console.log("brak prev");
       }
     },
     deleteQuestion: function deleteQuestion() {
@@ -2790,21 +2867,28 @@ __webpack_require__.r(__webpack_exports__);
       this.next();
     },
     start: function start() {
-      this.$store.dispatch('loadData');
+      this.$store.dispatch("loadData");
     },
     focusanswer: function focusanswer() {
       try {
-        document.getElementById('answerinput').focus();
+        document.getElementById("answerinput").focus();
       } catch (e) {}
     },
     update: function update() {
+      console.log('update');
       var self = this;
-      var editQanswer = document.getElementById('editQanswer').value;
-      var editQquestion = document.getElementById('editQquestion').value;
+      var editQanswer = document.getElementById("editQanswer").value;
+      var editQquestion = document.getElementById("editQquestion").value;
+      var editrodzajnik = '';
+
+      if (document.getElementById("editQrodzajnik")) {
+        editrodzajnik = document.getElementById("editQrodzajnik").value;
+      }
+
       axios.patch("updatequestion3/".concat(this.$store.state.currentQuestion.question_id), {
-        'question': editQquestion,
-        'answer': editQanswer,
-        'rodzajnik': self.currentQuestion.rodzajnik
+        question: editQquestion,
+        answer: editQanswer,
+        rodzajnik: editrodzajnik
       });
     },
     formprevent: function formprevent(e) {
@@ -2820,7 +2904,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var self = this;
     self.getTags();
-    window.events.$on('next', function () {
+    window.events.$on("next", function () {
       self.next();
     });
   },
@@ -2835,7 +2919,7 @@ __webpack_require__.r(__webpack_exports__);
       return this.$store.state.currentQuestion ? this.$store.state.currentQuestion : {};
     },
     activelanguage: function activelanguage() {
-      return this.$store.state.activelanguage ? this.$store.state.activelanguage : '';
+      return this.$store.state.activelanguage ? this.$store.state.activelanguage : "";
     },
     categories: function categories() {
       return this.$store.state.categories ? this.$store.state.categories : [];
@@ -7302,7 +7386,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.bold[data-v-47d90297]{\r\n  font-weight:bold;\n}\n.red[data-v-47d90297]{\r\n  color:red;\n}\r\n", ""]);
+exports.push([module.i, "\n.bold[data-v-47d90297]{\r\n  font-weight:bold;\n}\n.red[data-v-47d90297]{\r\n  color:red;\n}\n.active[data-v-47d90297]{\r\n  color:red;\n}\r\n", ""]);
 
 // exports
 
@@ -7359,7 +7443,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.closer[data-v-0008ab6a]:hover{\r\n    background:#994444 !important;\n}\n.bold[data-v-0008ab6a]{\r\n    font-weight:bold;\n}\n.red[data-v-0008ab6a]{\r\n    color:red;\r\n    /* background:red; */\r\n    /* background-color:red; */\n}\n.unfocus[data-v-0008ab6a]:focus{\r\n    outline:none;\n}\n.divbackground[data-v-0008ab6a]{\r\n    background-size:contain;background-repeat:no-repeat;\n}\n.icon[data-v-0008ab6a]:hover{\r\n    filter:drop-shadow(red 2px 2px 2px);\n}\r\n\r\n", ""]);
+exports.push([module.i, "\n.closer[data-v-0008ab6a]:hover {\r\n  background: #994444 !important;\n}\n.bold[data-v-0008ab6a] {\r\n  font-weight: bold;\n}\n.red[data-v-0008ab6a] {\r\n  color: red;\r\n  /* background:red; */\r\n  /* background-color:red; */\n}\n.unfocus[data-v-0008ab6a]:focus {\r\n  outline: none;\n}\n.divbackground[data-v-0008ab6a] {\r\n  background-size: contain;\r\n  background-repeat: no-repeat;\n}\n.icon[data-v-0008ab6a]:hover {\r\n  filter: drop-shadow(red 2px 2px 2px);\n}\r\n", ""]);
 
 // exports
 
@@ -39172,7 +39256,20 @@ var render = function() {
         _vm.render
           ? _c("appinstance", {
               key: _vm.key,
-              attrs: { activeobszar: _vm.$store.state.activeobszar }
+              attrs: {
+                activeobszar: _vm.$store.state.activeobszar,
+                instanceid: 1
+              }
+            })
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.render2
+          ? _c("appinstance", {
+              key: _vm.key2,
+              attrs: {
+                activeobszar: _vm.$store.state.activeobszar2,
+                instanceid: 2
+              }
             })
           : _vm._e()
       ],
@@ -39208,16 +39305,7 @@ var render = function() {
     [
       _c("sets"),
       _vm._v(" "),
-      _c("tester", {
-        directives: [
-          {
-            name: "show",
-            rawName: "v-show",
-            value: _vm.activeobszar == "egzaminer",
-            expression: "activeobszar=='egzaminer'"
-          }
-        ]
-      }),
+      _vm.activeobszar == "egzaminer" ? _c("tester") : _vm._e(),
       _vm._v(" "),
       _c("lista", {
         directives: [
@@ -39250,6 +39338,17 @@ var render = function() {
             expression: "activeobszar=='tags'"
           }
         ]
+      }),
+      _vm._v(" "),
+      _c("categoriser", {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.activeobszar == "categoriser",
+            expression: "activeobszar=='categoriser'"
+          }
+        ]
       })
     ],
     1
@@ -39280,162 +39379,61 @@ var render = function() {
   return _c(
     "div",
     { staticClass: "col-md-4" },
-    [
-      _c("label", { attrs: { for: "" } }, [_vm._v("Counterset:")]),
-      _vm._v(" "),
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model.number",
-            value: _vm.counterset2,
-            expression: "counterset2",
-            modifiers: { number: true }
-          }
-        ],
-        attrs: { type: "number", name: "", value: "" },
-        domProps: { value: _vm.counterset2 },
-        on: {
-          input: [
-            function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.counterset2 = _vm._n($event.target.value)
-            },
-            _vm.setcounterset
-          ],
-          blur: function($event) {
-            return _vm.$forceUpdate()
-          }
-        }
-      }),
-      _vm._v(" "),
-      _vm._l(_vm.categories, function(category) {
-        return _c(
-          "div",
-          {
-            on: {
-              click: function($event) {
-                return _vm.setCategory(category.id)
-              }
-            }
-          },
-          [
-            _c(
-              "span",
-              { class: { bold: category.id == _vm.currentcategory } },
-              [_vm._v(" " + _vm._s(category.name))]
-            ),
-            _vm._v(" "),
-            _c("span", [
-              _vm._v(
-                _vm._s(
-                  _vm.$store.state.words
-                    .filter(function(el) {
-                      return el.counter <= _vm.counterset2
-                    })
-                    .filter(function(el) {
-                      return el.category_id == category.id
-                    }).length
-                )
-              )
-            ]),
-            _vm._v(" "),
-            _c("span", [_vm._v(" / ")]),
-            _vm._v(" "),
-            _c("span", [
-              _vm._v(
-                _vm._s(
-                  _vm.$store.state.words.filter(function(el) {
-                    return el.category_id == category.id
-                  }).length
-                )
-              )
-            ])
-          ]
-        )
-      }),
-      _vm._v(" "),
-      _c("p", { staticStyle: { width: "300px" } }, [
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-sm btn-secondary",
-            staticStyle: { float: "right", display: "block" },
-            on: {
-              click: function($event) {
-                _vm.showcasebool = !_vm.showcasebool
-              }
-            }
-          },
-          [_vm._v("+")]
-        )
-      ]),
-      _vm._v(" "),
-      _c(
+    _vm._l(_vm.categories, function(category) {
+      return _c(
         "div",
         {
-          staticStyle: { "overflow-y": "auto", height: "300px" },
-          attrs: { id: "listagen" }
+          on: {
+            click: function($event) {
+              return _vm.setCategory(category)
+            }
+          }
         },
-        _vm._l(_vm.wordsFilter, function(item) {
-          return _c(
-            "div",
+        [
+          _c(
+            "p",
             {
-              staticStyle: { display: "flex" },
-              on: {
-                click: function($event) {
-                  _vm.$store.state.currentQuestion = item
-                }
-              }
+              class: { active: category == _vm.currentcategory },
+              staticStyle: { margin: "0px" }
             },
             [
               _c(
-                "p",
-                {
-                  class: { red: item.showcase == "1" },
-                  staticStyle: { margin: "0px", padding: "0px" },
-                  on: {
-                    click: function($event) {
-                      _vm.currentQuestion = item
-                    }
-                  }
-                },
-                [_vm._v(_vm._s(item.question) + " - " + _vm._s(item.counter))]
+                "span",
+                { class: { bold: category.id == _vm.currentcategory } },
+                [_vm._v(" " + _vm._s(category))]
               ),
               _vm._v(" "),
-              _vm.showcasebool
-                ? _c(
-                    "button",
-                    {
-                      staticClass: "unfocus",
-                      staticStyle: {
-                        width: "15px",
-                        height: "15px",
-                        padding: "0px",
-                        "line-height": "12px",
-                        "margin-left": "5px",
-                        "border-radius": "5px",
-                        background: "#FFBBBB"
-                      },
-                      attrs: { type: "button", name: "button" },
-                      on: {
-                        click: function($event) {
-                          return _vm.setShowcase(item.id)
-                        }
-                      }
-                    },
-                    [_vm._v("+")]
+              _c("span", [
+                _vm._v(
+                  _vm._s(
+                    _vm.$store.state.wordsall
+                      .filter(function(el) {
+                        return el.counter < _vm.counter
+                      })
+                      .filter(function(el) {
+                        return el.partofspeech == category
+                      }).length
                   )
-                : _vm._e()
+                )
+              ]),
+              _vm._v(" "),
+              _c("span", [_vm._v(" / ")]),
+              _vm._v(" "),
+              _c("span", [
+                _vm._v(
+                  _vm._s(
+                    _vm.$store.state.wordsall.filter(function(el) {
+                      return el.partofspeech == category
+                    }).length
+                  )
+                )
+              ])
             ]
           )
-        }),
-        0
+        ]
       )
-    ],
-    2
+    }),
+    0
   )
 }
 var staticRenderFns = []
@@ -39773,72 +39771,83 @@ var render = function() {
         _vm._v(" "),
         _c("option", { attrs: { value: "tags" } }, [_vm._v("tagi")]),
         _vm._v(" "),
-        _c("option", { attrs: { value: "add" } }, [_vm._v("dodaj")])
-      ]
-    ),
-    _vm._v(" "),
-    _c(
-      "p",
-      { staticStyle: { "margin-bottom": "0px", "line-height": "2rem" } },
-      [_vm._v("Counterset:")]
-    ),
-    _vm._v(" "),
-    _c(
-      "select",
-      {
-        staticClass: "mr-1",
-        attrs: { name: "" },
-        on: { change: _vm.setCounterMode }
-      },
-      [
-        _c("option", { attrs: { value: "<" } }, [_vm._v("<")]),
+        _c("option", { attrs: { value: "add" } }, [_vm._v("dodaj")]),
         _vm._v(" "),
-        _c("option", { attrs: { value: ">" } }, [_vm._v(">")])
+        _c("option", { attrs: { value: "categoriser" } }, [
+          _vm._v("categoriser")
+        ])
       ]
     ),
     _vm._v(" "),
-    _c(
-      "select",
-      {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.counterset,
-            expression: "counterset"
-          }
-        ],
-        attrs: { name: "" },
-        on: {
-          change: [
-            function($event) {
-              var $$selectedVal = Array.prototype.filter
-                .call($event.target.options, function(o) {
-                  return o.selected
-                })
-                .map(function(o) {
-                  var val = "_value" in o ? o._value : o.value
-                  return val
-                })
-              _vm.counterset = $event.target.multiple
-                ? $$selectedVal
-                : $$selectedVal[0]
+    _vm.$parent.instanceid == 1
+      ? _c("div", { staticStyle: { display: "flex" } }, [
+          _c(
+            "p",
+            { staticStyle: { "margin-bottom": "0px", "line-height": "2rem" } },
+            [_vm._v("Counterset:")]
+          ),
+          _vm._v(" "),
+          _c(
+            "select",
+            {
+              staticClass: "mr-1",
+              attrs: { name: "" },
+              on: { change: _vm.setCounterMode }
             },
-            _vm.setCounterSet
-          ]
-        }
-      },
-      _vm._l(10, function(n) {
-        return _c("option", [_vm._v(_vm._s(n))])
-      }),
-      0
-    ),
-    _vm._v(" "),
-    _c(
-      "button",
-      { attrs: { type: "button", name: "button" }, on: { click: _vm.reload } },
-      [_vm._v("Ustaw")]
-    )
+            [
+              _c("option", { attrs: { value: "<" } }, [_vm._v("<")]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: ">" } }, [_vm._v(">")])
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.counterset,
+                  expression: "counterset"
+                }
+              ],
+              attrs: { name: "" },
+              on: {
+                change: [
+                  function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.counterset = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  },
+                  _vm.setCounterSet
+                ]
+              }
+            },
+            _vm._l(10, function(n) {
+              return _c("option", [_vm._v(_vm._s(n))])
+            }),
+            0
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              attrs: { type: "button", name: "button" },
+              on: { click: _vm.reload }
+            },
+            [_vm._v("Ustaw")]
+          )
+        ])
+      : _vm._e()
   ])
 }
 var staticRenderFns = []
@@ -39958,12 +39967,14 @@ var render = function() {
       }),
       _vm._v(" "),
       _c("p", [
-        _c("b", [_vm._v(" Przetłumacz:")]),
-        _vm._v(" " + _vm._s(_vm.currentQuestion.question) + " ")
+        _c("b", [_vm._v("Przetłumacz:")]),
+        _vm._v("\n    " + _vm._s(_vm.currentQuestion.question) + "\n  ")
       ]),
       _vm._v(" "),
       _c("p", [
-        _vm._v("Counter: " + _vm._s(_vm.currentQuestion.counter) + "  "),
+        _vm._v(
+          "\n    Counter: " + _vm._s(_vm.currentQuestion.counter) + "\n    "
+        ),
         _c("span", { staticStyle: { "font-size": "8px" } }, [
           _vm._v("id: " + _vm._s(_vm.currentQuestion.id))
         ])
@@ -40109,12 +40120,16 @@ var render = function() {
               })
             ]),
             _vm._v(" "),
-            _vm.chosentag == "2"
+            _vm.currentQuestion.partofspeech == "rzeczownik"
               ? _c("div", { staticClass: "form-group" }, [
                   _c("label", { attrs: { for: "" } }, [_vm._v("Rodzajnik")]),
                   _vm._v(" "),
                   _c("input", {
-                    attrs: { type: "text", name: "rodzajnik" },
+                    attrs: {
+                      type: "text",
+                      name: "rodzajnik",
+                      id: "editQrodzajnik"
+                    },
                     domProps: { value: _vm.currentQuestion.rodzajnik }
                   })
                 ])
@@ -40122,7 +40137,7 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
               _c("label", { attrs: { for: "" } }, [
-                _vm._v("Odpowiedź "),
+                _vm._v("\n        Odpowiedź\n        "),
                 _vm.activelanguage == "DE"
                   ? _c("span", [_vm._v("po niemiecku")])
                   : _c("span", [_vm._v("po hiszpańsku")])
@@ -40287,10 +40302,20 @@ var render = function() {
           [_vm._m(1)]
         ),
         _vm._v(" "),
-        _vm._m(2)
+        _c(
+          "a",
+          {
+            attrs: {
+              href:
+                "https://pl.wiktionary.org/wiki/" + _vm.currentQuestion.answer,
+              target: "_blank"
+            }
+          },
+          [_vm._m(2)]
+        )
       ]),
       _vm._v(" "),
-      _c("p", [_vm._v("To do: ")]),
+      _c("p", [_vm._v("To do:")]),
       _vm._v(" "),
       _vm._m(3)
     ],
@@ -40318,7 +40343,6 @@ var staticRenderFns = [
         _c("img", {
           staticClass: "img-fluid",
           attrs: {
-            src: "",
             src:
               "https://www.collinsdictionary.com/external/images/logo.png?version=4.0.35",
             alt: ""
@@ -40384,7 +40408,7 @@ var staticRenderFns = [
       _vm._v(" "),
       _c("li", [_vm._v("synonimy beunruhigen änstigen")]),
       _vm._v(" "),
-      _c("li", [_vm._v("Counterset  > ")]),
+      _c("li", [_vm._v("Counterset >")]),
       _vm._v(" "),
       _c("li", [_vm._v("przełączanie tagów auto")]),
       _vm._v(" "),
@@ -53624,16 +53648,17 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
     count: 0,
     errors: [],
     words: [],
+    wordsall: [],
     currentQuestion: {},
     currentcategory: 4,
-    counterset: 7,
+    counterset: 2,
     countermode: '<',
     categories: [],
     activelanguage: 'DE',
     activeobszar: 'egzaminer',
-    activeobszar2: 'list',
+    activeobszar2: 'categoriser',
     loading: true,
-    randomset: true,
+    randomset: false,
     settings: {}
   },
   actions: {
@@ -53660,18 +53685,21 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
     setCounterSet: function setCounterSet(context, payload) {
       context.commit('setCounterSet', payload);
     },
+    setCategory: function setCategory(context, payload) {
+      context.commit('setCategory', payload);
+      location.reload();
+    },
     setLanguage: function setLanguage(context, payload) {
       context.commit('setLanguage', payload);
       context.dispatch('loadData');
     },
-    setRandomset: function setRandomset(context, payload) {
-      context.commit('setRandomset', payload);
+    setRandomset: function setRandomset(context, payload) {// context.commit('setRandomset',payload);
     }
   },
   mutations: {
-    setRandomset: function setRandomset(state, payload) {
-      state.randomset = payload;
-    },
+    // setRandomset(state,payload){
+    //   state.randomset = payload
+    // },
     getSettings: function getSettings(state, data) {
       state.settings = data;
     },
@@ -53688,6 +53716,9 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
       }
 
       ;
+      state.wordsall = data.filter(function (el) {
+        return el.language == state.settings.activelanguage;
+      });
       state.words = data.filter(function (el) {
         return el.language == state.settings.activelanguage;
       }).filter(function (el) {
@@ -53729,6 +53760,11 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
     setLanguage: function setLanguage(state, payload) {
       state.settings.activelanguage = payload;
     },
+    setCategory: function setCategory(state, payload) {
+      axios.patch('updatesetting', {
+        currentcategory: payload
+      }); // location.reload();
+    },
     initialiseStore: function initialiseStore(state) {// Check if the ID exists
       // if(localStorage.getItem('store')) {
       // 	// Replace the state object with the stored item
@@ -53747,7 +53783,7 @@ store.subscribe(function (mutation, state) {
   // localStorage.setItem('store', JSON.stringify(state));
   localStorage.setItem('counterset', state.counterset);
   localStorage.setItem('activeobszar', state.activeobszar);
-  localStorage.setItem('randomset', state.randomset);
+  localStorage.setItem('activeobszar2', state.activeobszar2); // localStorage.setItem('randomset', state.randomset);
 });
 var app = new Vue({
   el: '#app',
@@ -53757,18 +53793,16 @@ var app = new Vue({
     var self = this;
     this.$store.state.counterset = parseInt(localStorage.getItem('counterset'));
     this.$store.dispatch('getSettings'); // dispatch loading
-
-    setTimeout(function () {
-      self.$store.dispatch('loadData');
-    }, 0);
+    // setTimeout(function () {
+    //   self.$store.dispatch('loadData');
+    // }, 1000);
 
     if (localStorage.getItem('activeobszar')) {
       this.$store.state.activeobszar = localStorage.getItem('activeobszar');
     }
 
-    if (localStorage.getItem('randomset')) {
-      this.$store.dispatch('setRandomset', localStorage.getItem('randomset'));
-    } // dispatch loading
+    if (localStorage.getItem('randomset')) {} // this.$store.dispatch('setRandomset',localStorage.getItem('randomset'));
+    // dispatch loading
 
   },
   methods: {

@@ -19,6 +19,7 @@ class CreateSettingsTable extends Migration
             $table->string('activelanguage')->default('DE');
             $table->string('counterset')->default('5');
             $table->string('operator')->default('<');
+            $table->string('currentcategory')->default('');
             $table->timestamps();
         });
     }

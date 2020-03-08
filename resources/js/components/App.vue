@@ -2,7 +2,9 @@
     <div class="container">
         <div class="row">
 
-<appinstance :key="key" :activeobszar="$store.state.activeobszar" v-if="render"></appinstance>
+<appinstance :key="key" :activeobszar="$store.state.activeobszar" :instanceid="1" v-if="render"></appinstance>
+<appinstance :key="key2" :activeobszar="$store.state.activeobszar2" :instanceid="2" v-if="render2"></appinstance>
+
 <!-- <appinstance :activeobszar="$store.state.activeobszar2"></appinstance> -->
 </div>
 
@@ -15,7 +17,9 @@ export default {
     data(){
         return {
             key:0,
-            render:true
+            key2:1,
+            render:true,
+            render2:true
         }
     },
     methods:{

@@ -107,6 +107,8 @@ export default {
             axios.get('tags').then((res) => self.tags = res.data)
         },
         getQuestionsToTag(id) {
+            console.log('getquestionstotag');
+            
             if(id==0){
                 location.reload();
                 return;

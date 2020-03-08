@@ -16,8 +16,6 @@ class SettingController extends Controller
     {
         $setting = Setting::find(1);
         return $setting;
-
-
     }
 
     /**
