@@ -304,6 +304,12 @@ export default {
         .filter(el => el.counter <= this.$store.state.counterset)
         .filter(el => el.id < this.$store.state.currentQuestion.id)
         .slice(-1)[0];
+     
+       this.errors = [];
+      let self = this;
+      this.disabledInput = false;
+      this.answer = "";
+
       if (elem) {
         this.$store.state.currentQuestion = elem;
       } else {
@@ -324,9 +330,11 @@ export default {
         document.getElementById("answerinput").focus();
       } catch (e) {}
     },
-    update() {
+    async update() {
         console.log('update');
-        
+      this.errors = []    
+      this.errors.push('zedytowano');  
+
       let self = this;
       let editQanswer = document.getElementById("editQanswer").value;
       let editQquestion = document.getElementById("editQquestion").value;
@@ -335,9 +343,7 @@ export default {
           editrodzajnik = document.getElementById("editQrodzajnik").value;
       }
        
-
-
-      axios.patch(
+      await axios.patch(
         `updatequestion3/${this.$store.state.currentQuestion.question_id}`,
         {
           question: editQquestion,
@@ -345,6 +351,16 @@ export default {
           rodzajnik: editrodzajnik
         }
       );
+
+      this.$store.state.currentQuestion.answer = editQanswer;
+      this.$store.state.currentQuestion.question = editQquestion;
+
+       if(document.getElementById("editQrodzajnik")){
+         this.$store.state.currentQuestion.question = editrodzajnik
+      }
+
+
+      
     },
     formprevent(e) {
       e.preventdefault();
