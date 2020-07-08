@@ -111,8 +111,11 @@ const store = new Vuex.Store({
       state.settings = data;
     },
     getWords(state, data) {
+      
       let wordslocal = data.filter((el) => el.language == state.settings.activelanguage).filter((el) => el.counter < state.counterset);
+      console.log('length', wordslocal); 
       if (wordslocal.length < 1) { console.log('skończyły się słówka'); return };
+  
 
       state.wordsall = data.filter((el) => el.language == state.settings.activelanguage);
       state.words = data.filter((el) => el.language == state.settings.activelanguage).filter((el) => el.counter < state.counterset);
@@ -195,7 +198,11 @@ const app = new Vue({
 
   created() {
     let self = this;
+    console.log('cs localstorage', localStorage.counterset);
+    
+    if(localStorage.counterset){
     this.$store.state.counterset = parseInt(localStorage.getItem('counterset'));
+    }
     this.$store.dispatch('getSettings'); // dispatch loading
     // setTimeout(function () {
     //   self.$store.dispatch('loadData');

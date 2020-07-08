@@ -54503,6 +54503,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
       }).filter(function (el) {
         return el.counter < state.counterset;
       });
+      console.log('length', wordslocal);
 
       if (wordslocal.length < 1) {
         console.log('skończyły się słówka');
@@ -54585,7 +54586,12 @@ var app = new Vue({
   store: store,
   created: function created() {
     var self = this;
-    this.$store.state.counterset = parseInt(localStorage.getItem('counterset'));
+    console.log('cs localstorage', localStorage.counterset);
+
+    if (localStorage.counterset) {
+      this.$store.state.counterset = parseInt(localStorage.getItem('counterset'));
+    }
+
     this.$store.dispatch('getSettings'); // dispatch loading
     // setTimeout(function () {
     //   self.$store.dispatch('loadData');
