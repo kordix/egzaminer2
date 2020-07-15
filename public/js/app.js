@@ -2931,7 +2931,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 this.$store.state.currentQuestion.question = editQquestion;
 
                 if (document.getElementById("editQrodzajnik")) {
-                  this.$store.state.currentQuestion.question = editrodzajnik;
+                  this.$store.state.currentQuestion.rodzajnik = editrodzajnik;
                 }
 
               case 13:
@@ -7462,7 +7462,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.myrow[data-v-ed233ab0]{\n    display:flex;\n    flex-wrap: wrap;\n}\n.row[data-v-ed233ab0]:hover {\n    color: red\n}\np[data-v-ed233ab0]:active {\n    background: green;\n}\n.active[data-v-ed233ab0] {\n    background: red;\n}\n", ""]);
+exports.push([module.i, "\n.myrow[data-v-ed233ab0]{\r\n    display:flex;\r\n    flex-wrap: wrap;\n}\n.row[data-v-ed233ab0]:hover {\r\n    color: red\n}\np[data-v-ed233ab0]:active {\r\n    background: green;\n}\n.active[data-v-ed233ab0] {\r\n    background: red;\n}\r\n", ""]);
 
 // exports
 
@@ -40404,7 +40404,7 @@ var render = function() {
               },
               [
                 _c("div", { staticClass: "col-4" }, [
-                  _vm._v("\n            " + _vm._s(question.question) + " "),
+                  _vm._v("\r\n            " + _vm._s(question.question) + " "),
                   _c("span", { staticStyle: { "font-size": "6px" } }, [
                     _vm._v("id: " + _vm._s(question.id))
                   ])
@@ -40412,12 +40412,14 @@ var render = function() {
                 _vm._v(" "),
                 _c("div", { staticClass: "col-4" }, [
                   _c("b", [_vm._v(_vm._s(question.rodzajnik))]),
-                  _vm._v(" " + _vm._s(question.answer) + "\n        ")
+                  _vm._v(" " + _vm._s(question.answer) + "\r\n        ")
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "col-1" }, [
                   _vm._v(
-                    "\n            " + _vm._s(question.counter) + "\n        "
+                    "\r\n            " +
+                      _vm._s(question.counter) +
+                      "\r\n        "
                   )
                 ])
               ]
@@ -40447,7 +40449,7 @@ var render = function() {
               },
               [
                 _c("div", { staticClass: "col-4" }, [
-                  _vm._v("\n            " + _vm._s(question.question)),
+                  _vm._v("\r\n            " + _vm._s(question.question)),
                   _c("span", { staticStyle: { "font-size": "6px" } }, [
                     _vm._v("id: " + _vm._s(question.id))
                   ])
@@ -40455,12 +40457,14 @@ var render = function() {
                 _vm._v(" "),
                 _c("div", { staticClass: "col-4" }, [
                   _c("b", [_vm._v(_vm._s(question.rodzajnik))]),
-                  _vm._v(" " + _vm._s(question.answer) + "\n        ")
+                  _vm._v(" " + _vm._s(question.answer) + "\r\n        ")
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "col-1" }, [
                   _vm._v(
-                    "\n            " + _vm._s(question.counter) + "\n        "
+                    "\r\n            " +
+                      _vm._s(question.counter) +
+                      "\r\n        "
                   )
                 ])
               ]
@@ -55386,7 +55390,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\xampp\PROJEKTY\egzaminer\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\PROJEKTY\egzaminer\resources\js\app.js */"./resources/js/app.js");
 
 
 /***/ })

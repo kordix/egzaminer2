@@ -356,7 +356,7 @@ export default {
       this.$store.state.currentQuestion.question = editQquestion;
 
        if(document.getElementById("editQrodzajnik")){
-         this.$store.state.currentQuestion.question = editrodzajnik
+         this.$store.state.currentQuestion.rodzajnik = editrodzajnik
       }
 
 
