@@ -134,7 +134,9 @@
     </div>
     <p>To do:</p>
     <ul>
+      <li>categoriser tagi</li>
       <li>nauka wg tagu</li>
+      <li>duplikaty</li>
       <li>synonimy beunruhigen änstigen</li>
       <li>Counterset ></li>
       <li>przełączanie tagów auto</li>
