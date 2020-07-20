@@ -52,7 +52,7 @@ const store = new Vuex.Store({
     words: [],
     wordsall:[],
     currentQuestion: {},
-    currentcategory: 4,
+    // currentcategory: 4,
     counterset: 2,
     countermode: '<',
     categories: [],
@@ -127,19 +127,13 @@ const store = new Vuex.Store({
       state.loading = loading
     },
     getWord(state) {
-      console.log(state.randomset);
-      
       if (state.randomset == 'true') {
-        console.log('działa');
-        
         let count = state.words.length
         let num = Math.floor(Math.random() * count);
         console.log(num);
         
         state.currentQuestion = state.words[num];
       } else {
-        console.log('nie działa');
-        
         state.currentQuestion = state.words[0];
       }
 

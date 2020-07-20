@@ -1,15 +1,19 @@
 <template>
-  <div class="col-md-4">
-    <!-- <label for="">Counterset:</label> <input type="number" v-model.number="counterset2" name="" value="" @input="setcounterset"> -->
-    <!-- <button type="button" name="button" @click="setCounter">Ustaw</button> -->
+<div class="col-md-4">
     <div class="" v-for="category in categories" @click="setCategory(category)">
-       <p style="margin:0px" :class="{active:category==currentcategory}">
-        <span :class="{bold:category.id == currentcategory}"> {{category}}</span>
-        <span>{{$store.state.wordsall.filter((el)=>el.counter < counter).filter((el)=>el.partofspeech == category).length}}</span>
-        <span> / </span>
-        <span>{{$store.state.wordsall.filter((el)=>el.partofspeech == category).length}}</span>
-       </p> 
+        <p style="margin:0px" :class="{active:category==currentcategory}">
+            <span :class="{bold:category.id == currentcategory}"> {{category}}</span>
+            <span>{{words.filter((el)=>el.partofspeech == category).length}}</span>
+            <span> / </span>
+            <span>{{wordsall.filter((el)=>el.partofspeech == category).length}}</span>
+        </p>
     </div>
+
+    <br>
+    <br>
+
+    <p v-for="tag in tags" style="margin:0px">{{tag.name}}  {{words.filter((el)=>el.tags == tag.name).length}} </p>
+
     <!-- <p style="width:300px"><button  class="btn btn-sm btn-secondary" @click="showcasebool = !showcasebool" style="float:right;display:block">+</button></p>
     <div class="" id="listagen" style="overflow-y:auto;height:300px">
 
@@ -21,77 +25,60 @@
     </div> -->
 
 </div>
-
 </template>
 
 <script>
-import {mapActions} from 'vuex';
-
+import {
+    mapActions
+} from 'vuex';
+import {
+    mapState
+} from 'vuex';
 
 export default {
-  data(){
-    return {
-      categories:['rzeczownik','czasownik','przymiotnik','przyimek','zwroty'],
-      // counterset2:5,
-      category:{},
-      showcasebool:false,
-      // categories:[],
-      // currentcategory:4
+    data() {
+        return {
+            categories: ['rzeczownik', 'czasownik', 'przymiotnik', 'przyimek', 'zwroty'],
+            category: {},
+            showcasebool: false,
+            tags:[]
+        }
+    },
+    methods: {
+        ...mapActions([
+            'setCategory'
+        ]),
+        getTags() {
+            let self = this;
+            axios.get('tags').then((res) => self.tags = res.data)
+        },
+    },
+    mounted() {
+      this.getTags();
+
+    },
+    computed: {
+        ...mapState([
+            'words','wordsall', 'counterset',
+        ]),
+        currentcategory() {
+            return this.$store.state.settings.currentcategory;
+        }
     }
-  },
-  methods:{
-    ...mapActions([
-      'setCategory'
-      ]
-    ),
-    setcounterset(event){
-      // this.$store.state.counterset = parseInt(val.data);
-    }
-    // setCategory(id){
-    //   this.$store.state.currentcategory=id;
-    //   localStorage.currentcategory=id;
-    //   window.next();
-    // }
-  },
-  mounted(){
-    console.log(this.$store.state.words);
-  },
-  computed:{
-    // wordsFilter(){
-    //       if(typeof(this.$store.state.words)=='undefined' || typeof(this.$store.state.currentcategory)=='undefined'){
-    //           return {}
-    //       }else{
-    //           return this.$store.state.words.filter((el)=>el.counter <= this.counterset2).filter((el)=>el.category_id == this.currentcategory)
-    //       }
-    //   },
-      words(){
-        return this.$store.state.words;
-      },
-      counter(){
-        return this.$store.state.counterset
-      },
-      // categories(){
-      //   return this.$store.state.categories ? this.$store.state.categories : [];
-      // },
-      currentcategory(){
-        return this.$store.state.settings.currentcategory;
-      }
-  }
 
 }
-
 </script>
 
 <style scoped>
-.bold{
-  font-weight:bold;
+.bold {
+    font-weight: bold;
 }
 
-.red{
-  color:red;
+.red {
+    color: red;
 }
 
-.active{
-  color:red;
+.active {
+    color: red;
 }
 </style>

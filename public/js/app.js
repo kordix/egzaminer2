@@ -2144,51 +2144,36 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       categories: ['rzeczownik', 'czasownik', 'przymiotnik', 'przyimek', 'zwroty'],
-      // counterset2:5,
       category: {},
-      showcasebool: false // categories:[],
-      // currentcategory:4
-
+      showcasebool: false,
+      tags: []
     };
   },
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(['setCategory']), {
-    setcounterset: function setcounterset(event) {} // this.$store.state.counterset = parseInt(val.data);
-    // setCategory(id){
-    //   this.$store.state.currentcategory=id;
-    //   localStorage.currentcategory=id;
-    //   window.next();
-    // }
-
+    getTags: function getTags() {
+      var self = this;
+      axios.get('tags').then(function (res) {
+        return self.tags = res.data;
+      });
+    }
   }),
   mounted: function mounted() {
-    console.log(this.$store.state.words);
+    this.getTags();
   },
-  computed: {
-    // wordsFilter(){
-    //       if(typeof(this.$store.state.words)=='undefined' || typeof(this.$store.state.currentcategory)=='undefined'){
-    //           return {}
-    //       }else{
-    //           return this.$store.state.words.filter((el)=>el.counter <= this.counterset2).filter((el)=>el.category_id == this.currentcategory)
-    //       }
-    //   },
-    words: function words() {
-      return this.$store.state.words;
-    },
-    counter: function counter() {
-      return this.$store.state.counterset;
-    },
-    // categories(){
-    //   return this.$store.state.categories ? this.$store.state.categories : [];
-    // },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])(['words', 'wordsall', 'counterset']), {
     currentcategory: function currentcategory() {
       return this.$store.state.settings.currentcategory;
     }
-  }
+  })
 });
 
 /***/ }),
@@ -2569,6 +2554,8 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
 //
 //
 //
@@ -7443,7 +7430,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.bold[data-v-47d90297]{\r\n  font-weight:bold;\n}\n.red[data-v-47d90297]{\r\n  color:red;\n}\n.active[data-v-47d90297]{\r\n  color:red;\n}\r\n", ""]);
+exports.push([module.i, "\n.bold[data-v-47d90297] {\r\n    font-weight: bold;\n}\n.red[data-v-47d90297] {\r\n    color: red;\n}\n.active[data-v-47d90297] {\r\n    color: red;\n}\r\n", ""]);
 
 // exports
 
@@ -40173,61 +40160,78 @@ var render = function() {
   return _c(
     "div",
     { staticClass: "col-md-4" },
-    _vm._l(_vm.categories, function(category) {
-      return _c(
-        "div",
-        {
-          on: {
-            click: function($event) {
-              return _vm.setCategory(category)
+    [
+      _vm._l(_vm.categories, function(category) {
+        return _c(
+          "div",
+          {
+            on: {
+              click: function($event) {
+                return _vm.setCategory(category)
+              }
             }
-          }
-        },
-        [
-          _c(
-            "p",
-            {
-              class: { active: category == _vm.currentcategory },
-              staticStyle: { margin: "0px" }
-            },
-            [
-              _c(
-                "span",
-                { class: { bold: category.id == _vm.currentcategory } },
-                [_vm._v(" " + _vm._s(category))]
-              ),
-              _vm._v(" "),
-              _c("span", [
-                _vm._v(
-                  _vm._s(
-                    _vm.$store.state.wordsall
-                      .filter(function(el) {
-                        return el.counter < _vm.counter
-                      })
-                      .filter(function(el) {
+          },
+          [
+            _c(
+              "p",
+              {
+                class: { active: category == _vm.currentcategory },
+                staticStyle: { margin: "0px" }
+              },
+              [
+                _c(
+                  "span",
+                  { class: { bold: category.id == _vm.currentcategory } },
+                  [_vm._v(" " + _vm._s(category))]
+                ),
+                _vm._v(" "),
+                _c("span", [
+                  _vm._v(
+                    _vm._s(
+                      _vm.words.filter(function(el) {
                         return el.partofspeech == category
                       }).length
+                    )
                   )
-                )
-              ]),
-              _vm._v(" "),
-              _c("span", [_vm._v(" / ")]),
-              _vm._v(" "),
-              _c("span", [
-                _vm._v(
-                  _vm._s(
-                    _vm.$store.state.wordsall.filter(function(el) {
-                      return el.partofspeech == category
-                    }).length
+                ]),
+                _vm._v(" "),
+                _c("span", [_vm._v(" / ")]),
+                _vm._v(" "),
+                _c("span", [
+                  _vm._v(
+                    _vm._s(
+                      _vm.wordsall.filter(function(el) {
+                        return el.partofspeech == category
+                      }).length
+                    )
                   )
-                )
-              ])
-            ]
+                ])
+              ]
+            )
+          ]
+        )
+      }),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v(" "),
+      _vm._l(_vm.tags, function(tag) {
+        return _c("p", { staticStyle: { margin: "0px" } }, [
+          _vm._v(
+            _vm._s(tag.name) +
+              "  " +
+              _vm._s(
+                _vm.words.filter(function(el) {
+                  return el.tags == tag.name
+                }).length
+              ) +
+              " "
           )
-        ]
-      )
-    }),
-    0
+        ])
+      })
+    ],
+    2
   )
 }
 var staticRenderFns = []
@@ -41202,7 +41206,11 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("ul", [
+      _c("li", [_vm._v("categoriser tagi")]),
+      _vm._v(" "),
       _c("li", [_vm._v("nauka wg tagu")]),
+      _vm._v(" "),
+      _c("li", [_vm._v("duplikaty")]),
       _vm._v(" "),
       _c("li", [_vm._v("synonimy beunruhigen änstigen")]),
       _vm._v(" "),
@@ -54448,7 +54456,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
     words: [],
     wordsall: [],
     currentQuestion: {},
-    currentcategory: 4,
+    // currentcategory: 4,
     counterset: 2,
     countermode: '<',
     categories: [],
@@ -54528,16 +54536,12 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
       state.loading = loading;
     },
     getWord: function getWord(state) {
-      console.log(state.randomset);
-
       if (state.randomset == 'true') {
-        console.log('działa');
         var count = state.words.length;
         var num = Math.floor(Math.random() * count);
         console.log(num);
         state.currentQuestion = state.words[num];
       } else {
-        console.log('nie działa');
         state.currentQuestion = state.words[0];
       } // state.currentQuestion = state.words.find((el) => el.counter <= state.counterset);
 
