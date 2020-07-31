@@ -94,7 +94,7 @@ const store = new Vuex.Store({
       context.commit('setCategory',payload);
       location.reload();
     },
-    setCategory(context,payload){
+    setTag(context,payload){
       context.commit('setTag',payload);
       location.reload();
     },
@@ -162,23 +162,9 @@ const store = new Vuex.Store({
     },
     setCategory(state,payload){
       axios.patch('updatesetting',{currentcategory:payload});
-      // location.reload();
     },
     setTag(state,payload){
       axios.patch('updatesetting',{currenttag:payload});
-      // location.reload();
-    },
-    initialiseStore(state) {
-      // Check if the ID exists
-      // if(localStorage.getItem('store')) {
-      // 	// Replace the state object with the stored item
-      // 	this.replaceState(
-      // 		Object.assign(state, JSON.parse(localStorage.getItem('store')))
-      // 	);
-      // }
-      // if(localStorage.getItem('counterset')){
-      // state.counterset = parseInt(localStorage.getItem('counterset'));
-      // }
     }
   }
 

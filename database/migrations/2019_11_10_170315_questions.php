@@ -20,7 +20,7 @@ class Questions extends Migration
             $table->string('language')->default('DE')->nullable();
             $table->string('partofspeech')->default('')->nullable();
             $table->string('tags')->default('')->nullable();
-            $table->string('rodzajnik')->default('')->nullable();
+            $table->string('rodzajnik')->default('');
             $table->string('fav')->default('')->nullable();
             $table->string('level')->default('')->nullable();
             $table->timestamps();

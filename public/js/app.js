@@ -1992,18 +1992,6 @@ __webpack_require__.r(__webpack_exports__);
       this.question = '';
       this.answer = '';
     },
-    addTagToQuestion: function addTagToQuestion(elem) {
-      var self = this;
-      axios.post('/addtagtoquestion/' + self.currentQuestion.id + '/' + self.chosentag).then(function (res) {
-        return self.getTagsToQuestion();
-      });
-    },
-    deletetag: function deletetag(elem) {
-      var self = this;
-      axios["delete"]('/deletetagtoquestion/' + elem.question_id + '/' + elem.tag_id).then(function (res) {
-        return self.getTagsToQuestion();
-      });
-    },
     getTags: function getTags() {
       var self = this;
       axios.get('tags').then(function (res) {
@@ -54399,10 +54387,6 @@ module.exports = function(module) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-var _actions;
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -54455,7 +54439,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
     randomset: false,
     settings: {}
   },
-  actions: (_actions = {
+  actions: {
     loadData: function loadData(_ref) {
       var commit = _ref.commit;
       axios.get('/all').then(function (response) {
@@ -54482,15 +54466,18 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
     setCategory: function setCategory(context, payload) {
       context.commit('setCategory', payload);
       location.reload();
+    },
+    setTag: function setTag(context, payload) {
+      context.commit('setTag', payload);
+      location.reload();
+    },
+    setLanguage: function setLanguage(context, payload) {
+      context.commit('setLanguage', payload);
+      context.dispatch('loadData');
+    },
+    setRandomset: function setRandomset(context, payload) {// context.commit('setRandomset',payload);
     }
-  }, _defineProperty(_actions, "setCategory", function setCategory(context, payload) {
-    context.commit('setTag', payload);
-    location.reload();
-  }), _defineProperty(_actions, "setLanguage", function setLanguage(context, payload) {
-    context.commit('setLanguage', payload);
-    context.dispatch('loadData');
-  }), _defineProperty(_actions, "setRandomset", function setRandomset(context, payload) {// context.commit('setRandomset',payload);
-  }), _actions),
+  },
   mutations: {
     // setRandomset(state,payload){
     //   state.randomset = payload
@@ -54555,23 +54542,12 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
     setCategory: function setCategory(state, payload) {
       axios.patch('updatesetting', {
         currentcategory: payload
-      }); // location.reload();
+      });
     },
     setTag: function setTag(state, payload) {
       axios.patch('updatesetting', {
         currenttag: payload
-      }); // location.reload();
-    },
-    initialiseStore: function initialiseStore(state) {// Check if the ID exists
-      // if(localStorage.getItem('store')) {
-      // 	// Replace the state object with the stored item
-      // 	this.replaceState(
-      // 		Object.assign(state, JSON.parse(localStorage.getItem('store')))
-      // 	);
-      // }
-      // if(localStorage.getItem('counterset')){
-      // state.counterset = parseInt(localStorage.getItem('counterset'));
-      // }
+      });
     }
   }
 });

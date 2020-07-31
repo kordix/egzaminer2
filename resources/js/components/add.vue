@@ -65,14 +65,6 @@ export default {
             this.answer='';
 
         },
-        addTagToQuestion(elem){
-          let self = this;
-          axios.post('/addtagtoquestion/'+self.currentQuestion.id+'/'+self.chosentag).then((res)=>self.getTagsToQuestion())
-        },
-        deletetag(elem){
-            let self = this;
-          axios.delete('/deletetagtoquestion/'+elem.question_id+'/'+elem.tag_id).then((res)=>self.getTagsToQuestion())
-        },
         getTags(){
             let self = this;
             axios.get('tags').then((res)=>self.tags=res.data)
