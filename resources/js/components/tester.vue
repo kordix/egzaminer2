@@ -1,5 +1,6 @@
 <template>
   <div id="egzaminer">
+    <p>TO JEST NOWA WERSJA</p>
     <div id="error" v-for="error in errors" :key="error" v-html="error"></div>
     <p>
       <b>Przetłumacz:</b>

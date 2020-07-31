@@ -2700,6 +2700,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -40732,6 +40733,8 @@ var render = function() {
     "div",
     { attrs: { id: "egzaminer" } },
     [
+      _c("p", [_vm._v("TO JEST NOWA WERSJA")]),
+      _vm._v(" "),
       _vm._l(_vm.errors, function(error) {
         return _c("div", {
           key: error,
