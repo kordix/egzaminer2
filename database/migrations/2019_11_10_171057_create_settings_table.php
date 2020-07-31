@@ -20,6 +20,7 @@ class CreateSettingsTable extends Migration
             $table->string('counterset')->default('5');
             $table->string('operator')->default('<');
             $table->string('currentcategory')->default('');
+            $table->string('currenttag')->default('');
             $table->timestamps();
         });
     }
