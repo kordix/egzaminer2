@@ -3,9 +3,9 @@
     <div class="myrow my-2" style="margin-left:0px">
         <button type="button" class="btn btn-primary" style="margin-right:10px" name="button" @click="showanswers = !showanswers">Pokaż odpowiedzi</button>
         <p>Wybierz tag:</p>
-        <select name="" class="form-control" style="width:200px" v-model="activetag" @change="getQuestionsToTag(activetag)">
+        <select name="" class="form-control" style="width:200px" v-model="activetag">
             <option value="0">Wszystkie</option>
-            <option v-for="tag in tags" :key="tag.id" :value="tag.id">{{tag.name}}</option>
+            <option v-for="tag in tags" :key="tag.id" :value="tag.name">{{tag.name}}</option>
         </select>
 
     </div>
@@ -69,6 +69,7 @@ export default {
             return 'dupa';
         },
         filteredHeroes: function() {
+            let self = this;
             var sortKey = '';
             var filterkeydump = this.search;
             var filterKey = filterkeydump && filterkeydump.toLowerCase()
@@ -88,7 +89,12 @@ export default {
                     return (a === b ? 0 : a > b ? 1 : -1) * order
                 })
             }
+
+            if(this.activetag){
+                return heroes.filter((el)=>el.tags == self.activetag)
+            }else{
             return heroes
+            }
         }
     },
     mounted() {

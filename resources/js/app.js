@@ -94,6 +94,10 @@ const store = new Vuex.Store({
       context.commit('setCategory',payload);
       location.reload();
     },
+    setCategory(context,payload){
+      context.commit('setTag',payload);
+      location.reload();
+    },
     setLanguage(context,payload){
       context.commit('setLanguage',payload);
       context.dispatch('loadData');
@@ -158,6 +162,10 @@ const store = new Vuex.Store({
     },
     setCategory(state,payload){
       axios.patch('updatesetting',{currentcategory:payload});
+      // location.reload();
+    },
+    setTag(state,payload){
+      axios.patch('updatesetting',{currenttag:payload});
       // location.reload();
     },
     initialiseStore(state) {

@@ -75,15 +75,10 @@
       </div>
     </div>
     <div class id="tagstoquestion" style="margin-bottom:5px;display:flex">
-      <div
-        class
-        style="position:relative;margin-right:4px;"
-        v-for="elem in tagstoquestion"
-        :key="elem.id"
-      >
-        <button class="btn-sm btn-primary tag">{{elem.name}}</button>
+      <div  class style="position:relative;margin-right:4px;" v-if="currentQuestion.tags != ''">
+        <button class="btn-sm btn-primary tag">{{currentQuestion.tags}}</button>
         <div
-          @click="deletetag(elem)"
+          @click="deletetag()"
           class="closer"
           style="position:absolute;width:10px;height:10px;background:red;top:-2px;right:0px;border-radius:2em;"
         >
@@ -95,34 +90,22 @@
     <div class style="display:flex">
       <p @click="addTagToQuestion" style="margin-right:10px">Dodaj tag:</p>
       <select class name v-model="chosentag" style="margin-right:10px">
-        <option :value="tag.id" v-for="tag in tags" :key="tag.id">{{tag.name}}</option>
+        <option :value="tag.name" v-for="tag in tags" :key="tag.id">{{tag.name}}</option>
       </select>
       <button @click="addTagToQuestion" type="button" class="btn-sm btn-default" name="button">Dodaj</button>
     </div>
     <div style="display:flex;align-items:center">
-      <a
-        :href="'https://www.collinsdictionary.com/dictionary/spanish-english/'+currentQuestion.answer"
-        target="_blank"
-      >
-        <div
-          style="background-color:#333;width:100px;height:40px;margin:.3em;padding:5px"
-          class="icon"
-        >
+      <a :href="'https://www.collinsdictionary.com/dictionary/spanish-english/'+currentQuestion.answer" target="_blank"  >
+        <div style="background-color:#333;width:100px;height:40px;margin:.3em;padding:5px"  class="icon" >
           <img
-            src="https://www.collinsdictionary.com/external/images/logo.png?version=4.0.35"
-            class="img-fluid"
-            alt
+            src="https://www.collinsdictionary.com/external/images/logo.png?version=4.0.35" class="img-fluid" alt
           />
         </div>
       </a>
 
       <a :href="'https://pl.wiktionary.org/wiki/'+currentQuestion.answer" target="_blank">
         <div style="height:60px;width:60px;margin:.3em" class="icon">
-          <img
-            src="https://pl.wiktionary.org/static/images/project-logos/plwiktionary.png"
-            class="img-fluid"
-            alt
-          />
+          <img src="https://pl.wiktionary.org/static/images/project-logos/plwiktionary.png" class="img-fluid" />
         </div>
       </a>
 
@@ -134,12 +117,16 @@
     </div>
     <p>To do:</p>
     <ul>
+      <li>tagi po nowemu</li>
+      <li>dodaj po nowemu</li>
       <li>categoriser tagi</li>
       <li>nauka wg tagu</li>
       <li>duplikaty</li>
       <li>synonimy beunruhigen änstigen</li>
       <li>Counterset ></li>
       <li>przełączanie tagów auto</li>
+      <li>opcjonalne kategorie</li>
+      <li>opcjonalne rodzajniki</li>
       <li>collins babla szukanie</li>
       <li>odpowiednik w innym języku</li>
       <li>podobne, alfabetycznie</li>
@@ -168,38 +155,24 @@ export default {
   },
   methods: {
     addTagToQuestion(elem) {
-      console.log("ADDRAGTOQUETON");
       let self = this;
-      axios
-        .post(
-          "/addtagtoquestion/" + self.currentQuestion.id + "/" + self.chosentag
-        )
-        .then(res => self.getTagsToQuestion());
+      this.currentQuestion.tags = self.chosentag;
+      axios.patch("/updatequestion3/" + self.currentQuestion.question_id, {tags:self.chosentag});
     },
     deletetag(elem) {
-      let self = this;
-      axios
-        .delete("/deletetagtoquestion/" + elem.question_id + "/" + elem.tag_id)
-        .then(res => self.getTagsToQuestion());
+      // let self = this;
+      // axios
+      //   .delete("/deletetagtoquestion/" + elem.question_id + "/" + elem.tag_id)
+      //   .then(res => self.getTagsToQuestion());
     },
     getTags() {
       let self = this;
       axios.get("tags").then(res => (self.tags = res.data));
     },
-    getTagsToQuestion() {
-      let self = this;
-      if (typeof self.$store.state.currentQuestion == "undefined") {
-        return;
-      }
-
-      axios
-        .get("tagstoquestion/" + self.$store.state.currentQuestion.id)
-        .then(res => (self.tagstoquestion = res.data));
-    },
     answerm(e) {
       e.preventDefault();
 
-      if (this.currentQuestion.rodzajnik) {
+      if (this.currentQuestion.rodzajnik && 1 < 0) {
         if (
           this.answer.escapeDiacritics().toLowerCase() ==
             this.currentQuestion.rodzajnik +
@@ -292,7 +265,6 @@ export default {
       }
 
       this.$store.state.currentQuestion = elem;
-      this.getTagsToQuestion();
 
       setTimeout(function() {
         self.focusanswer();
@@ -333,7 +305,6 @@ export default {
       } catch (e) {}
     },
     async update() {
-        console.log('update');
       this.errors = []    
       this.errors.push('zedytowano');  
 
@@ -384,9 +355,6 @@ export default {
   },
   mounted() {
     let self = this;
-    setTimeout(function() {
-      self.getTagsToQuestion();
-    }, 1000);
   },
   computed: {
     currentQuestion() {

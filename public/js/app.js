@@ -2307,6 +2307,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return 'dupa';
     },
     filteredHeroes: function filteredHeroes() {
+      var self = this;
       var sortKey = '';
       var filterkeydump = this.search;
       var filterKey = filterkeydump && filterkeydump.toLowerCase();
@@ -2329,7 +2330,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       }
 
-      return heroes;
+      if (this.activetag) {
+        return heroes.filter(function (el) {
+          return el.tags == self.activetag;
+        });
+      } else {
+        return heroes;
+      }
     }
   },
   mounted: function mounted() {
@@ -2693,19 +2700,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2722,17 +2716,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   methods: {
     addTagToQuestion: function addTagToQuestion(elem) {
-      console.log("ADDRAGTOQUETON");
       var self = this;
-      axios.post("/addtagtoquestion/" + self.currentQuestion.id + "/" + self.chosentag).then(function (res) {
-        return self.getTagsToQuestion();
+      this.currentQuestion.tags = self.chosentag;
+      axios.patch("/updatequestion3/" + self.currentQuestion.question_id, {
+        tags: self.chosentag
       });
     },
-    deletetag: function deletetag(elem) {
-      var self = this;
-      axios["delete"]("/deletetagtoquestion/" + elem.question_id + "/" + elem.tag_id).then(function (res) {
-        return self.getTagsToQuestion();
-      });
+    deletetag: function deletetag(elem) {// let self = this;
+      // axios
+      //   .delete("/deletetagtoquestion/" + elem.question_id + "/" + elem.tag_id)
+      //   .then(res => self.getTagsToQuestion());
     },
     getTags: function getTags() {
       var self = this;
@@ -2740,21 +2733,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         return self.tags = res.data;
       });
     },
-    getTagsToQuestion: function getTagsToQuestion() {
-      var self = this;
-
-      if (typeof self.$store.state.currentQuestion == "undefined") {
-        return;
-      }
-
-      axios.get("tagstoquestion/" + self.$store.state.currentQuestion.id).then(function (res) {
-        return self.tagstoquestion = res.data;
-      });
-    },
     answerm: function answerm(e) {
       e.preventDefault();
 
-      if (this.currentQuestion.rodzajnik) {
+      if (this.currentQuestion.rodzajnik && 1 < 0) {
         if (this.answer.escapeDiacritics().toLowerCase() == this.currentQuestion.rodzajnik + " " + this.currentQuestion.answer.escapeDiacritics().toLowerCase() && this.answer != "") {
           this.answerPositive();
         } else {
@@ -2847,7 +2829,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       this.$store.state.currentQuestion = elem;
-      this.getTagsToQuestion();
       setTimeout(function () {
         self.focusanswer();
       }, 200); // document.getElementById('answerinput').focus();
@@ -2894,7 +2875,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                console.log('update');
                 this.errors = [];
                 this.errors.push('zedytowano');
                 self = this;
@@ -2906,14 +2886,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   editrodzajnik = document.getElementById("editQrodzajnik").value;
                 }
 
-                _context.next = 10;
+                _context.next = 9;
                 return axios.patch("updatequestion3/".concat(this.$store.state.currentQuestion.question_id), {
                   question: editQquestion,
                   answer: editQanswer,
                   rodzajnik: editrodzajnik
                 });
 
-              case 10:
+              case 9:
                 this.$store.state.currentQuestion.answer = editQanswer;
                 this.$store.state.currentQuestion.question = editQquestion;
 
@@ -2921,7 +2901,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   this.$store.state.currentQuestion.rodzajnik = editrodzajnik;
                 }
 
-              case 13:
+              case 12:
               case "end":
                 return _context.stop();
             }
@@ -2954,9 +2934,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   mounted: function mounted() {
     var self = this;
-    setTimeout(function () {
-      self.getTagsToQuestion();
-    }, 1000);
   },
   computed: {
     currentQuestion: function currentQuestion() {
@@ -40350,24 +40327,19 @@ var render = function() {
               staticStyle: { width: "200px" },
               attrs: { name: "" },
               on: {
-                change: [
-                  function($event) {
-                    var $$selectedVal = Array.prototype.filter
-                      .call($event.target.options, function(o) {
-                        return o.selected
-                      })
-                      .map(function(o) {
-                        var val = "_value" in o ? o._value : o.value
-                        return val
-                      })
-                    _vm.activetag = $event.target.multiple
-                      ? $$selectedVal
-                      : $$selectedVal[0]
-                  },
-                  function($event) {
-                    return _vm.getQuestionsToTag(_vm.activetag)
-                  }
-                ]
+                change: function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.activetag = $event.target.multiple
+                    ? $$selectedVal
+                    : $$selectedVal[0]
+                }
               }
             },
             [
@@ -40376,7 +40348,7 @@ var render = function() {
               _vm._l(_vm.tags, function(tag) {
                 return _c(
                   "option",
-                  { key: tag.id, domProps: { value: tag.id } },
+                  { key: tag.id, domProps: { value: tag.name } },
                   [_vm._v(_vm._s(tag.name))]
                 )
               })
@@ -40981,43 +40953,43 @@ var render = function() {
           staticStyle: { "margin-bottom": "5px", display: "flex" },
           attrs: { id: "tagstoquestion" }
         },
-        _vm._l(_vm.tagstoquestion, function(elem) {
-          return _c(
-            "div",
-            {
-              key: elem.id,
-              staticStyle: { position: "relative", "margin-right": "4px" }
-            },
-            [
-              _c("button", { staticClass: "btn-sm btn-primary tag" }, [
-                _vm._v(_vm._s(elem.name))
-              ]),
-              _vm._v(" "),
-              _c(
+        [
+          _vm.currentQuestion.tags != ""
+            ? _c(
                 "div",
                 {
-                  staticClass: "closer",
-                  staticStyle: {
-                    position: "absolute",
-                    width: "10px",
-                    height: "10px",
-                    background: "red",
-                    top: "-2px",
-                    right: "0px",
-                    "border-radius": "2em"
-                  },
-                  on: {
-                    click: function($event) {
-                      return _vm.deletetag(elem)
-                    }
-                  }
+                  staticStyle: { position: "relative", "margin-right": "4px" }
                 },
-                [_c("span")]
+                [
+                  _c("button", { staticClass: "btn-sm btn-primary tag" }, [
+                    _vm._v(_vm._s(_vm.currentQuestion.tags))
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "closer",
+                      staticStyle: {
+                        position: "absolute",
+                        width: "10px",
+                        height: "10px",
+                        background: "red",
+                        top: "-2px",
+                        right: "0px",
+                        "border-radius": "2em"
+                      },
+                      on: {
+                        click: function($event) {
+                          return _vm.deletetag()
+                        }
+                      }
+                    },
+                    [_c("span")]
+                  )
+                ]
               )
-            ]
-          )
-        }),
-        0
+            : _vm._e()
+        ]
       ),
       _vm._v(" "),
       _c("div", { staticStyle: { display: "flex" } }, [
@@ -41060,9 +41032,11 @@ var render = function() {
             }
           },
           _vm._l(_vm.tags, function(tag) {
-            return _c("option", { key: tag.id, domProps: { value: tag.id } }, [
-              _vm._v(_vm._s(tag.name))
-            ])
+            return _c(
+              "option",
+              { key: tag.id, domProps: { value: tag.name } },
+              [_vm._v(_vm._s(tag.name))]
+            )
           }),
           0
         ),
@@ -41168,8 +41142,7 @@ var staticRenderFns = [
           staticClass: "img-fluid",
           attrs: {
             src:
-              "https://pl.wiktionary.org/static/images/project-logos/plwiktionary.png",
-            alt: ""
+              "https://pl.wiktionary.org/static/images/project-logos/plwiktionary.png"
           }
         })
       ]
@@ -41206,6 +41179,10 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("ul", [
+      _c("li", [_vm._v("tagi po nowemu")]),
+      _vm._v(" "),
+      _c("li", [_vm._v("dodaj po nowemu")]),
+      _vm._v(" "),
       _c("li", [_vm._v("categoriser tagi")]),
       _vm._v(" "),
       _c("li", [_vm._v("nauka wg tagu")]),
@@ -41217,6 +41194,10 @@ var staticRenderFns = [
       _c("li", [_vm._v("Counterset >")]),
       _vm._v(" "),
       _c("li", [_vm._v("przełączanie tagów auto")]),
+      _vm._v(" "),
+      _c("li", [_vm._v("opcjonalne kategorie")]),
+      _vm._v(" "),
+      _c("li", [_vm._v("opcjonalne rodzajniki")]),
       _vm._v(" "),
       _c("li", [_vm._v("collins babla szukanie")]),
       _vm._v(" "),
@@ -54415,6 +54396,10 @@ module.exports = function(module) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+var _actions;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -54467,7 +54452,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
     randomset: false,
     settings: {}
   },
-  actions: {
+  actions: (_actions = {
     loadData: function loadData(_ref) {
       var commit = _ref.commit;
       axios.get('/all').then(function (response) {
@@ -54494,14 +54479,15 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
     setCategory: function setCategory(context, payload) {
       context.commit('setCategory', payload);
       location.reload();
-    },
-    setLanguage: function setLanguage(context, payload) {
-      context.commit('setLanguage', payload);
-      context.dispatch('loadData');
-    },
-    setRandomset: function setRandomset(context, payload) {// context.commit('setRandomset',payload);
     }
-  },
+  }, _defineProperty(_actions, "setCategory", function setCategory(context, payload) {
+    context.commit('setTag', payload);
+    location.reload();
+  }), _defineProperty(_actions, "setLanguage", function setLanguage(context, payload) {
+    context.commit('setLanguage', payload);
+    context.dispatch('loadData');
+  }), _defineProperty(_actions, "setRandomset", function setRandomset(context, payload) {// context.commit('setRandomset',payload);
+  }), _actions),
   mutations: {
     // setRandomset(state,payload){
     //   state.randomset = payload
@@ -54566,6 +54552,11 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
     setCategory: function setCategory(state, payload) {
       axios.patch('updatesetting', {
         currentcategory: payload
+      }); // location.reload();
+    },
+    setTag: function setTag(state, payload) {
+      axios.patch('updatesetting', {
+        currenttag: payload
       }); // location.reload();
     },
     initialiseStore: function initialiseStore(state) {// Check if the ID exists

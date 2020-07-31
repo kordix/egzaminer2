@@ -10,6 +10,6 @@ class Question extends Model
 
     public function tags()
     {
-        return $this->belongsToMany('App\Tag', 'questions_tags', 'question_id', 'tag_id');
+       // return $this->belongsToMany('App\Tag', 'questions_tags', 'question_id', 'tag_id');
     }
 }
