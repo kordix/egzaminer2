@@ -118,9 +118,7 @@
     </div>
     <p>To do:</p>
     <ul>
-      <li>tagi po nowemu</li>
       <li>dodaj po nowemu</li>
-      <li>categoriser tagi</li>
       <li>nauka wg tagu</li>
       <li>duplikaty</li>
       <li>synonimy beunruhigen änstigen</li>
@@ -248,17 +246,8 @@ export default {
       let self = this;
       this.disabledInput = false;
       this.answer = "";
-      let filtered = this.$store.state.words.filter(
-        el => el.counter <= this.$store.state.counterset
-      );
 
-      console.log(this.$store.state.settings.currentcategory);
-
-      if(this.$store.state.settings.currentcategory){
-          filtered = filtered.filter((el)=>el.partofspeech == this.$store.state.settings.currentcategory)
-      }  
-
-      let elem = filtered.find(el => el.id > this.$store.state.currentQuestion.id);
+      let elem = this.words.find(el => el.id > this.$store.state.currentQuestion.id);
 
       if (typeof elem == "undefined") {
         this.start();
@@ -332,9 +321,6 @@ export default {
        if(document.getElementById("editQrodzajnik")){
          this.$store.state.currentQuestion.rodzajnik = editrodzajnik
       }
-
-
-      
     },
     formprevent(e) {
       e.preventdefault();
@@ -358,15 +344,12 @@ export default {
     let self = this;
   },
   computed: {
+    ...mapState(['words']),
     currentQuestion() {
-      return this.$store.state.currentQuestion
-        ? this.$store.state.currentQuestion
-        : {};
+      return this.$store.state.currentQuestion ? this.$store.state.currentQuestion : {};
     },
     activelanguage() {
-      return this.$store.state.activelanguage
-        ? this.$store.state.activelanguage
-        : "";
+      return this.$store.state.activelanguage ? this.$store.state.activelanguage : "";
     },
     categories() {
       return this.$store.state.categories ? this.$store.state.categories : [];

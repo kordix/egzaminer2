@@ -2135,6 +2135,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2146,7 +2150,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       tags: []
     };
   },
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(['setCategory']), {
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(['setCategory', 'setTag']), {
     getTags: function getTags() {
       var self = this;
       axios.get('tags').then(function (res) {
@@ -2157,9 +2161,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   mounted: function mounted() {
     this.getTags();
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])(['words', 'wordsall', 'counterset']), {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])(['words', 'wordsall', 'counterset', 'currentQuestion']), {
     currentcategory: function currentcategory() {
       return this.$store.state.settings.currentcategory;
+    },
+    currenttag: function currenttag() {
+      return this.$store.state.settings.currenttag;
     }
   })
 });
@@ -2341,23 +2348,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       axios.get('tags').then(function (res) {
         return self.tags = res.data;
       });
-    },
-    getQuestionsToTag: function getQuestionsToTag(id) {
-      var _this = this;
+    } // getQuestionsToTag(id) {
+    //     console.log('getquestionstotag');
+    //     if(id==0){
+    //         location.reload();
+    //         return;
+    //     }
+    //     let self = this;
+    //     this.filterBy='tag';
+    //     axios.get('questionstotag/' + id).then((res) => this.words2 = res.data);
+    // }
 
-      console.log('getquestionstotag');
-
-      if (id == 0) {
-        location.reload();
-        return;
-      }
-
-      var self = this;
-      this.filterBy = 'tag';
-      axios.get('questionstotag/' + id).then(function (res) {
-        return _this.words2 = res.data;
-      });
-    }
   })
 });
 
@@ -2545,12 +2546,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-//
-//
 //
 //
 //
@@ -2797,18 +2802,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var self = this;
       this.disabledInput = false;
       this.answer = "";
-      var filtered = this.$store.state.words.filter(function (el) {
-        return el.counter <= _this5.$store.state.counterset;
-      });
-      console.log(this.$store.state.settings.currentcategory);
-
-      if (this.$store.state.settings.currentcategory) {
-        filtered = filtered.filter(function (el) {
-          return el.partofspeech == _this5.$store.state.settings.currentcategory;
-        });
-      }
-
-      var elem = filtered.find(function (el) {
+      var elem = this.words.find(function (el) {
         return el.id > _this5.$store.state.currentQuestion.id;
       });
 
@@ -2924,7 +2918,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   mounted: function mounted() {
     var self = this;
   },
-  computed: {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])(['words']), {
     currentQuestion: function currentQuestion() {
       return this.$store.state.currentQuestion ? this.$store.state.currentQuestion : {};
     },
@@ -2934,7 +2928,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     categories: function categories() {
       return this.$store.state.categories ? this.$store.state.categories : [];
     }
-  }
+  })
 });
 
 /***/ }),
@@ -7396,7 +7390,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.bold[data-v-47d90297] {\r\n    font-weight: bold;\n}\n.red[data-v-47d90297] {\r\n    color: red;\n}\n.active[data-v-47d90297] {\r\n    color: red;\n}\r\n", ""]);
+exports.push([module.i, "\n.bold[data-v-47d90297] {\r\n    font-weight: bold;\n}\n.red[data-v-47d90297] {\r\n    color: red;\n}\n.active[data-v-47d90297] {\r\n    color: red;\n}\np[data-v-47d90297]{\r\n    cursor:pointer;\r\n    margin-bottom:2px;\n}\n.myheader[data-v-47d90297]{\r\n    cursor:default;\r\n    font-weight:bold;\n}\r\n\r\n", ""]);
 
 // exports
 
@@ -40125,8 +40119,9 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "col-md-4" },
     [
+      _c("p", { staticClass: "myheader" }, [_vm._v("Części mowy:")]),
+      _vm._v(" "),
       _vm._l(_vm.categories, function(category) {
         return _c(
           "div",
@@ -40182,19 +40177,52 @@ var render = function() {
       _vm._v(" "),
       _c("br"),
       _vm._v(" "),
+      _c("p", { staticClass: "myheader" }, [_vm._v("Kategorie tematyczne:")]),
+      _vm._v(" "),
       _vm._l(_vm.tags, function(tag) {
-        return _c("p", { staticStyle: { margin: "0px" } }, [
-          _vm._v(
-            _vm._s(tag.name) +
-              "  " +
-              _vm._s(
-                _vm.words.filter(function(el) {
-                  return el.tags == tag.name
-                }).length
-              ) +
-              " "
-          )
-        ])
+        return _c(
+          "p",
+          {
+            class: { active: tag.name == _vm.currenttag },
+            staticStyle: { margin: "0px" },
+            on: {
+              click: function($event) {
+                return _vm.setTag(tag.name)
+              }
+            }
+          },
+          [
+            _vm._v(
+              _vm._s(tag.name) +
+                "  " +
+                _vm._s(
+                  _vm.words.filter(function(el) {
+                    return el.tags == tag.name
+                  }).length
+                ) +
+                " "
+            )
+          ]
+        )
+      }),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v(" "),
+      _c(
+        "p",
+        { staticClass: "myheader", staticStyle: { "margin-bottom": "0px" } },
+        [_vm._v("Aktualnie w puli:")]
+      ),
+      _vm._v(" "),
+      _vm._l(_vm.words, function(word) {
+        return _c(
+          "p",
+          {
+            class: { active: word.id == _vm.currentQuestion.id },
+            staticStyle: { "margin-bottom": "0px" }
+          },
+          [_vm._v(_vm._s(word.question))]
+        )
       })
     ],
     2
@@ -41170,11 +41198,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("ul", [
-      _c("li", [_vm._v("tagi po nowemu")]),
-      _vm._v(" "),
       _c("li", [_vm._v("dodaj po nowemu")]),
-      _vm._v(" "),
-      _c("li", [_vm._v("categoriser tagi")]),
       _vm._v(" "),
       _c("li", [_vm._v("nauka wg tagu")]),
       _vm._v(" "),
@@ -54507,6 +54531,18 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
       }).filter(function (el) {
         return el.counter < state.counterset;
       });
+
+      if (state.settings.currentcategory) {
+        state.words = state.words.filter(function (el) {
+          return el.partofspeech == state.settings.currentcategory;
+        });
+      }
+
+      if (state.settings.currenttag) {
+        state.words = state.words.filter(function (el) {
+          return el.tags == state.settings.currenttag;
+        });
+      }
     },
     changeLoadingState: function changeLoadingState(state, loading) {
       state.loading = loading;
@@ -54540,12 +54576,13 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
       state.settings.activelanguage = payload;
     },
     setCategory: function setCategory(state, payload) {
-      axios.patch('updatesetting', {
+      axios.patch('updatecategory', {
         currentcategory: payload
       });
     },
     setTag: function setTag(state, payload) {
-      axios.patch('updatesetting', {
+      console.log(payload, 'setTag payload');
+      axios.patch('updatetag', {
         currenttag: payload
       });
     }
@@ -54564,7 +54601,6 @@ var app = new Vue({
   store: store,
   created: function created() {
     var self = this;
-    console.log('cs localstorage', localStorage.counterset);
 
     if (localStorage.counterset) {
       this.$store.state.counterset = parseInt(localStorage.getItem('counterset'));

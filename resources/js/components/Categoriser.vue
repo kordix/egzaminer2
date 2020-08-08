@@ -1,5 +1,6 @@
 <template>
-<div class="col-md-4">
+<div >
+    <p class="myheader">Części mowy:</p>
     <div class="" v-for="category in categories" @click="setCategory(category)">
         <p style="margin:0px" :class="{active:category==currentcategory}">
             <span :class="{bold:category.id == currentcategory}"> {{category}}</span>
@@ -11,8 +12,11 @@
 
     <br>
     <br>
-
-    <p v-for="tag in tags" style="margin:0px">{{tag.name}}  {{words.filter((el)=>el.tags == tag.name).length}} </p>
+    <p class="myheader">Kategorie tematyczne:</p>
+    <p v-for="tag in tags" style="margin:0px" @click="setTag(tag.name)" :class="{active:tag.name==currenttag}">{{tag.name}}  {{words.filter((el)=>el.tags == tag.name).length}} </p>
+    <br>
+    <p style="margin-bottom:0px" class="myheader">Aktualnie w puli:</p>
+    <p v-for="word in words" style="margin-bottom:0px" :class="{active:word.id==currentQuestion.id}">{{word.question}}</p>
 
     <!-- <p style="width:300px"><button  class="btn btn-sm btn-secondary" @click="showcasebool = !showcasebool" style="float:right;display:block">+</button></p>
     <div class="" id="listagen" style="overflow-y:auto;height:300px">
@@ -46,7 +50,7 @@ export default {
     },
     methods: {
         ...mapActions([
-            'setCategory'
+            'setCategory','setTag'
         ]),
         getTags() {
             let self = this;
@@ -59,10 +63,13 @@ export default {
     },
     computed: {
         ...mapState([
-            'words','wordsall', 'counterset',
+            'words','wordsall', 'counterset','currentQuestion'
         ]),
         currentcategory() {
             return this.$store.state.settings.currentcategory;
+        },
+        currenttag() {
+            return this.$store.state.settings.currenttag;
         }
     }
 
@@ -81,4 +88,14 @@ export default {
 .active {
     color: red;
 }
+p{
+    cursor:pointer;
+    margin-bottom:2px;
+}
+
+.myheader{
+    cursor:default;
+    font-weight:bold;
+}
+
 </style>

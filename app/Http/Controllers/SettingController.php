@@ -72,7 +72,21 @@ class SettingController extends Controller
     {
 
         Setting::find(1)->update($request->all());
-        dd($request);
+        dd($request->all());
+    }
+
+    public function updateTag(Request $request){
+        Setting::find(1)->update([
+            'currenttag' => $request->currenttag,
+            'currentcategory' => ''
+        ]);
+    }
+
+    public function updateCategory(Request $request){
+        Setting::find(1)->update([
+            'currentcategory' => $request->currentcategory,
+            'currenttag' => ''
+        ]);
     }
 
     /**

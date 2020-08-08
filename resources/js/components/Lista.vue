@@ -112,17 +112,17 @@ export default {
             let self = this;
             axios.get('tags').then((res) => self.tags = res.data)
         },
-        getQuestionsToTag(id) {
-            console.log('getquestionstotag');
+        // getQuestionsToTag(id) {
+        //     console.log('getquestionstotag');
             
-            if(id==0){
-                location.reload();
-                return;
-            }
-            let self = this;
-            this.filterBy='tag';
-            axios.get('questionstotag/' + id).then((res) => this.words2 = res.data);
-        }
+        //     if(id==0){
+        //         location.reload();
+        //         return;
+        //     }
+        //     let self = this;
+        //     this.filterBy='tag';
+        //     axios.get('questionstotag/' + id).then((res) => this.words2 = res.data);
+        // }
     }
 }
 </script>

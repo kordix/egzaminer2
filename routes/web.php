@@ -60,3 +60,7 @@ Route::patch('/updatequestion3/{id}', 'egzaminerController@update3');
 Route::get('/settings','SettingController@index');
 
 Route::patch('/updatesetting','SettingController@update');
+Route::patch('/updatecategory','SettingController@updateCategory');
+
+Route::patch('/updatetag','SettingController@updateTag');
+
