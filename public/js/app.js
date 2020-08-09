@@ -2296,7 +2296,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   computed: {
     words: function words() {
-      return this.$store.state.words;
+      return this.$store.state.wordsall;
     },
     test: function test() {
       return 'dupa';
@@ -55400,7 +55400,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\PROJEKTY\egzaminer\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\xampp\PROJEKTY\egzaminer\resources\js\app.js */"./resources/js/app.js");
 
 
 /***/ })

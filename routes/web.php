@@ -64,3 +64,5 @@ Route::patch('/updatecategory','SettingController@updateCategory');
 
 Route::patch('/updatetag','SettingController@updateTag');
 
+Route::get('/populate', 'egzaminerController@populateResults');
+

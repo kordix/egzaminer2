@@ -63,7 +63,7 @@ export default {
     },
     computed: {
         words() {
-            return this.$store.state.words
+            return this.$store.state.wordsall
         },
         test(){
             return 'dupa';

@@ -132,4 +132,21 @@ class egzaminerController extends Controller
     {
         return Question::find($id);
     }
+
+    public function populateResults(){
+
+        $rows = DB::table('questions')->join('results', 'questions.id', '=', 'results.question_id','left outer')->where('question_id','=',null)->select(['questions.id'])->get();
+
+        foreach($rows as $row){
+            Result::create([
+                'question_id'=>$row->id,
+                'user_id'=>1
+            ]);
+        }
+        echo json_encode($rows);
+        
+
+       
+
+    }
 }
