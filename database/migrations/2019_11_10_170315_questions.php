@@ -18,8 +18,8 @@ class Questions extends Migration
             $table->string('question')->default('')->nullable();
             $table->string('answer')->default('')->nullable();
             $table->string('language')->default('DE')->nullable();
-            $table->string('partofspeech')->default('')->nullable();
-            $table->string('tags')->default('')->nullable();
+            $table->string('partofspeech')->default('nieprzypisane')->nullable();
+            $table->string('tags')->default('nieprzypisane')->nullable();
             $table->string('rodzajnik')->default('');
             $table->string('fav')->default('')->nullable();
             $table->string('level')->default('')->nullable();

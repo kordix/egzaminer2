@@ -50,7 +50,7 @@ const store = new Vuex.Store({
     count: 0,
     errors: [],
     words: [],
-    wordsall:[],
+    wordsall: [],
     currentQuestion: {},
     // currentcategory: 4,
     counterset: 2,
@@ -90,22 +90,22 @@ const store = new Vuex.Store({
     setCounterSet(context, payload) {
       context.commit('setCounterSet', payload);
     },
-    setCategory(context,payload){
-      context.commit('setCategory',payload);
+    setCategory(context, payload) {
+      context.commit('setCategory', payload);
       location.reload();
     },
-    setTag(context,payload){
-      context.commit('setTag',payload);
+    setTag(context, payload) {
+      context.commit('setTag', payload);
       location.reload();
     },
-    setLanguage(context,payload){
-      context.commit('setLanguage',payload);
+    setLanguage(context, payload) {
+      context.commit('setLanguage', payload);
       context.dispatch('loadData');
     },
-    setRandomset(context,payload){
+    setRandomset(context, payload) {
       // context.commit('setRandomset',payload);
     }
-    
+
   },
   mutations: {
     // setRandomset(state,payload){
@@ -115,22 +115,24 @@ const store = new Vuex.Store({
       state.settings = data;
     },
     getWords(state, data) {
-      
+
+      console.log(data);
+
       let wordslocal = data.filter((el) => el.language == state.settings.activelanguage).filter((el) => el.counter < state.counterset);
-      console.log('length', wordslocal); 
+      console.log('length', wordslocal);
       if (wordslocal.length < 1) { console.log('skończyły się słówka'); return };
-  
+
 
       state.wordsall = data.filter((el) => el.language == state.settings.activelanguage);
       state.words = data.filter((el) => el.language == state.settings.activelanguage).filter((el) => el.counter < state.counterset);
 
-      if(state.settings.currentcategory){
-        state.words = state.words.filter((el)=>el.partofspeech == state.settings.currentcategory)
-    }  
+      if (state.settings.currentcategory) {
+        state.words = state.words.filter((el) => el.partofspeech == state.settings.currentcategory)
+      }
 
-    if(state.settings.currenttag){
-      state.words = state.words.filter((el)=>el.tags == state.settings.currenttag)
-  }  
+      if (state.settings.currenttag) {
+        state.words = state.words.filter((el) => el.tags == state.settings.currenttag)
+      }
 
 
 
@@ -143,7 +145,7 @@ const store = new Vuex.Store({
         let count = state.words.length
         let num = Math.floor(Math.random() * count);
         console.log(num);
-        
+
         state.currentQuestion = state.words[num];
       } else {
         state.currentQuestion = state.words[0];
@@ -168,12 +170,12 @@ const store = new Vuex.Store({
     setLanguage(state, payload) {
       state.settings.activelanguage = payload;
     },
-    setCategory(state,payload){
-      axios.patch('updatecategory',{currentcategory:payload});
+    setCategory(state, payload) {
+      axios.patch('updatecategory', { currentcategory: payload });
     },
-    setTag(state,payload){
-      console.log(payload,'setTag payload');
-      axios.patch('updatetag',{currenttag:payload});
+    setTag(state, payload) {
+      console.log(payload, 'setTag payload');
+      axios.patch('updatetag', { currenttag: payload });
     }
   }
 
@@ -195,8 +197,8 @@ const app = new Vue({
 
   created() {
     let self = this;
-    if(localStorage.counterset){
-    this.$store.state.counterset = parseInt(localStorage.getItem('counterset'));
+    if (localStorage.counterset) {
+      this.$store.state.counterset = parseInt(localStorage.getItem('counterset'));
     }
     this.$store.dispatch('getSettings'); // dispatch loading
     // setTimeout(function () {
@@ -204,13 +206,13 @@ const app = new Vue({
 
     // }, 1000);
 
-    if(localStorage.getItem('activeobszar')){
-    this.$store.state.activeobszar = localStorage.getItem('activeobszar');
-  }
+    if (localStorage.getItem('activeobszar')) {
+      this.$store.state.activeobszar = localStorage.getItem('activeobszar');
+    }
 
-  if(localStorage.getItem('randomset')){
-    // this.$store.dispatch('setRandomset',localStorage.getItem('randomset'));
-  }
+    if (localStorage.getItem('randomset')) {
+      // this.$store.dispatch('setRandomset',localStorage.getItem('randomset'));
+    }
     // dispatch loading
   },
   methods: {
@@ -219,7 +221,7 @@ const app = new Vue({
       let self = this;
       console.log(self.$store.state.settings.activelanguage);
 
-      axios.patch('/updatesetting',{activelanguage:self.$store.state.settings.activelanguage}).then((res)=>location.reload());
+      axios.patch('/updatesetting', { activelanguage: self.$store.state.settings.activelanguage }).then((res) => location.reload());
     }
   }
 })

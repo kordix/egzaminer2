@@ -75,12 +75,15 @@ class egzaminerController extends Controller
             $rodzajnik = $request->rodzajnik;
         }
 
+        // dd($request);
+
         $row = Question::create([
             'answer' => $request->answer,
             'question' => $request->question,
             'rodzajnik' => $rodzajnik,
-            'language' => $language
-
+            'language' => $language,
+            'tags'=>$request->tags,
+            'partofspeech'=>$request->partofspeech
         ]);
 
         Result::create([
@@ -88,10 +91,7 @@ class egzaminerController extends Controller
             'counter' => 0,
             'user_id' => Auth::id()
         ]);
-        Tagpivot::create([
-            'question_id' => $row->id,
-            'tag_id' => $request->tag_id
-        ]);
+ 
 
         dd($request->all());
     }

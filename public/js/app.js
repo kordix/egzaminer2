@@ -1965,6 +1965,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1972,7 +1975,8 @@ __webpack_require__.r(__webpack_exports__);
       answer: '',
       rodzajnik: '',
       tags: [],
-      chosentag: 1,
+      chosentag: 'nieprzypisane',
+      partofspeech: 'nieprzypisane',
       messages: [],
       reversed: true
     };
@@ -1984,7 +1988,8 @@ __webpack_require__.r(__webpack_exports__);
         'question': this.question,
         'answer': this.answer,
         'rodzajnik': this.rodzajnik,
-        'tag_id': this.chosentag
+        'tags': this.chosentag,
+        'partofspeech': this.partofspeech
       }).then(function (res) {
         return console.log(res);
       });
@@ -2002,21 +2007,7 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     this.getTags();
   },
-  computed: {
-    chosenTagObj: function chosenTagObj() {
-      var _this = this;
-
-      if (this.tags.find(function (el) {
-        return el.id == _this.chosentag;
-      })) {
-        return this.tags.find(function (el) {
-          return el.id == _this.chosentag;
-        });
-      } else {
-        return {};
-      }
-    }
-  }
+  computed: {}
 });
 
 /***/ }),
@@ -2144,7 +2135,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      categories: ['rzeczownik', 'czasownik', 'przymiotnik', 'przyimek', 'zwroty'],
+      categories: ['rzeczownik', 'czasownik', 'przymiotnik', 'przyimek', 'zwroty', 'nieprzypisane'],
       category: {},
       showcasebool: false,
       tags: []
@@ -39744,7 +39735,7 @@ var render = function() {
       _vm._v(" "),
       _c("p", [_vm._v("Dodaj słówko")]),
       _vm._v(" "),
-      _vm.chosenTagObj.name == "rzeczowniki"
+      _vm.partofspeech == "rzeczownik"
         ? _c("div", [
             _vm.chosentag == "2"
               ? _c("label", { attrs: { for: "" } }, [_vm._v("Rodzajnik")])
@@ -39911,47 +39902,6 @@ var render = function() {
             [_vm._v("reverse")]
           )
         ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticStyle: { display: "flex", "margin-bottom": "5px" } }, [
-        _c("p", { staticStyle: { "margin-right": "10px" } }, [_vm._v("Tag:")]),
-        _vm._v(" "),
-        _c(
-          "select",
-          {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.chosentag,
-                expression: "chosentag"
-              }
-            ],
-            staticStyle: { "margin-right": "10px" },
-            attrs: { name: "" },
-            on: {
-              change: function($event) {
-                var $$selectedVal = Array.prototype.filter
-                  .call($event.target.options, function(o) {
-                    return o.selected
-                  })
-                  .map(function(o) {
-                    var val = "_value" in o ? o._value : o.value
-                    return val
-                  })
-                _vm.chosentag = $event.target.multiple
-                  ? $$selectedVal
-                  : $$selectedVal[0]
-              }
-            }
-          },
-          _vm._l(_vm.tags, function(tag) {
-            return _c("option", { key: tag.id, domProps: { value: tag.id } }, [
-              _vm._v(_vm._s(tag.name))
-            ])
-          }),
-          0
-        )
       ]),
       _vm._v(" "),
       _c(
@@ -40196,7 +40146,7 @@ var render = function() {
               _vm._s(tag.name) +
                 "  " +
                 _vm._s(
-                  _vm.words.filter(function(el) {
+                  _vm.wordsall.filter(function(el) {
                     return el.tags == tag.name
                   }).length
                 ) +
@@ -54510,6 +54460,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
       state.settings = data;
     },
     getWords: function getWords(state, data) {
+      console.log(data);
       var wordslocal = data.filter(function (el) {
         return el.language == state.settings.activelanguage;
       }).filter(function (el) {

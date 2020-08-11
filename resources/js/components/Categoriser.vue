@@ -13,7 +13,7 @@
     <br>
     <br>
     <p class="myheader">Kategorie tematyczne:</p>
-    <p v-for="tag in tags" style="margin:0px" @click="setTag(tag.name)" :class="{active:tag.name==currenttag}">{{tag.name}}  {{words.filter((el)=>el.tags == tag.name).length}} </p>
+    <p v-for="tag in tags" style="margin:0px" @click="setTag(tag.name)" :class="{active:tag.name==currenttag}">{{tag.name}}  {{wordsall.filter((el)=>el.tags == tag.name).length}} </p>
     <br>
     <p style="margin-bottom:0px" class="myheader">Aktualnie w puli:</p>
     <p v-for="word in words" style="margin-bottom:0px" :class="{active:word.id==currentQuestion.id}">{{word.question}}</p>
@@ -42,7 +42,7 @@ import {
 export default {
     data() {
         return {
-            categories: ['rzeczownik', 'czasownik', 'przymiotnik', 'przyimek', 'zwroty'],
+            categories: ['rzeczownik', 'czasownik', 'przymiotnik', 'przyimek', 'zwroty','nieprzypisane'],
             category: {},
             showcasebool: false,
             tags:[]

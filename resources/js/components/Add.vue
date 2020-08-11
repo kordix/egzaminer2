@@ -3,7 +3,7 @@
     <p v-for="elem in messages" :key="elem">{{elem}}</p>
 
     <p>Dodaj słówko</p>
-    <div v-if="chosenTagObj.name=='rzeczowniki'">
+    <div v-if="partofspeech=='rzeczownik'">
     <label for v-if="chosentag=='2'">Rodzajnik</label>
     <select class name v-model="rodzajnik" >
       <option value="der">der</option>
@@ -31,13 +31,16 @@
         </div>
     </div>
 
+
+    
+
    
-    <div style="display:flex;margin-bottom:5px">
+    <!-- <div style="display:flex;margin-bottom:5px">
       <p style="margin-right:10px">Tag:</p>
       <select class name v-model="chosentag" style="margin-right:10px">
         <option :value="tag.id" :key="tag.id" v-for="tag in tags">{{tag.name}}</option>
       </select>
-    </div>
+    </div> -->
 
     <button type="button" name="button" class="btn btn-primary" @click="add">Zatwierdź</button>
   </div>
@@ -51,7 +54,8 @@ export default {
             answer:'',
             rodzajnik:'',
             tags:[],
-            chosentag:1,
+            chosentag:'nieprzypisane',
+            partofspeech:'nieprzypisane',
             messages:[],
             reversed:true
         }
@@ -59,7 +63,7 @@ export default {
     methods:{
         add(){
             let self = this;
-            axios.post('add',{'question':this.question,'answer':this.answer,'rodzajnik':this.rodzajnik, 'tag_id':this.chosentag }).then((res)=>console.log(res));
+            axios.post('add',{'question':this.question,'answer':this.answer,'rodzajnik':this.rodzajnik, 'tags':this.chosentag,'partofspeech':this.partofspeech}).then((res)=>console.log(res));
             this.messages.push('dodano pytanie ('+this.question+') ');
             this.question='';
             this.answer='';
@@ -74,14 +78,7 @@ export default {
         this.getTags();
     },
     computed:{
-        chosenTagObj(){
-            if(this.tags.find((el)=>el.id==this.chosentag)){
-                return this.tags.find((el)=>el.id==this.chosentag)
-            }else{
-                return {}
-            }
 
-        }
     }
 
 }
