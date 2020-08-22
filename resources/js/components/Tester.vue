@@ -29,8 +29,8 @@
       </div>
 
       <div class="form-group">
-        <button type="button" class="btn btn-success" name="button" @click="plusCounter">Counter +1</button>
-        <button type="button" class="btn btn-success" name="button" @click="plusCounter5">Counter +5</button>
+        <button type="button" class="btn btn-success" name="button" @click="plusCounter(1)">Counter +1</button>
+        <button type="button" class="btn btn-success" name="button" @click="plusCounter(5)">Counter +5</button>
         <button type="button" class="btn btn-success" name="button" @click="plusCounter0">Zresetuj</button>
       </div>
 
@@ -118,6 +118,7 @@
     </div>
     <p>To do:</p>
     <ul>
+      <li>counter +1 bug</li>
       <li>dodaj po nowemu</li>
       <li>nauka wg tagu</li>
       <li>duplikaty</li>
@@ -218,17 +219,10 @@ export default {
         document.getElementById("nextbutton").focus();
       }, 200);
     },
-    plusCounter() {
+    plusCounter(howmany) {
       this.$store.state.words.find(
         el => el.id == this.$store.state.currentQuestion.id
-      ).counter++;
-      axios.patch(`/counterquestion/${this.currentQuestion.question_id}`);
-      this.next();
-    },
-    plusCounter5() {
-      this.$store.state.words.find(
-        el => el.id == this.$store.state.currentQuestion.id
-      ).counter += 5;
+      ).counter += howmany;
       axios.patch(`/updatequestion2/${this.currentQuestion.id}`, {
         counter: this.currentQuestion.counter
       });

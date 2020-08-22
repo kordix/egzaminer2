@@ -2685,6 +2685,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2757,44 +2758,35 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         document.getElementById("nextbutton").focus();
       }, 200);
     },
-    plusCounter: function plusCounter() {
+    plusCounter: function plusCounter(howmany) {
       var _this2 = this;
 
       this.$store.state.words.find(function (el) {
         return el.id == _this2.$store.state.currentQuestion.id;
-      }).counter++;
-      axios.patch("/counterquestion/".concat(this.currentQuestion.question_id));
-      this.next();
-    },
-    plusCounter5: function plusCounter5() {
-      var _this3 = this;
-
-      this.$store.state.words.find(function (el) {
-        return el.id == _this3.$store.state.currentQuestion.id;
-      }).counter += 5;
+      }).counter += howmany;
       axios.patch("/updatequestion2/".concat(this.currentQuestion.id), {
         counter: this.currentQuestion.counter
       });
       this.next();
     },
     plusCounter0: function plusCounter0() {
-      var _this4 = this;
+      var _this3 = this;
 
       this.$store.state.find(function (el) {
-        return el.id == _this4.$store.state.currentQuestion.id;
+        return el.id == _this3.$store.state.currentQuestion.id;
       }).counter = 0;
       axios.patch("/counterquestion0/".concat(this.currentQuestion.question_id));
       this.next();
     },
     next: function next() {
-      var _this5 = this;
+      var _this4 = this;
 
       this.errors = [];
       var self = this;
       this.disabledInput = false;
       this.answer = "";
       var elem = this.words.find(function (el) {
-        return el.id > _this5.$store.state.currentQuestion.id;
+        return el.id > _this4.$store.state.currentQuestion.id;
       });
 
       if (typeof elem == "undefined") {
@@ -2809,12 +2801,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       // this.getCurrent();
     },
     prev: function prev() {
-      var _this6 = this;
+      var _this5 = this;
 
       var elem = this.$store.state.words.filter(function (el) {
-        return el.counter <= _this6.$store.state.counterset;
+        return el.counter <= _this5.$store.state.counterset;
       }).filter(function (el) {
-        return el.id < _this6.$store.state.currentQuestion.id;
+        return el.id < _this5.$store.state.currentQuestion.id;
       }).slice(-1)[0];
       this.errors = [];
       var self = this;
@@ -40775,7 +40767,11 @@ var render = function() {
             {
               staticClass: "btn btn-success",
               attrs: { type: "button", name: "button" },
-              on: { click: _vm.plusCounter }
+              on: {
+                click: function($event) {
+                  return _vm.plusCounter(1)
+                }
+              }
             },
             [_vm._v("Counter +1")]
           ),
@@ -40785,7 +40781,11 @@ var render = function() {
             {
               staticClass: "btn btn-success",
               attrs: { type: "button", name: "button" },
-              on: { click: _vm.plusCounter5 }
+              on: {
+                click: function($event) {
+                  return _vm.plusCounter(5)
+                }
+              }
             },
             [_vm._v("Counter +5")]
           ),
@@ -41148,6 +41148,8 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("ul", [
+      _c("li", [_vm._v("counter +1 bug")]),
+      _vm._v(" "),
       _c("li", [_vm._v("dodaj po nowemu")]),
       _vm._v(" "),
       _c("li", [_vm._v("nauka wg tagu")]),
@@ -55351,7 +55353,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\xampp\PROJEKTY\egzaminer\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\PROJEKTY\egzaminer\resources\js\app.js */"./resources/js/app.js");
 
 
 /***/ })
