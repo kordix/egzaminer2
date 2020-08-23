@@ -115,17 +115,10 @@ const store = new Vuex.Store({
       state.settings = data;
     },
     getWords(state, data) {
-
-      console.log(data);
-
-      let wordslocal = data.filter((el) => el.language == state.settings.activelanguage).filter((el) => el.counter < state.counterset);
-      console.log('length', wordslocal);
-      if (wordslocal.length < 1) { console.log('skończyły się słówka'); return };
-
-
       state.wordsall = data.filter((el) => el.language == state.settings.activelanguage);
       state.words = data.filter((el) => el.language == state.settings.activelanguage).filter((el) => el.counter < state.counterset);
-
+      if (state.words.length < 1) { console.log('skończyły się słówka'); state.errors.push('Skończyły się słówka - zmień counter, kategorię albo dodaj nowe'); return };
+      
       if (state.settings.currentcategory) {
         state.words = state.words.filter((el) => el.partofspeech == state.settings.currentcategory)
       }

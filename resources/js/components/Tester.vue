@@ -1,7 +1,8 @@
 <template>
   <div id="egzaminer">
-    <p>TO JEST NOWA WERSJA</p>
+    <p style="color:red" v-if="!ready"><b>Skończyły się słówka - zmień counter, kategorię albo dodaj nowe</b></p>
     <div id="error" v-for="error in errors" :key="error" v-html="error"></div>
+    <div id="tester" v-if="ready">
     <p>
       <b>Przetłumacz:</b>
       {{currentQuestion.question}}
@@ -53,7 +54,16 @@
         >Usuń</button>
       </div>
     </form>
+    </div>
     <div class v-if="editbool">
+      <div class="form-group">
+          <label for="category">Część mowy:</label>
+          <select v-model="editpartofspeech"> 
+              <option :value="elem" v-for="elem in categories">{{elem}}</option>
+          </select> 
+
+         
+      </div>
       <div class="form-group">
         <label for>Pytanie po polsku</label>
         <input type="text" id="editQquestion" name="question" :value="currentQuestion.question" />
@@ -75,7 +85,7 @@
         <button @click="reverse" type="button" name="button" class="btn btn-warning">Reverse</button>
       </div>
     </div>
-    <div class id="tagstoquestion" style="margin-bottom:5px;display:flex">
+    <div class id="tagstoquestion" style="margin-bottom:5px;display:flex" v-if="ready">
       <div  class style="position:relative;margin-right:4px;" v-if="currentQuestion.tags != ''">
         <button class="btn-sm btn-primary tag">{{currentQuestion.tags}}</button>
         <div
@@ -88,14 +98,14 @@
       </div>
     </div>
 
-    <div class style="display:flex">
+    <div class style="display:flex" id="dodajtag" v-if="ready">
       <p @click="addTagToQuestion" style="margin-right:10px">Dodaj tag:</p>
       <select class name v-model="chosentag" style="margin-right:10px">
         <option :value="tag.name" v-for="tag in tags" :key="tag.id">{{tag.name}}</option>
       </select>
       <button @click="addTagToQuestion" type="button" class="btn-sm btn-default" name="button">Dodaj</button>
     </div>
-    <div style="display:flex;align-items:center">
+    <div style="display:flex;align-items:center" id="collinsy" v-if="ready">
       <a :href="'https://www.collinsdictionary.com/dictionary/spanish-english/'+currentQuestion.answer" target="_blank"  >
         <div style="background-color:#333;width:100px;height:40px;margin:.3em;padding:5px"  class="icon" >
           <img
@@ -118,9 +128,8 @@
     </div>
     <p>To do:</p>
     <ul>
-      <li>counter +1 bug</li>
-      <li>dodaj po nowemu</li>
-      <li>nauka wg tagu</li>
+      <li>komunikat przy braku słówek itp.</li>
+      <li>wygodne dodawanie tagów</li>
       <li>duplikaty</li>
       <li>synonimy beunruhigen änstigen</li>
       <li>Counterset ></li>
@@ -143,6 +152,7 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
+      categories: ['nieprzypisane','rzeczownik', 'czasownik', 'przymiotnik', 'przyimek', 'zwroty'],
       errors: [],
       answer: "",
       disabledInput: false,
@@ -150,6 +160,7 @@ export default {
       wordcategory: "",
       tags: null,
       tagstoquestion: null,
+      editpartofspeech:'',
       chosentag: {}
     };
   },
@@ -305,7 +316,8 @@ export default {
         {
           question: editQquestion,
           answer: editQanswer,
-          rodzajnik: editrodzajnik
+          rodzajnik: editrodzajnik,
+          partofspeech:self.editpartofspeech
         }
       );
 
@@ -336,6 +348,10 @@ export default {
   },
   mounted() {
     let self = this;
+    setTimeout(()=>{
+    console.log(self.$store.state.currentQuestion);
+      self.editpartofspeech = self.currentQuestion.partofspeech;
+    },5000)
   },
   computed: {
     ...mapState(['words']),
@@ -345,9 +361,12 @@ export default {
     activelanguage() {
       return this.$store.state.activelanguage ? this.$store.state.activelanguage : "";
     },
-    categories() {
-      return this.$store.state.categories ? this.$store.state.categories : [];
+    ready(){
+      return this.$store.state.words.length > 0 ? true : false;
     }
+    // categories() {
+    //   return this.$store.state.categories ? this.$store.state.categories : [];
+    // }
   }
 };
 </script>

@@ -12,20 +12,40 @@
     </select>
     </div>
     <div class="row">
-        <div class="col-md-9" v-if="reversed">
+        <div class="col-md-9">
+        <div v-if="reversed">
             <label for>Odpowiedź (po obcemu)</label>
             <input type="text" name v-model="answer" />
             <br />
             <label for>Pytanie (po polsku)</label>
             <input type="text" name v-model="question" />
         </div>
-        <div class="col-md-9" v-else>
+        <div v-else>
             <label for>Pytanie (po polsku)</label>
             <input type="text" name v-model="question" />
             <br />
             <label for>Odpowiedź (po obcemu)</label>
             <input type="text" name v-model="answer" />
         </div>
+
+        <div>
+            <label for="category">Część mowy:</label>
+            <select name="" id="" v-model="partofspeech">
+                <option value="nieprzypisane" selected>nieprzypisane</option>
+                <option :value="elem" v-for="elem in categories">{{elem}}</option>
+            </select>
+        </div>
+
+        <div >
+            <label for="tags">Tag:</label>
+            <select name="" id="" v-model="chosentag">
+                <option value="nieprzypisane">nieprzypisane</option>
+                <option value="" v-for="tag in tags" :value="tag.name">{{tag.name}}</option>
+            </select>
+        </div>
+
+        </div>
+
         <div class="col-md-3">
             <button @click="reversed=!reversed">reverse</button>
         </div>
@@ -50,6 +70,7 @@
 export default {
     data(){
         return {
+            categories: ['rzeczownik', 'czasownik', 'przymiotnik', 'przyimek', 'zwroty'],
             question:'',
             answer:'',
             rodzajnik:'',
