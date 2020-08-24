@@ -26,8 +26,7 @@
     </select>
     <button type="button" name="button" @click="reload">Ustaw</button>
     </div>
-    <!-- <p>Random:</p>       -->
-    <!-- <input type="checkbox" v-model="randomsetlocal"  @change="test"/> -->
+    <p>Random:</p>      
 
     <!-- <div class="col-md-4">
              <button class="ikona ikonagerman" :class="{active:activelanguage=='DE'}" @click="setLanguage('DE')"> </button>
@@ -43,13 +42,10 @@ export default {
       activeobszar2: "egzaminer",
       countermode: "<",
       counterset: 5,
-      randomsetlocal: false
+      randomsetlocal: 0
     };
   },
   methods: {
-    test() {
-      this.$store.dispatch("setRandomset", this.randomsetlocal);
-    },
     setLanguage(arg) {
       this.$store.state.activelanguage = arg;
       localStorage.languageset = arg;
@@ -90,7 +86,11 @@ export default {
     }
   },
   mounted() {
-    this.randomsetlocal = this.$store.state.randomset;
+    if(this.$store.state.randomset === 'true'){
+    this.randomsetlocal = true;
+    }else{
+      this.randomsetlocal = false;
+    }
 
     this.counterset = this.$store.state.counterset;
 

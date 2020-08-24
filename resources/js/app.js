@@ -60,7 +60,7 @@ const store = new Vuex.Store({
     activeobszar: 'egzaminer',
     activeobszar2: 'categoriser',
     loading: true,
-    randomset: false,
+    randomset: 'false',
     settings: {}
   },
   actions: {
@@ -103,14 +103,14 @@ const store = new Vuex.Store({
       context.dispatch('loadData');
     },
     setRandomset(context, payload) {
-      // context.commit('setRandomset',payload);
+       context.commit('setRandomset',payload);
     }
 
   },
   mutations: {
-    // setRandomset(state,payload){
-    //   state.randomset = payload
-    // },
+    setRandomset(state,payload){
+      state.randomset =payload
+    },
     getSettings(state, data) {
       state.settings = data;
     },
@@ -134,7 +134,7 @@ const store = new Vuex.Store({
       state.loading = loading
     },
     getWord(state) {
-      if (state.randomset == 'true') {
+      if (state.randomset === 'true') {
         let count = state.words.length
         let num = Math.floor(Math.random() * count);
         console.log(num);
@@ -180,7 +180,7 @@ store.subscribe((mutation, state) => {
   localStorage.setItem('counterset', state.counterset);
   localStorage.setItem('activeobszar', state.activeobszar);
   localStorage.setItem('activeobszar2', state.activeobszar2);
-  // localStorage.setItem('randomset', state.randomset);
+  localStorage.setItem('randomset', state.randomset);
 });
 
 const app = new Vue({
@@ -191,7 +191,7 @@ const app = new Vue({
   created() {
     let self = this;
     if (localStorage.counterset) {
-      this.$store.state.counterset = parseInt(localStorage.getItem('counterset'));
+      this.$store.state.counterset = localStorage.getItem('counterset');
     }
     this.$store.dispatch('getSettings'); // dispatch loading
     // setTimeout(function () {
@@ -204,7 +204,7 @@ const app = new Vue({
     }
 
     if (localStorage.getItem('randomset')) {
-      // this.$store.dispatch('setRandomset',localStorage.getItem('randomset'));
+       this.$store.dispatch('setRandomset',localStorage.getItem('randomset'));
     }
     // dispatch loading
   },
