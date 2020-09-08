@@ -8,6 +8,7 @@ require('./bootstrap');
 
 
 import Vuex from 'vuex';
+import store from './index';
 Vue.use(Vuex);
 
 /**
@@ -45,134 +46,7 @@ Vue.component('app', require('./components/App.vue').default);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-const store = new Vuex.Store({
-  state: {
-    count: 0,
-    errors: [],
-    words: [],
-    wordsall: [],
-    currentQuestion: {},
-    // currentcategory: 4,
-    counterset: 2,
-    countermode: '<',
-    categories: [],
-    activelanguage: 'DE',
-    activeobszar: 'egzaminer',
-    activeobszar2: 'categoriser',
-    loading: true,
-    randomset: 'false',
-    settings: {}
-  },
-  actions: {
-    loadData({
-      commit
-    }) {
-      axios.get('/all').then((response) => {
-        commit('getWords', response.data);
-        commit('changeLoadingState', false);
-        commit('getWord');
-      });
-    },
-    getSettings({
-      commit
-    }) {
-      axios.get('/settings').then((response) => {
-        commit('getSettings', response.data);
-      });
-    },
 
-    setWord(context, id) {
-      context.commit('setWord', id)
-    },
-    setCounterMode(context, payload) {
-      context.commit('setCounterMode', payload);
-    },
-    setCounterSet(context, payload) {
-      context.commit('setCounterSet', payload);
-    },
-    setCategory(context, payload) {
-      context.commit('setCategory', payload);
-      location.reload();
-    },
-    setTag(context, payload) {
-      context.commit('setTag', payload);
-      location.reload();
-    },
-    setLanguage(context, payload) {
-      context.commit('setLanguage', payload);
-      context.dispatch('loadData');
-    },
-    setRandomset(context, payload) {
-       context.commit('setRandomset',payload);
-    }
-
-  },
-  mutations: {
-    setRandomset(state,payload){
-      state.randomset =payload
-    },
-    getSettings(state, data) {
-      state.settings = data;
-    },
-    getWords(state, data) {
-      state.wordsall = data.filter((el) => el.language == state.settings.activelanguage);
-      state.words = data.filter((el) => el.language == state.settings.activelanguage).filter((el) => el.counter < state.counterset);
-      if (state.words.length < 1) { console.log('skończyły się słówka'); state.errors.push('Skończyły się słówka - zmień counter, kategorię albo dodaj nowe'); return };
-      
-      if (state.settings.currentcategory) {
-        state.words = state.words.filter((el) => el.partofspeech == state.settings.currentcategory)
-      }
-
-      if (state.settings.currenttag) {
-        state.words = state.words.filter((el) => el.tags == state.settings.currenttag)
-      }
-
-
-
-    },
-    changeLoadingState(state, loading) {
-      state.loading = loading
-    },
-    getWord(state) {
-      if (state.randomset === 'true') {
-        let count = state.words.length
-        let num = Math.floor(Math.random() * count);
-        console.log(num);
-
-        state.currentQuestion = state.words[num];
-      } else {
-        state.currentQuestion = state.words[0];
-      }
-
-      // state.currentQuestion = state.words.find((el) => el.counter <= state.counterset);
-    },
-    setWord(state, id) {
-      state.currentQuestion = state.words.find((el) => el.id == id);
-
-      // axios.get('/getquestion/'+id).then((res)=>state.currentQuestion=res.data);
-    },
-    getCategories(state, data) {
-      state.categories = data;
-    },
-    setCounterMode(state, payload) {
-      state.countermode = payload;
-    },
-    setCounterSet(state, payload) {
-      state.counterset = payload;
-    },
-    setLanguage(state, payload) {
-      state.settings.activelanguage = payload;
-    },
-    setCategory(state, payload) {
-      axios.patch('updatecategory', { currentcategory: payload });
-    },
-    setTag(state, payload) {
-      console.log(payload, 'setTag payload');
-      axios.patch('updatetag', { currenttag: payload });
-    }
-  }
-
-})
 
 store.subscribe((mutation, state) => {
   // Store the state object as a JSON string
@@ -185,36 +59,86 @@ store.subscribe((mutation, state) => {
 
 const app = new Vue({
   el: '#app',
-  computed: Vuex.mapState(['words', 'loading']),
+  // computed: Vuex.mapState(['words', 'loading']),
   store,
+  data:{
+    counterset:5,
+    wordsall:[],
+    words:[],
+    activeobszar:'egzaminer',
+    activeobszar2:'egzaminer',
 
+    settings:{
+      activelanguage:'SP',
+      currentcategory:'',
+      currenttag:''
+    },
+    randomset:'true',
+    randomset2: false,
+    currentQuestion:{}
+  },
+  watch:{
+    randomset2(val){
+      localStorage.randomset2 = val; 
+    }
+  },
   created() {
     let self = this;
-    if (localStorage.counterset) {
-      this.$store.state.counterset = localStorage.getItem('counterset');
-    }
-    this.$store.dispatch('getSettings'); // dispatch loading
-    // setTimeout(function () {
-    //   self.$store.dispatch('loadData');
+    this.loadData();
+    if (localStorage.counterset) {this.counterset = localStorage.getItem('counterset');}
+    // this.$store.dispatch('getSettings'); // dispatch loading
+    if (localStorage.getItem('activeobszar')) {this.activeobszar = localStorage.getItem('activeobszar')}
+    if (localStorage.getItem('randomset')) {this.randomset = localStorage.getItem('randomset')}
 
-    // }, 1000);
+      if (localStorage.getItem('randomset2') === 'true'){
+        this.randomset2 = true
+      }else {
+        this.randomset2 = false
+      }
+     
+    
 
-    if (localStorage.getItem('activeobszar')) {
-      this.$store.state.activeobszar = localStorage.getItem('activeobszar');
-    }
-
-    if (localStorage.getItem('randomset')) {
-       this.$store.dispatch('setRandomset',localStorage.getItem('randomset'));
-    }
     // dispatch loading
   },
   methods: {
     setLanguage(lang) {
-      this.$store.dispatch('setLanguage', lang);
+      this.activelanguage = lang;
       let self = this;
-      console.log(self.$store.state.settings.activelanguage);
+      axios.patch('/updatesetting', { activelanguage: self.activelanguage }).then((res) => location.reload());
+    },
+    async loadData(){
+      let self = this;
+      await axios.get('/all').then((res)=>self.wordsall = res.data).then((res)=>self.getWords()).then((res)=>self.getWord());
+    },
+    getWords(state, data) {
+      let self = this;
+      this.wordsall = this.wordsall.filter((el) => el.language == self.settings.activelanguage);
+      this.words = this.wordsall.filter((el) => el.counter < self.counterset);
+      if (this.words.length < 1) { console.log('skończyły się słówka'); this.errors.push('Skończyły się słówka - zmień counter, kategorię albo dodaj nowe'); return };
+      
+      if (this.settings.currentcategory) {
+        this.words = this.wordsall.filter((el) => el.partofspeech == self.settings.currentcategory)
+      }
 
-      axios.patch('/updatesetting', { activelanguage: self.$store.state.settings.activelanguage }).then((res) => location.reload());
-    }
+      if (this.settings.currenttag) {
+        this.words = this.words.filter((el) => el.tags == self.settings.currenttag)
+      }
+
+    },
+    getWord() {
+      if (this.randomset === 'true') {
+        let count = this.words.length
+        let num = Math.floor(Math.random() * count);
+        console.log(num);
+
+        this.currentQuestion = this.words[num];
+      } else {
+        this.currentQuestion = this.words[0];
+      }
+
+      // state.currentQuestion = state.words.find((el) => el.counter <= state.counterset);
+    },
+
+
   }
 })

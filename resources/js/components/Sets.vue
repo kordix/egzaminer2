@@ -3,7 +3,7 @@
     <select
       class="form-control"
       name
-      v-model="activeobszar2"
+      v-model="$root.activeobszar"
       style="width:150px;margin-right:10px"
       @change="setActiveObszar"
     >
@@ -26,7 +26,6 @@
     </select>
     <button type="button" name="button" @click="reload">Ustaw</button>
     </div>
-    <p>Random:</p>      
 
     <!-- <div class="col-md-4">
              <button class="ikona ikonagerman" :class="{active:activelanguage=='DE'}" @click="setLanguage('DE')"> </button>

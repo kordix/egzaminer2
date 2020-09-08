@@ -49,9 +49,13 @@ export default {
         }
     },
     methods: {
-        ...mapActions([
-            'setCategory','setTag'
-        ]),
+        // ...mapActions([
+        //     'setCategory','setTag'
+        // ]),
+        setCategory(cat){
+            this.$root.settings.currentcategory = cat;
+            this.$root.loadData();
+        },
         getTags() {
             let self = this;
             axios.get('tags').then((res) => self.tags = res.data)
@@ -65,11 +69,23 @@ export default {
         ...mapState([
             'words','wordsall', 'counterset','currentQuestion'
         ]),
+        words(){
+            return this.$root.words
+        },
+        wordsall(){
+            return this.$root.wordsall
+        },
+        counterset(){
+            return this.$root.counterset
+        },
+        currentQuestion(){
+            return this.$root.currentQuestion
+        },
         currentcategory() {
-            return this.$store.state.settings.currentcategory;
+            return this.$root.settings.currentcategory;
         },
         currenttag() {
-            return this.$store.state.settings.currenttag;
+            return this.$root.settings.currenttag;
         }
     }
 

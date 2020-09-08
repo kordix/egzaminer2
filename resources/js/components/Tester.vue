@@ -149,12 +149,12 @@
     </div>
 
     <div>
-      <p>Random:  <input type="checkbox" v-model="randomsetlocal" @change="dispatchSetRandomset" /></p>
+      <p>Random:  <input type="checkbox" v-model="$root.randomset2" @change="dispatchSetRandomset" /></p>
      
     </div>
     <p>To do:</p>
     <ul>
-      <li>randomset</li>
+      <li>wywalenie store'a</li>
       <li>wygodne dodawanie tagów</li>
       <li>duplikaty</li>
       <li>synonimy beunruhigen änstigen</li>
@@ -246,10 +246,10 @@ export default {
     answerPositive() {
       this.disabledInput = true;
       this.errors.push(
-        `<b>Dobrze!</b> Można przejść do następnego pytania (Odpowiedź:<b>${this.$store.state.currentQuestion.rodzajnik}</b> ${this.$store.state.currentQuestion.answer})`
+        `<b>Dobrze!</b> Można przejść do następnego pytania (Odpowiedź:<b>${this.currentQuestion.rodzajnik}</b> ${this.currentQuestion.answer})`
       );
-      this.$store.state.words.find(
-        (el) => el.id == this.$store.state.currentQuestion.id
+      this.$root.words.find(
+        (el) => el.id == this.currentQuestion.id
       ).counter++;
       axios.patch(`/updatequestion2/${this.currentQuestion.id}`, {
         counter: this.currentQuestion.counter + 1,
@@ -268,8 +268,8 @@ export default {
       }, 200);
     },
     plusCounter(howmany) {
-      this.$store.state.words.find(
-        (el) => el.id == this.$store.state.currentQuestion.id
+      this.$root.words.find(
+        (el) => el.id == this.currentQuestion.id
       ).counter += howmany;
       axios.patch(`/updatequestion2/${this.currentQuestion.id}`, {
         counter: this.currentQuestion.counter,
@@ -278,7 +278,7 @@ export default {
     },
     plusCounter0() {
       this.$store.state.find(
-        (el) => el.id == this.$store.state.currentQuestion.id
+        (el) => el.id == this.currentQuestion.id
       ).counter = 0;
       axios.patch(`/counterquestion0/${this.currentQuestion.question_id}`);
       this.next();
@@ -289,28 +289,25 @@ export default {
       this.disabledInput = false;
       this.answer = "";
 
-      let elem = this.words.find(
-        (el) => el.id > this.$store.state.currentQuestion.id
+      let elem = this.$root.words.find(
+        (el) => el.id > this.currentQuestion.id
       );
 
       if (typeof elem == "undefined") {
-        this.start();
+        this.$root.loadData();
         return;
       }
 
-      this.$store.state.currentQuestion = elem;
+      this.$root.currentQuestion = elem;
 
       setTimeout(function () {
         self.focusanswer();
       }, 200);
-      // document.getElementById('answerinput').focus();
-
-      // this.getCurrent();
     },
     prev() {
-      let elem = this.$store.state.words
-        .filter((el) => el.counter <= this.$store.state.counterset)
-        .filter((el) => el.id < this.$store.state.currentQuestion.id)
+      let elem = this.$root.words
+        .filter((el) => el.counter <= this.$root.counterset)
+        .filter((el) => el.id < this.$root.currentQuestion.id)
         .slice(-1)[0];
 
       this.errors = [];
@@ -319,7 +316,7 @@ export default {
       this.answer = "";
 
       if (elem) {
-        this.$store.state.currentQuestion = elem;
+        this.$root.currentQuestion = elem;
       } else {
         console.log("brak prev");
       }
@@ -328,10 +325,6 @@ export default {
       let self = this;
       axios.delete(`/delete/${self.currentQuestion.question_id}`);
       this.next();
-    },
-
-    start: function () {
-      this.$store.dispatch("loadData");
     },
     focusanswer() {
       try {
@@ -390,21 +383,16 @@ export default {
   },
   mounted() {
     let self = this;
-    if (this.$store.state.randomset === "true") {
-      this.randomsetlocal = true;
-    } else {
-      this.randomsetlocal = false;
-    }
     setTimeout(() => {
-      console.log(self.$store.state.currentQuestion);
+      console.log(this.$root.currentQuestion);
       self.editpartofspeech = self.currentQuestion.partofspeech;
     }, 5000);
   },
   computed: {
-    ...mapState(["words"]),
+    // ...mapState(["words"]),
     currentQuestion() {
-      return this.$store.state.currentQuestion
-        ? this.$store.state.currentQuestion
+      return this.$root.currentQuestion
+        ? this.$root.currentQuestion
         : {};
     },
     activelanguage() {
@@ -413,7 +401,7 @@ export default {
         : "";
     },
     ready() {
-      return this.$store.state.words.length > 0 ? true : false;
+      return this.$root.words.length > 0 ? true : false;
     },
     // categories() {
     //   return this.$store.state.categories ? this.$store.state.categories : [];

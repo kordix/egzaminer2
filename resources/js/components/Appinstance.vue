@@ -2,10 +2,10 @@
 <div class="col-md-6">
   <sets></sets>
       <tester v-if="activeobszar=='egzaminer'"></tester>
-  <lista v-show="activeobszar=='list'"></lista>
-  <add v-show="activeobszar=='add'"></add>
-  <tags v-show="activeobszar=='tags'"></tags>
-  <categoriser v-show="activeobszar=='categoriser'"></categoriser>
+  <lista v-if="activeobszar=='list'"></lista>
+  <add v-if="activeobszar=='add'"></add>
+  <tags v-if="activeobszar=='tags'"></tags>
+  <categoriser v-if="activeobszar=='categoriser'"></categoriser>
 
 </div>
 </template>
