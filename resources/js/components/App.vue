@@ -3,7 +3,7 @@
         <div class="row">
 
     <appinstance :key="key" :activeobszar="$root.activeobszar" :instanceid="1" v-if="render"></appinstance>
-    <!-- <appinstance :key="key2" :activeobszar="$root.activeobszar2" :instanceid="2" v-if="render2"></appinstance> -->
+    <appinstance :key="key2" :activeobszar="$root.activeobszar2" :instanceid="2" v-if="render2"></appinstance>
 
 </div>
 

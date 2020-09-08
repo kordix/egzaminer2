@@ -63,10 +63,7 @@ export default {
     },
     computed: {
         words() {
-            return this.$store.state.wordsall
-        },
-        test(){
-            return 'dupa';
+            return this.$root.wordsall
         },
         filteredHeroes: function() {
             let self = this;

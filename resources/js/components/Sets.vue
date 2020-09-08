@@ -1,11 +1,23 @@
 <template>
   <div class="row">
-    <select
+    <select v-if="$parent.instanceid == 1"
       class="form-control"
       name
       v-model="$root.activeobszar"
       style="width:150px;margin-right:10px"
-      @change="setActiveObszar"
+    >
+      <option value="egzaminer">Egzaminer</option>
+      <option value="list">Lista</option>
+      <option value="tags">tagi</option>
+      <option value="add">dodaj</option>
+      <option value="categoriser">categoriser</option>
+    </select>
+
+    <select v-if="$parent.instanceid == 2"
+      class="form-control"
+      name
+      v-model="$root.activeobszar2"
+      style="width:150px;margin-right:10px"
     >
       <option value="egzaminer">Egzaminer</option>
       <option value="list">Lista</option>
@@ -76,11 +88,6 @@ export default {
     activelanguage() {
       return this.$store.state.activelanguage
         ? this.$store.state.activelanguage
-        : {};
-    },
-    activeobszar() {
-      return this.$store.state.activeobszar
-        ? this.$store.state.activeobszar
         : {};
     }
   },
